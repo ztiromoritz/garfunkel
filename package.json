@@ -1,0 +1,8 @@
+{
+	"name": "parsley",
+	"version": "0.0.1",
+	"description": "2D geometry toolbox",
+	"scripts" : {
+		"test" : "mocha"
+	}
+}
