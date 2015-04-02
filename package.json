@@ -4,5 +4,8 @@
 	"description": "2D geometry toolbox",
 	"scripts" : {
 		"test" : "mocha"
+	},
+	"devDependencies": {
+		"chai": "~1.9.1",
 	}
 }
