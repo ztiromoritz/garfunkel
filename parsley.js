@@ -34,6 +34,9 @@ Parsley.setXisLeftOfY = function(value){
 	X_IS_LEFT_TO_Y = value;
 };
 
+Parsley.setGameCoords = function() { X_IS_LEFT_TO_Y = true;};
+Parsley.setSchoolCoords = function(){ X_IS_LEFT_TO_Y = false;};
+
 
 Vect.prototype.toString = function() {
 	return 'x: ' + this.x + ' y: ' + this.y;
@@ -199,7 +202,7 @@ Vect.prototype.reflectOn = function( u ){
 
 /**
  * A rectangular box with edges parallel to the coordinate axes.
- * The origin (0,0) is in the upper left corner.
+ * 
  * So:
  * 		Box#left &le; Box#right
  * 		Box#top  &le; Box#bottom
@@ -207,8 +210,11 @@ Vect.prototype.reflectOn = function( u ){
 var Box = function(x0, x1, y0, y1) {
 	this.left = Math.min(x0, x1);
 	this.right = Math.max(x0, x1);
-	this.top = Math.min(y0, y1);
-	this.bottom = Math.max(y0, y1);
+	
+	this.y_min = Math.min(y0, y1);
+	this.y_max = Math.max(y0, y1);
+	this.top = X_IS_LEFT_TO_Y?this.y_min:this.y_max;
+	this.bottom =  X_IS_LEFT_TO_Y?this.y_max:this.y_min;
 };
 
 /**
@@ -216,7 +222,10 @@ var Box = function(x0, x1, y0, y1) {
  */
 Box.fromSegment = function(segment) {
 	return new Box(segment.p1.x, segment.p2.x, segment.p1.y, segment.p2.y);
+};
 
+Box.fromObject = function(obj){
+	return new Box(obj.x0,obj.x1,obj.y0,obj.y1);
 };
 
 Box.prototype.toString = function() {
@@ -225,12 +234,12 @@ Box.prototype.toString = function() {
 
 Box.prototype.containsPoint = function(p) {
 	return this.left <= p.x && p.x <= this.right//
-	&& this.top <= p.y && p.y <= this.bottom;
+	&& this.y_min <= p.y && p.y <= this.y_max;
 };
 
 Box.prototype.intersect = function(box) {
 	return this.left <= box.right && box.left <= this.right//
-		 && this.top <= box.bottom && box.top <= this.bottom;
+		 && this.y_min <= box.y_max && box.y_min <= this.y_max;
 };
 
 /**

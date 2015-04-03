@@ -17,6 +17,84 @@ describe('Vect#constructor', function(){
   });
 });
 
+describe('Vect#invert', function(){
+	it('should invert values', function(){
+		var v = new Vect(3,4);
+		v.invert();
+		assert.equal(v.x, -3);
+		assert.equal(v.y, -4);	
+	});	
+});
+
+describe('Vect#mul', function(){
+	it('should multiply by scalar', function(){
+		var v = new Vect(4,5);
+		v.mul(3);
+		assert.equal(v.x, 12);
+		assert.equal(v.y, 15);
+	});
+});
+
+describe('Vect#div', function(){
+	it('should divide by scalar', function(){
+		var v = new Vect(4,5);
+		v.div(2);
+		assert.equal(v.x, 2);
+		assert.equal(v.y, 2.5);
+	});
+	
+	it('should divide by 0 to Infinity', function(){
+		var v = new Vect(4,5);
+		v.div(0);
+		assert.equal(v.x, Infinity);
+		assert.equal(v.y, Infinity);
+	});
+});
+
+describe('Vect#add', function(){
+	it('should add parameterwise', function(){
+		var v = new Vect(-3,4);
+		var w = new Vect(2,6);
+		v.add(w);
+		assert.equal(v.x, -1);
+		assert.equal(v.y, 10);
+	});
+});
+
+describe('Vect#sub', function(){
+	it('should sub parameterwise', function(){
+		var v = new Vect(-3,4);
+		var w = new Vect(2,6);
+		v.sub(w);
+		assert.equal(v.x, -5);
+		assert.equal(v.y, -2);
+	});
+});
+
+describe('Vect#dot', function(){
+	it('should calc product of length for parrallels', function(){
+		var v = new Vect(3,0);
+		var w = new Vect(4,0);
+		var dot = v.dot(w);
+		assert.equal(dot,12);
+	});
+	
+	it('should calc 0 for 90° vectors', function(){
+		var v = new Vect(0,3);
+		var w = new Vect(4,0);
+		var dot = v.dot(w);
+		assert.equal(dot,0);
+	});
+	
+	it('should project on vector to another', function(){
+		var v = new Vect(3,4); //length 5 
+		var w = new Vect(7,0);
+		var dot = v.dot(w);
+		assert.equal(dot, 21);
+	});
+});
+
+
 
 describe('Vect#isLeftOf/isRightOf', function(){
 	var a = new Vect(1,0);
@@ -297,11 +375,49 @@ describe('Segment#intersect', function(){
 });
 
 
-describe('Box#containsPoint', function(){
-	var box = new Box(0,3,0,3);
-	var ins =  [new Vect(0,0), new Vect(0,3), new Vect(3,3), new Vect(3,0)];
-	var outs = [new Vect(0,-1), new Vect(0,4), new Vect(1,4)];
+describe('Box#constructor', function(){
+	var box;
 	
+
+	
+	it('keep values ordered according to game coordinate system', function(){
+		box = new Box(1,3,4,5);
+		
+		assert.equal(box.left, 1);
+		assert.equal(box.right, 3);
+		assert.equal(box.top, 4);
+		assert.equal(box.bottom, 5);
+	});
+});
+
+describe('Box#constructor', function(){
+	var box;
+	before(function(){
+		Parsley.setSchoolCoords();
+	});
+	
+	it('keep values ordered according to school coordinate system', function(){
+		box = new Box(1,3,4,5);
+		assert.equal(box.left, 1);
+		assert.equal(box.right, 3);
+		assert.equal(box.top, 5); //!
+		assert.equal(box.bottom, 4); //!
+	});
+	
+	after(function(){
+		Parsley.setGameCoords();
+	});
+});
+
+
+describe('Box#containsPoint', function(){
+	var box , ins, outs;
+	
+	before(function(){
+		box = new Box(0,3,0,3);
+		ins =  [new Vect(0,0), new Vect(0,3), new Vect(3,3), new Vect(3,0)];
+		outs = [new Vect(0,-1), new Vect(0,4), new Vect(1,4)];
+	});
 
 	it('should sort in', function(){
 		var l = ins.length;
@@ -318,16 +434,56 @@ describe('Box#containsPoint', function(){
 			
 		}
 	});
+	
+
+});
+
+
+describe('Box#containsPoint ', function(){
+	var box , ins, outs;
+	describe('also for school coords it', function(){
+		before(function(){
+			Parsley.setSchoolCoords();
+			box = new Box(0,3,0,3);
+			ins =  [new Vect(0,0), new Vect(0,3), new Vect(3,3), new Vect(3,0)];
+			outs = [new Vect(0,-1), new Vect(0,4), new Vect(1,4)];
+		});
+
+		it('should sort in', function(){
+			var l = ins.length;
+			while(l--){
+				assert( box.containsPoint(ins[l]), ins[l]+' in ' + box);
+				
+			};
+		});	
+	
+		it('and sort out', function(){
+			var l = outs.length;
+			while(l--){
+				assert(!box.containsPoint(outs[l]), outs[l]+ ' out ' + box);
+				
+			}
+		});
+		
+		after(function(){
+			Parsley.setGameCoords();
+		});
+	});
 });
 
 
 describe('Box#intersect', function(){
-	var box1 = new Box(3,5,3,5);
-	var box2 = new Box(4,6,4,6);
-	var box3 = new Box(0,4,0,4);
-	var box4 = new Box(5,6,5,6);
-	var box5 = new Box(10,12,10,13);
-
+	var box1,box2,box3,box4,box5;
+	before(function(){
+		
+		Parsley.setSchoolCoords();
+		
+		box1 = new Box(3,5,3,5);
+		box2 = new Box(4,6,4,6);
+	 	box3 = new Box(0,4,0,4);
+		box4 = new Box(5,6,5,6);
+		box5 = new Box(10,12,10,13);
+	});
 
 	it('should work with intersected', function(){
 		assert( box1.intersect(box3) ,  box1 + ' with ' +box3);
@@ -345,6 +501,46 @@ describe('Box#intersect', function(){
 		assert( !box3.intersect(box5) ,  box3 + ' out ' +box5);
 		}	
 	);
+	
+	after(function(){
+			Parsley.setGameCoords();
+	});
+	
+});
+
+
+describe('Box#intersect', function(){
+	
+	var box1,box2,box3,box4,box5;
+	
+	describe('also for school coords', function(){
+	
+		before(function(){
+			box1 = new Box(3,5,3,5);
+			box2 = new Box(4,6,4,6);
+		 	box3 = new Box(0,4,0,4);
+			box4 = new Box(5,6,5,6);
+			box5 = new Box(10,12,10,13);
+		});
+	
+		it('should work with intersected', function(){
+			assert( box1.intersect(box3) ,  box1 + ' with ' +box3);
+			assert( box2.intersect(box3) ,  box2 + ' with ' +box3);
+			assert( box1.intersect(box2) ,  box1 + ' with ' +box2);
+			}	
+		);
+		
+		it('even only a corner', function(){
+			assert( box1.intersect(box4) ,  box1 + ' out ' +box4);
+		});
+		
+		it('should work with non intersected', function(){
+			assert( !box2.intersect(box5) ,  box2 + ' out ' +box5);
+			assert( !box3.intersect(box5) ,  box3 + ' out ' +box5);
+			}	
+		);
+	});
+
 	
 });
 
