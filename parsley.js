@@ -3,6 +3,35 @@
  * parsley.js - my personal 2d geometry toolbox
  */
 
+
+/**
+ * Simple Object Pool implementation 
+ */
+var Pool = function(size, constructor , init){
+	this.items = new Array(size);
+	this.size = size;
+	this.current = size;
+	this.init = init;
+	this.constructor = constructor; 
+};
+
+Pool.prototype.get = function( ){
+	if(this.current === 0){
+		this.items.length = this.size;
+		this.current = this.size;
+		this.size += size;		
+	}
+		
+};
+
+Pool.prototype.dispose = function( obj ){
+	
+};
+
+
+
+
+
 /**
  * Represents a vector as well as a point.
  *
@@ -36,6 +65,7 @@ Parsley.setXisLeftOfY = function(value){
 
 Parsley.setGameCoords = function() { X_IS_LEFT_TO_Y = true;};
 Parsley.setSchoolCoords = function(){ X_IS_LEFT_TO_Y = false;};
+
 
 
 Vect.prototype.toString = function() {
@@ -313,6 +343,7 @@ Segment.prototype.intersect = function(s) {
 Parsley.Vect = Vect;
 Parsley.Segment = Segment;
 Parsley.Box = Box;
+Parsley.Pool = Pool;
 
 global.Parsley = Parsley;
 

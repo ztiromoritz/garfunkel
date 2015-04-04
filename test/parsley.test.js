@@ -1,8 +1,50 @@
 var assert = require("assert");
+var sinon = require("sinon");
 var Parsley = require("../parsley").Parsley;
 Vect = Parsley.Vect;
 Box = Parsley.Box;
 Segment = Parsley.Segment;
+Pool = Parsley.Pool;
+
+describe('Pool#constructor', function(){
+	it('should take initial size, constructor and initializer',
+		function(){
+			var pool = new Pool(1, Vect, function(x,y){this.x = x; this.y = y;}); //Can the constructor be reused as init?
+			
+			
+		}
+	);
+	
+});
+
+
+describe('Pool#get' , function(){
+	
+	
+	it('should give instance created be constructor function', function(){
+		var pool = new Pool(1, Vect, function(x,y){this.x = x; this.y = y;});
+		assert(pool.get(3,4) instanceof Vector);	
+	});
+	
+	it('should use initialize function', function(){
+		
+		var initSpy = sinon.spy();
+		
+		var pool = new Pool(1, Vect, function(x,y){this.x = x; this.y = y;});
+		pool.get();
+		
+		assert(initSpy.called);
+		
+	});
+});
+
+
+describe('Pool#dispose' , function(){
+	
+});
+
+
+
 
 describe('Vect#constructor', function(){
  it('should keep values', function(){
