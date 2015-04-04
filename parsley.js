@@ -5,28 +5,62 @@
 
 
 /**
- * Simple Object Pool implementation 
+ * Used for the isLeftOf, isRightOf, getLeftNormal, getRightNormal functions.
+ * 
+ * FALSE, means the normal school book coordinates with (0,0) in the lower left corner.
+ * TRUE, means the canvas or graphic coordinates with (0,0) in the upper left corner;
+ * 
  */
-var Pool = function(size, constructor , init){
-	this.items = new Array(size);
-	this.size = size;
-	this.current = size;
-	this.init = init;
-	this.constructor = constructor; 
+var X_IS_LEFT_TO_Y = true;
+
+var Parsley = {};
+
+Parsley.setXisLeftOfY = function(value){
+	X_IS_LEFT_TO_Y = value;
 };
 
-Pool.prototype.get = function( ){
-	if(this.current === 0){
-		this.items.length = this.size;
-		this.current = this.size;
-		this.size += size;		
+Parsley.setGameCoords = function() { X_IS_LEFT_TO_Y = true;};
+Parsley.setSchoolCoords = function(){ X_IS_LEFT_TO_Y = false;};
+
+
+/**
+ * Simple Object Pool for internal and external use
+ */
+var Pool = function(capacity, constructor , init){
+	this.items = new Array(capacity);
+	this.capacity = capacity;
+	this.current = capacity;
+	this.init = init;
+	this.constructor = constructor; 
+	this.createItems();
+};
+
+Pool.prototype.createItems = function(){
+	var n = this.items.length;
+	while(n--){
+		this.items[n] = new this.constructor();
 	}
-		
+};
+
+Pool.prototype.get = function(){
+	
+	if(this.current === 0){
+		//Capacity reached, double capacity
+		this.items.length = this.capacity;
+		this.current = this.capacity;
+		this.capacity =  2*this.capacity;
+		this.createItems();	
+	}		
+	this.current--;
+	var item = this.items[this.current];
+	this.init.apply(item,arguments);
+	return item;
 };
 
 Pool.prototype.dispose = function( obj ){
-	
+	this.current = this.items.push(obj);	
 };
+
 
 
 
@@ -45,28 +79,7 @@ var Vect = function(x, y) {
 	this.y = y || 0;
 };
 
-
-/**
- * Used for the isLeftOf, isRightOf, getLeftNormal, getRightNormal functions.
- * 
- * FALSE, means the normal school book coordinates with (0,0) in the lower left corner.
- * TRUE, means the canvas or graphic coordinates with (0,0) in the upper left corner;
- * 
- */
-var X_IS_LEFT_TO_Y = true;
-
 var ZERO = new Vect(0, 0);
-
-var Parsley = {};
-
-Parsley.setXisLeftOfY = function(value){
-	X_IS_LEFT_TO_Y = value;
-};
-
-Parsley.setGameCoords = function() { X_IS_LEFT_TO_Y = true;};
-Parsley.setSchoolCoords = function(){ X_IS_LEFT_TO_Y = false;};
-
-
 
 Vect.prototype.toString = function() {
 	return 'x: ' + this.x + ' y: ' + this.y;

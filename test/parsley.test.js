@@ -23,25 +23,31 @@ describe('Pool#get' , function(){
 	
 	it('should give instance created be constructor function', function(){
 		var pool = new Pool(1, Vect, function(x,y){this.x = x; this.y = y;});
-		assert(pool.get(3,4) instanceof Vector);	
+		//assert(pool.get(3,4) instanceof Vect);
+		console.log(pool.get(3,4));	
 	});
 	
 	it('should use initialize function', function(){
 		
 		var initSpy = sinon.spy();
 		
-		var pool = new Pool(1, Vect, function(x,y){this.x = x; this.y = y;});
+		var pool = new Pool(1, Vect, initSpy);
 		pool.get();
 		
 		assert(initSpy.called);
 		
+	});	
+	
+	it('should work with parameters', function(){
+		var pool = new Pool(3, Vect, function(x,y){this.x = x; this.y = y;});
+		var v = pool.get(2,9);
+		assert.equal(v.x, 2);
+		assert.equal(v.y, 9);	
 	});
 });
 
 
-describe('Pool#dispose' , function(){
-	
-});
+
 
 
 
