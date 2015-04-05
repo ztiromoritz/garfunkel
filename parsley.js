@@ -24,46 +24,49 @@ Parsley.setSchoolCoords = function(){ X_IS_LEFT_TO_Y = false;};
 
 
 /**
- * Simple Object Pool for internal and external use
+ * Simple Object Pool 
+ * (for internal and external use)
+ * 
+ * @example
+ *    # exponential growth
+ *    growth = function(capacity){return capacity === 0?1:2*capacity;};
+ * 
+ * 
+ * @param {growth}
  */
-var Pool = function(capacity, constructor , init){
+var Pool = function(capacity, constructor , initializer, growth){
 	this.items = new Array(capacity);
 	this.capacity = capacity;
 	this.current = capacity;
-	this.init = init;
-	this.constructor = constructor; 
-	this.createItems();
+	this.initializer = initializer;
+	this.constructor = constructor;
+	this.growth = growth || function(cap){return 1;};// 
+	this.createItems( capacity );
 };
 
-Pool.prototype.createItems = function(){
-	var n = this.items.length;
-	while(n--){
-		this.items[n] = new this.constructor();
-	}
+Pool.prototype.createItems = function(size){
+	this.items.length = size;
+	for(var i = 0; i < size; i++)
+		this.items[i] = new this.constructor();	
 };
 
 Pool.prototype.get = function(){
-	
 	if(this.current === 0){
-		//Capacity reached, double capacity
-		this.items.length = this.capacity;
-		this.current = this.capacity;
-		this.capacity =  2*this.capacity;
-		this.createItems();	
+		var growth = this.growth( this.capacity ); 
+		this.capacity += growth;
+		this.current = growth;
+		this.createItems( growth );	
 	}		
 	this.current--;
 	var item = this.items[this.current];
-	this.init.apply(item,arguments);
+	this.initializer.apply( item, arguments );
 	return item;
 };
 
 Pool.prototype.dispose = function( obj ){
-	this.current = this.items.push(obj);	
+	this.current = this.items.push(obj);
+	this.capacity = Math.max(this.capacity, this.current);	
 };
-
-
-
-
 
 
 /**

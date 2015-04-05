@@ -1,5 +1,6 @@
 var assert = require("assert");
 var sinon = require("sinon");
+var expect = require("chai").expect;
 var Parsley = require("../parsley").Parsley;
 Vect = Parsley.Vect;
 Box = Parsley.Box;
@@ -9,9 +10,7 @@ Pool = Parsley.Pool;
 describe('Pool#constructor', function(){
 	it('should take initial size, constructor and initializer',
 		function(){
-			var pool = new Pool(1, Vect, function(x,y){this.x = x; this.y = y;}); //Can the constructor be reused as init?
-			
-			
+			var pool = new Pool(1, Vect, function(x,y){this.x = x; this.y = y;}); //Can the constructor be reused as init?	
 		}
 	);
 	
@@ -19,32 +18,92 @@ describe('Pool#constructor', function(){
 
 
 describe('Pool#get' , function(){
+	var constructorSpy = sinon.spy(Vect);
+	var initializerSpy = sinon.spy(Vect);
+	var pool; 
+	
+	beforeEach(function(){
+		pool = new Pool(4, constructorSpy, initializerSpy);
+		constructorSpy.reset();
+		initializerSpy.reset();	
+	});
 	
 	
-	it('should give instance created be constructor function', function(){
-		var pool = new Pool(1, Vect, function(x,y){this.x = x; this.y = y;});
-		//assert(pool.get(3,4) instanceof Vect);
-		console.log(pool.get(3,4));	
+	it('should take the given capacity and be full loaded at start', function(){
+		expect(pool.capacity, "capacity").to.be.equal(4);
+		expect(pool.current, "current").to.be.equal(4);
+	});
+	
+	it('should keep have the given capacity and update the current load', function(){
+		pool.get(3,4);
+		expect(pool.capacity, "capacity").to.be.equal(4);
+		expect(pool.current, "current").to.be.equal(3);
+	});
+	
+	it('should take object not created by the pool', function(){
+		/**
+		 * This might be unusual, because the object was not created under the control of this pool.
+		 * So for example another constructor was used. 
+		 * If the capacity is reached, desiposing a new object would increase the capacity.
+		 * 
+		 * Not that the application also could juggle with more instances but keep a certain amount of them 
+		 * undisposed at every moment. So the capacity of the pool would not increase, but every object could be 
+		 * passed to the pool once in a while.
+		 * 
+		 */
+		pool.dispose(new Vect(7,7));
+		expect(pool.capacity, "capacity").to.be.equal(5);
+		expect(pool.current, "current").to.be.equal(5);	
+	});
+	
+		
+	it('capacity 0 is possible', function(){
+		pool = new Pool(0, constructorSpy, initializerSpy);		
+		expect(pool.capacity, "capacity").to.be.equal(0);
+		expect(pool.current, "current").to.be.equal(0);
+	});
+	
+	it('dispose can be used to initialize a capacity zero pool', function(){
+		pool = new Pool(0, constructorSpy, initializerSpy);
+		pool.dispose(new Vect(3,1));
+		pool.dispose(new Vect(4,1));
+		pool.dispose(new Vect(5,9));
+		pool.dispose(new Vect(2,6));
+		expect(pool.capacity,"capacity").to.be.equal(4);
+		expect(pool.current, "current").to.be.equal(4);
+	});
+	
+	it('get can also be used to initialize a capacity zero pool', function(){
+		pool = new Pool(0, constructorSpy, initializerSpy);
+		pool.get(3,1);
+		pool.get(4,1);
+		pool.get(5,9);
+		pool.get(2,6);
+		expect(pool.capacity, "capacity").to.be.least(4);
+		expect(pool.current, "current").to.be.equal(0);
+	});
+	
+	
+	it('should give instance created by constructor function', function(){	
+		assert(pool.get(3,4) instanceof Vect);
 	});
 	
 	it('should use initialize function', function(){
-		
-		var initSpy = sinon.spy();
-		
-		var pool = new Pool(1, Vect, initSpy);
 		pool.get();
-		
-		assert(initSpy.called);
-		
+		assert(initializerSpy.called);		
 	});	
 	
-	it('should work with parameters', function(){
-		var pool = new Pool(3, Vect, function(x,y){this.x = x; this.y = y;});
+	it('should work with parameters', function(){	
 		var v = pool.get(2,9);
 		assert.equal(v.x, 2);
 		assert.equal(v.y, 9);	
 	});
+	
 });
+
+
+
+
 
 
 

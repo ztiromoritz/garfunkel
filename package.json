@@ -3,7 +3,7 @@
 	"version": "0.0.1",
 	"description": "2D geometry toolbox",
 	"scripts" : {
-		"test" : "mocha"
+		"test" : "mocha -b"
 	},
 	"devDependencies": {
 		"mocha": "~2.2.0",
