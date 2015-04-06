@@ -1,17 +1,23 @@
 {
 	"name": "garfunkel",
-	"main": "./garfunkel.js"
-	"version": "0.0.1",
+	"main": "./garfunkel.js",
+	"version": "0.1.0",
 	"description": "2D geometry toolbox",
 	"scripts" : {
 		"test" : "mocha -b",
-		"lint" : "jshint **.js;true"
+		"lint" : "jshint **.js;true",
+		"build" : "(echo '/*!' ; cat ./LICENSE ; echo '*/' ; browserify garfunkel.js) > build/garfunkel.js",
+		"doc" : "jsdoc -c jsdoc.conf.json garfunkel.js"
+		
 	},
 	"devDependencies": {
 		"mocha": "~2.2.0",
 		"chai": "~2.2.0",
-		"sinon": "~1.14.0"
+		"sinon": "~1.14.0",
+		"browserify" : "latest",
+		"jshint" : "latest"
 	},
+
 	"licenses" : [
 		{
     		"type": "MIT",
