@@ -12,7 +12,7 @@
  * @example
  *  	exponential growth
  *      growth = function(capacity){return capacity === 0?1:2*capacity;};
- * @memberOf Parsley
+ * @memberOf Garfunkel
  * @class Pool
  * @constructor
  * @param {Number} capacity The initial capacity.
@@ -66,10 +66,10 @@ Pool.prototype.dispose = function( obj ){
 
 
 
-if(!!!global.Parsley)
-	global.Parsley = {};
+if(!!!global.Garfunkel)
+	global.Garfunkel = {};
 
-global.Parsley.Pool = Pool;
+global.Garfunkel.Pool = Pool;
 	
 })(this);
 

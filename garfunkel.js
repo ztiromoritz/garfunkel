@@ -1,6 +1,6 @@
 /**
- * parsley.js - my personal 2d geometry toolbox
- * @module Parsley
+ * garfunkel.js - my personal 2d geometry toolbox
+ * @module Garfunkel
  */
 (function(global){
 
@@ -15,14 +15,14 @@
  */
 var X_IS_LEFT_TO_Y = true;
 
-var Parsley = {};
+var Garfunkel = {};
 
-Parsley.setXisLeftOfY = function(value){
+Garfunkel.setXisLeftOfY = function(value){
 	X_IS_LEFT_TO_Y = value;
 };
 
-Parsley.setGameCoords = function() { X_IS_LEFT_TO_Y = true;};
-Parsley.setSchoolCoords = function(){ X_IS_LEFT_TO_Y = false;};
+Garfunkel.setGameCoords = function() { X_IS_LEFT_TO_Y = true;};
+Garfunkel.setSchoolCoords = function(){ X_IS_LEFT_TO_Y = false;};
 
 
 
@@ -34,7 +34,7 @@ Parsley.setSchoolCoords = function(){ X_IS_LEFT_TO_Y = false;};
  * It's a tupel.
  *
  * 
- * @memberOf Parsley
+ * @memberOf Garfunkel
  * @class Vect
  * @param {Number} x
  * @param {Number} y
@@ -321,11 +321,11 @@ Segment.prototype.intersect = function(s) {
 	return this.boundingBox.intersect(s.boundingBox) && touchOrCross(this, s) && touchOrCross(s, this);
 };
 
-Parsley.Vect = Vect;
-Parsley.Segment = Segment;
-Parsley.Box = Box;
+Garfunkel.Vect = Vect;
+Garfunkel.Segment = Segment;
+Garfunkel.Box = Box;
 
 
-global.Parsley = Parsley;
+global.Garfunkel = Garfunkel;
 
 })(this);

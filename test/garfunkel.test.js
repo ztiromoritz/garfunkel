@@ -1,13 +1,13 @@
 var assert = require("assert");
 var sinon = require("sinon");
 var expect = require("chai").expect;
-var Parsley = require("../parsley").Parsley;
-Vect = Parsley.Vect;
-Box = Parsley.Box;
-Segment = Parsley.Segment;
+var Garfunkel = require("../garfunkel").Garfunkel;
+Vect = Garfunkel.Vect;
+Box = Garfunkel.Box;
+Segment = Garfunkel.Segment;
 
 //TODO: own test
-var Pool = require("../parsley.pool").Parsley.Pool;
+var Pool = require("../garfunkel.pool").Garfunkel.Pool;
 
 describe('Pool#constructor', function(){
 	it('should take initial size, constructor and initializer',
@@ -218,7 +218,7 @@ describe('Vect#isLeftOf/isRightOf', function(){
 	var j = new Vect(2,-1);
 	var all = [a,b,c,d,e,f,g,h,i,j];
 	
-	Parsley.setXisLeftOfY(true);
+	Garfunkel.setXisLeftOfY(true);
 	
 	it('should find the correct right values',
 		function(){
@@ -283,11 +283,11 @@ describe('Vect#isLeftOf/isRightOf the other way around', function(){
 	var all = [a,b,c,d,e,f,g,h,i,j];
 	
 	before(function(){
-		Parsley.setXisLeftOfY(false);
+		Garfunkel.setXisLeftOfY(false);
 	});
 	
 	after(function(){
-		Parsley.setXisLeftOfY(true);
+		Garfunkel.setXisLeftOfY(true);
 	});
 	
 	it('should find the correct right values',
@@ -304,7 +304,7 @@ describe('Vect#isLeftOf/isRightOf the other way around', function(){
 	
 	it('should find the correct left values', 
 		function(){
-			Parsley.setXisLeftOfY(false);
+			Garfunkel.setXisLeftOfY(false);
 			assert(h.isRightOf(a));
 			assert(i.isRightOf(a));
 			assert(j.isRightOf(a));
@@ -502,7 +502,7 @@ describe('Box#constructor', function(){
 describe('Box#constructor', function(){
 	var box;
 	before(function(){
-		Parsley.setSchoolCoords();
+		Garfunkel.setSchoolCoords();
 	});
 	
 	it('keep values ordered according to school coordinate system', function(){
@@ -514,7 +514,7 @@ describe('Box#constructor', function(){
 	});
 	
 	after(function(){
-		Parsley.setGameCoords();
+		Garfunkel.setGameCoords();
 	});
 });
 
@@ -552,7 +552,7 @@ describe('Box#containsPoint ', function(){
 	var box , ins, outs;
 	describe('also for school coords it', function(){
 		before(function(){
-			Parsley.setSchoolCoords();
+			Garfunkel.setSchoolCoords();
 			box = new Box(0,3,0,3);
 			ins =  [new Vect(0,0), new Vect(0,3), new Vect(3,3), new Vect(3,0)];
 			outs = [new Vect(0,-1), new Vect(0,4), new Vect(1,4)];
@@ -575,7 +575,7 @@ describe('Box#containsPoint ', function(){
 		});
 		
 		after(function(){
-			Parsley.setGameCoords();
+			Garfunkel.setGameCoords();
 		});
 	});
 });
@@ -585,7 +585,7 @@ describe('Box#intersect', function(){
 	var box1,box2,box3,box4,box5;
 	before(function(){
 		
-		Parsley.setSchoolCoords();
+		Garfunkel.setSchoolCoords();
 		
 		box1 = new Box(3,5,3,5);
 		box2 = new Box(4,6,4,6);
@@ -612,7 +612,7 @@ describe('Box#intersect', function(){
 	);
 	
 	after(function(){
-			Parsley.setGameCoords();
+			Garfunkel.setGameCoords();
 	});
 	
 });

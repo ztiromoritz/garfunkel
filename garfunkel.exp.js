@@ -1,5 +1,5 @@
-var Pool = require('./parsley.pool').Parsley.Pool;
-var Vect = require('./parsley').Parsley.Vect; 
+var Pool = require('./garfunkel.pool').Garfunkel.Pool;
+var Vect = require('./garfunkel').Garfunkel.Vect; 
 
 /**
  * Experimental Equation Api.
