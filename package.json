@@ -1,13 +1,21 @@
 {
 	"name": "garfunkel",
+	"main": "./garfunkel.js"
 	"version": "0.0.1",
 	"description": "2D geometry toolbox",
 	"scripts" : {
-		"test" : "mocha -b"
+		"test" : "mocha -b",
+		"lint" : "jshint **.js;true"
 	},
 	"devDependencies": {
 		"mocha": "~2.2.0",
 		"chai": "~2.2.0",
 		"sinon": "~1.14.0"
-	}
+	},
+	"licenses" : [
+		{
+    		"type": "MIT",
+    		"url": "https://raw.githubusercontent.com/ztiromoritz/garfunkel/master/LICENSE"
+  		}
+	]
 }
