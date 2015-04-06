@@ -1,7 +1,9 @@
-(function(global){
 /**
  * parsley.js - my personal 2d geometry toolbox
+ * @module Parsley
  */
+(function(global){
+
 
 
 /**
@@ -23,59 +25,19 @@ Parsley.setGameCoords = function() { X_IS_LEFT_TO_Y = true;};
 Parsley.setSchoolCoords = function(){ X_IS_LEFT_TO_Y = false;};
 
 
-/**
- * Simple Object Pool 
- * (for internal and external use)
- * 
- * @example
- *    # exponential growth
- *    growth = function(capacity){return capacity === 0?1:2*capacity;};
- * 
- * 
- * @param {growth}
- */
-var Pool = function(capacity, constructor , initializer, growth){
-	this.items = new Array(capacity);
-	this.capacity = capacity;
-	this.current = capacity;
-	this.initializer = initializer;
-	this.constructor = constructor;
-	this.growth = growth || function(cap){return 1;};// 
-	this.createItems( capacity );
-};
-
-Pool.prototype.createItems = function(size){
-	this.items.length = size;
-	for(var i = 0; i < size; i++)
-		this.items[i] = new this.constructor();	
-};
-
-Pool.prototype.get = function(){
-	if(this.current === 0){
-		var growth = this.growth( this.capacity ); 
-		this.capacity += growth;
-		this.current = growth;
-		this.createItems( growth );	
-	}		
-	this.current--;
-	var item = this.items[this.current];
-	this.initializer.apply( item, arguments );
-	return item;
-};
-
-Pool.prototype.dispose = function( obj ){
-	this.current = this.items.push(obj);
-	this.capacity = Math.max(this.capacity, this.current);	
-};
 
 
 /**
+
  * Represents a vector as well as a point.
  *
  * It's a tupel.
  *
- * @param {Object} x
- * @param {Object} y
+ * 
+ * @memberOf Parsley
+ * @class Vect
+ * @param {Number} x
+ * @param {Number} y
  */
 var Vect = function(x, y) {
 	this.x = x || 0;
@@ -227,12 +189,15 @@ Vect.prototype.rotateTo = function(angle){
 };
 
 
+
 Vect.prototype.reflectOn = function( u ){
 	var l,n,r;
 	if(this.isRightOf(u)){
 		l = this.clone();
 		n = u.clone().leftNormal();
 		r = l.sub(n.clone().mul( n.dot(l) * (2) ));
+	
+		
 	}else if(this.isLeftOf(u)){
 		l = this.clone();
 		n = u.clone().rightNormal();
@@ -359,7 +324,7 @@ Segment.prototype.intersect = function(s) {
 Parsley.Vect = Vect;
 Parsley.Segment = Segment;
 Parsley.Box = Box;
-Parsley.Pool = Pool;
+
 
 global.Parsley = Parsley;
 

@@ -5,7 +5,9 @@ var Parsley = require("../parsley").Parsley;
 Vect = Parsley.Vect;
 Box = Parsley.Box;
 Segment = Parsley.Segment;
-Pool = Parsley.Pool;
+
+//TODO: own test
+var Pool = require("../parsley.pool").Parsley.Pool;
 
 describe('Pool#constructor', function(){
 	it('should take initial size, constructor and initializer',
