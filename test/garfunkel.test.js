@@ -5,9 +5,8 @@ var Garfunkel = require("../garfunkel").Garfunkel;
 Vect = Garfunkel.Vect;
 Box = Garfunkel.Box;
 Segment = Garfunkel.Segment;
-
-//TODO: own test
-var Pool = require("../garfunkel.pool").Garfunkel.Pool;
+Equation = Garfunkel.Equation;
+Pool = Garfunkel.Pool;
 
 describe('Pool#constructor', function(){
 	it('should take initial size, constructor and initializer',
@@ -104,14 +103,65 @@ describe('Pool#get' , function(){
 });
 
 
+describe('Equation#get', function(){
+	it('should provide an Equation', function(){
+		var e = Equation.get();
+		expect(e).to.be.instanceOf(Equation);	
+	});
+});
 
 
+describe('Equation#_get()', function(){
+	it('should provide a Vect', function(){
+		var e = Equation.get();	
+		expect(e._get()).to.have.property('x');
+		expect(e._get()).to.have.property('y');
+		expect(e._get()).to.be.instanceof(Vect);
+		
+	});
+	
+	
+	it('should set the values', function(){
+		var e = Equation.get();
+		var v = e._get(1,4);
+		expect(v.x).to.be.equal(1);
+		expect(v.y).to.be.equal(4);
+	});
+		
+});
+
+describe('Equation#items', function(){
+	it('should count only own elements', function(){
+		var e = Equation.get();
+		var u = new Vect(2,3);
+		var v = e._get(23,7);
+		var w = e.add(u,v);
+		
+		expect(e.items.length).to.be.equal(2);
+		
+		expect(e.items[0].x).to.be.equal(23);
+		expect(e.items[1].x).to.be.equal(25);
+	});
+});
 
 
-
-
-
-
+describe('Equation#mul', function(){
+	it('should provide new object', function(){
+		var e = Equation.get();
+		var u = new Vect(2,3);
+		var v = e.mul(4,u);
+		expect(u.x).to.be.equal(2);
+		expect(u.y).to.be.equal(3);
+	});
+	
+	it('should multiply by skalar', function(){
+		var e = Equation.get();
+		var u = new Vect(2,3);
+		var v = e.mul(4,u);
+		expect(v.x).to.be.equal(8);
+		expect(v.y).to.be.equal(12);
+	});
+});
 
 describe('Vect#constructor', function(){
  it('should keep values', function(){

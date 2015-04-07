@@ -25,7 +25,68 @@ Garfunkel.setGameCoords = function() { X_IS_LEFT_TO_Y = true;};
 Garfunkel.setSchoolCoords = function(){ X_IS_LEFT_TO_Y = false;};
 
 
+/**
+ * 
+ * TODO: desctructor
+ * 
+ * Simple Object Pool 
+ * (for internal and external use)	
+ * <img src="../doc/logo.jpg">
+ * 
+ * @example
+ *  	exponential growth
+ *      growth = function(capacity){return capacity === 0?1:2*capacity;};
+ * @memberOf Garfunkel
+ * @class Pool
+ * @constructor
+ * @param {Number} capacity The initial capacity.
+ */
+var Pool = function(capacity, constructor , initializer, growth){
+	this.items = new Array(capacity);
+	this.capacity = capacity;
+	this.current = capacity;
+	this.initializer = initializer;
+	this.constructor = constructor;
+	this.growth = growth || function(cap){return 1;};// 
+	this.createItems( capacity );
+};
 
+
+/** 
+ * CreateItems
+ * 
+ * @function 
+ * 
+ */
+Pool.prototype.createItems = function(size){
+	this.items.length = size;
+	for(var i = 0; i < size; i++)
+		this.items[i] = new this.constructor();	
+};
+
+/**
+ * @function
+ */
+Pool.prototype.get = function(){
+	if(this.current === 0){
+		var growth = this.growth( this.capacity ); 
+		this.capacity += growth;
+		this.current = growth;
+		this.createItems( growth );	
+	}		
+	this.current--;
+	var item = this.items[this.current];
+	this.initializer.apply( item, arguments );
+	return item;
+};
+
+/**
+ * @function
+ */
+Pool.prototype.dispose = function( obj ){
+	this.current = this.items.push(obj);
+	this.capacity = Math.max(this.capacity, this.current);	
+};
 
 /**
 
@@ -211,6 +272,69 @@ Vect.prototype.reflectOn = function( u ){
 };
 
 
+
+/**
+ * Experimental Equation Api.
+ *  * Include Object Pooling
+ */
+
+/**
+ * @constructor
+ */
+var Equation = function(){
+	this.items = []; //TODO: create destructor to empty this array
+};  
+
+var eqPool = new Pool(4,Equation, Equation);
+var vectPool = new Pool(16, Vect, Vect);
+
+
+Equation.get = function(){
+	return eqPool.get();	
+};
+
+/**
+ * Dispose this equation and all the vectors produced by this equation
+ * @param {Object} equation
+ * @param {Object} disposeLastResult
+ */
+Equation.dispose = function( equation, disposeLast ){
+	for(var i = 0; i< this.items.length; i++){
+		vectPool.dispose(this.items[i]);
+	}
+	this.items.length = 0; //No destructor needed ??
+	eqPool.dispose(equation);
+};
+
+
+Equation.prototype._get = function (){
+	var item = Pool.prototype.get.apply(vectPool, arguments);
+	this.items.push(item);
+	return item;
+};
+
+Equation.prototype.add = function(u,v){
+	return this._get(u.x + v.x, u.y + v.y);
+};
+
+Equation.prototype.div = function(s,u){
+	return this.mul(1/s,u);
+};
+
+Equation.prototype.mul = function(s,u){
+	return this._get(u.x * s, u.y * s);
+};
+
+Equation.prototype.normalize = function(u){
+	var length = this.length(u); //TODO: u.length();
+	if (length === 0) {
+		return this._get(1,0);
+	} else {
+		return this.div(u,length);
+	}		
+};
+
+
 /**
  * A rectangular box with edges parallel to the coordinate axes.
  * 
@@ -324,6 +448,8 @@ Segment.prototype.intersect = function(s) {
 Garfunkel.Vect = Vect;
 Garfunkel.Segment = Segment;
 Garfunkel.Box = Box;
+Garfunkel.Pool = Pool;
+Garfunkel.Equation = Equation;
 
 
 global.Garfunkel = Garfunkel;
