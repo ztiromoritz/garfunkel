@@ -27,17 +27,16 @@ Garfunkel.setSchoolCoords = function(){ X_IS_LEFT_TO_Y = false;};
 
 /**
  * 
- * TODO: desctructor
- * 
- * Simple Object Pool 
- * (for internal and external use)	
- * <img src="../doc/logo.jpg">
  * 
  * @example
  *  	exponential growth
  *      growth = function(capacity){return capacity === 0?1:2*capacity;};
  * @memberOf Garfunkel
+ * 
+ * @classdesc A simple object pool 
+ * 
  * @class Pool
+ * 
  * @constructor
  * @param {Number} capacity The initial capacity.
  */
@@ -89,14 +88,17 @@ Pool.prototype.dispose = function( obj ){
 };
 
 /**
-
- * Represents a vector as well as a point.
- *
- * It's a tupel.
+ * @classdesc Represents a vector as well as a point.
+ * 
+ * <br>
+ * All Methods on a Vector that return a vector are 
+ * chainable and will change the initial vector to 
+ * the result of the operation. 
  *
  * 
  * @memberOf Garfunkel
  * @class Vect
+ * @constructor
  * @param {Number} x
  * @param {Number} y
  */
@@ -107,11 +109,24 @@ var Vect = function(x, y) {
 
 var ZERO = new Vect(0, 0);
 
+
+/**
+ * 
+ * 
+ * @example
+ * new Vector(2,4).toString()
+ * "x: 2 y: 4" 
+ * 
+ * @function
+ * @return {String} 
+ */
 Vect.prototype.toString = function() {
 	return 'x: ' + this.x + ' y: ' + this.y;
 };
 
-
+/**
+ * @function
+ */
 Vect.prototype.clone = function() {
 	return new Vect(this.x, this.y);
 };
@@ -249,16 +264,12 @@ Vect.prototype.rotateTo = function(angle){
 	return this;
 };
 
-
-
 Vect.prototype.reflectOn = function( u ){
 	var l,n,r;
 	if(this.isRightOf(u)){
 		l = this.clone();
 		n = u.clone().leftNormal();
-		r = l.sub(n.clone().mul( n.dot(l) * (2) ));
-	
-		
+		r = l.sub(n.clone().mul( n.dot(l) * (2) ));	
 	}else if(this.isLeftOf(u)){
 		l = this.clone();
 		n = u.clone().rightNormal();
@@ -274,7 +285,7 @@ Vect.prototype.reflectOn = function( u ){
 
 
 /**
- * Experimental Equation Api.
+ * Experimental Equation API.
  *  * Include Object Pooling
  */
 
@@ -313,6 +324,10 @@ Equation.prototype._get = function (){
 	return item;
 };
 
+Equation.prototype.clone = function(u) {
+	return this._get(u.x,v.x);
+};
+
 Equation.prototype.add = function(u,v){
 	return this._get(u.x + v.x, u.y + v.y);
 };
@@ -325,7 +340,15 @@ Equation.prototype.mul = function(s,u){
 	return this._get(u.x * s, u.y * s);
 };
 
-Equation.prototype.normalize = function(u){
+Equation.prototype.cross = function(s,u){
+	return this._get(u.x * s, u.y * s);
+};
+
+Equation.prototype.dot = function(u,v){
+	
+};
+
+Equation.prototype.normalized = function(u){
 	var length = this.length(u); //TODO: u.length();
 	if (length === 0) {
 		return this._get(1,0);
