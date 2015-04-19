@@ -130,6 +130,14 @@ describe('Equation#_get()', function(){
 		
 });
 
+describe('Equation.dispose' , function(){
+	it('should cleanup without error after a small equation', function(){
+		var e = Equation.get();
+		e.sub(e.v(3,4),e.v(3,5));
+		Equation.dispose(e);
+	});
+});
+
 describe('Equation#items', function(){
 	it('should count only own elements', function(){
 		var e = Equation.get();

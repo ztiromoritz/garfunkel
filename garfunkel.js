@@ -307,13 +307,13 @@ Equation.get = function(){
 /**
  * Dispose this equation and all the vectors produced by this equation
  * @param {Object} equation
- * @param {Object} disposeLastResult
+ * @param {Object} disposeLastResult TODO not yet implementd
  */
 Equation.dispose = function( equation, disposeLast ){
-	for(var i = 0; i< this.items.length; i++){
-		vectPool.dispose(this.items[i]);
+	for(var i = 0; i< equation.items.length; i++){
+		vectPool.dispose(equation.items[i]);
 	}
-	this.items.length = 0; //No destructor needed ??
+	equation.items.length = 0; //No destructor needed ??
 	eqPool.dispose(equation);
 };
 
@@ -324,12 +324,20 @@ Equation.prototype._get = function (){
 	return item;
 };
 
+Equation.prototype.v = function(x,y){
+	return this._get(x,y);
+};
+
 Equation.prototype.clone = function(u) {
 	return this._get(u.x,v.x);
 };
 
 Equation.prototype.add = function(u,v){
 	return this._get(u.x + v.x, u.y + v.y);
+};
+
+Equation.prototype.sub = function(u,v){
+	return this._get(u.x -v.x, u.y - v.y);
 };
 
 Equation.prototype.div = function(s,u){
@@ -340,12 +348,20 @@ Equation.prototype.mul = function(s,u){
 	return this._get(u.x * s, u.y * s);
 };
 
-Equation.prototype.cross = function(s,u){
-	return this._get(u.x * s, u.y * s);
+Equation.prototype.cross = function(u,v){
+	return (u.x * v.y ) - (u.y * v.x );
 };
 
 Equation.prototype.dot = function(u,v){
-	
+	return u.x * v.x + u.y * v.y;
+};
+
+Equation.prototype.length = function(u){
+	return Math.sqrt(this.lengthSq(u));
+};
+
+Equation.prototype.lengthSq = function(u){
+	return u.x * u.x + u.y * u.y;
 };
 
 Equation.prototype.normalized = function(u){

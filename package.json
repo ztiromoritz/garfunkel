@@ -1,7 +1,7 @@
 {
 	"name": "garfunkel",
 	"main": "./garfunkel.js",
-	"version": "0.1.0",
+	"version": "0.1.1",
 	"description": "2D geometry toolbox",
 	"scripts" : {
 		"test" : "mocha",
