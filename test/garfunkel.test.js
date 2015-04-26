@@ -1,7 +1,24 @@
-var assert = require("assert");
-var sinon = require("sinon");
-var expect = require("chai").expect;
-var Garfunkel = require("../garfunkel").Garfunkel;
+if( typeof window === 'undefined' ){
+	//Nodejs, iojs
+	
+	require('blanket')({
+    pattern: function (filename) {
+        return !/node_modules/.test(filename);
+   	 }
+	});
+	
+	assert = require("assert");
+	sinon = require("sinon");
+	expect = require("chai").expect;
+	Garfunkel = require("../garfunkel").Garfunkel;
+	
+}else{
+	//in browser
+	expect = chai.expect;
+	assert = chai.assert;
+}
+
+
 Vect = Garfunkel.Vect;
 Box = Garfunkel.Box;
 Segment = Garfunkel.Segment;
@@ -127,8 +144,64 @@ describe('Equation#_get()', function(){
 		expect(v.x).to.be.equal(1);
 		expect(v.y).to.be.equal(4);
 	});
+	
+	it('should provide a clean value', function(){
+		
+	});
 		
 });
+
+
+describe('Strange bugs' , function(){
+	it('#1', function(){
+		var _ = Equation.get();	
+		var o1 = {x: 2, y: 3};
+		var o2 = {x: 3, y: 4};
+		var v_1 = _.v(o1.x,o1.y);
+		var v_2 = _.v(o2.x,o2.y);
+		
+		var dist = _.sub( v_1 , v_2 ).length();
+		
+		expect(v_1.x).to.be.equal(2);
+		expect(v_1.y).to.be.equal(3);
+		expect(o1.x).to.be.equal(2);
+		expect(o1.y).to.be.equal(3);	
+	});
+});
+
+describe('Equation#v()', function(){
+	it('should provide a Vect', function(){
+		var e = Equation.get();	
+		expect(e.v()).to.have.property('x');
+		expect(e.v()).to.have.property('y');
+		expect(e.v()).to.be.instanceof(Vect);
+		
+	});
+	
+	
+	it('should set the values', function(){
+		var e = Equation.get();
+		var v = e.v(1,4);
+		expect(v.x).to.be.equal(1);
+		expect(v.y).to.be.equal(4);
+	});
+	
+	
+	it('should handle adapt capacity', function(){
+		var e = Equation.get();
+		var v = null;
+		for(var n = 0; n < 100; n++){
+			v = e._get(n,n*2);
+			expect(v.x).to.be.equal(n);
+			expect(v.y).to.be.equal(n*2);
+		}
+			
+	});
+	
+	
+		
+});
+
 
 describe('Equation.dispose' , function(){
 	it('should cleanup without error after a small equation', function(){

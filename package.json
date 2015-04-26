@@ -5,6 +5,7 @@
 	"description": "2D geometry toolbox",
 	"scripts" : {
 		"test" : "mocha",
+		"test-cov" : "mocha -R html-cov > test/coverage.html",
 		"lint" : "jshint **.js;true",
 		"build" : "(echo '/*!' ; cat ./LICENSE ; echo '*/' ; browserify garfunkel.js) > build/garfunkel.js",
 		"doc" : "jsdoc -c jsdoc.conf.json garfunkel.js"
@@ -19,7 +20,8 @@
 		"chai": "~2.2.0",
 		"sinon": "~1.14.0",
 		"browserify" : "latest",
-		"jshint" : "latest"
+		"jshint" : "latest",
+		"blanket": "latest"
 	},
 
 	"licenses" : [
@@ -27,5 +29,12 @@
     		"type": "MIT",
     		"url": "https://raw.githubusercontent.com/ztiromoritz/garfunkel/master/LICENSE"
   		}
-	]
+	],
+	
+	"config": {
+      "blanket": {
+        "pattern": [ "src" ],
+        "data-cover-never": [ "node_modules" ]
+      }
+    }
 }

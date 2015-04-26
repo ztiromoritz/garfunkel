@@ -324,9 +324,8 @@ Equation.prototype._get = function (){
 	return item;
 };
 
-Equation.prototype.v = function(x,y){
-	return this._get(x,y);
-};
+Equation.prototype.v = Equation.prototype._get;
+
 
 Equation.prototype.clone = function(u) {
 	return this._get(u.x,v.x);
@@ -337,7 +336,7 @@ Equation.prototype.add = function(u,v){
 };
 
 Equation.prototype.sub = function(u,v){
-	return this._get(u.x -v.x, u.y - v.y);
+	return this._get(u.x - v.x, u.y - v.y);
 };
 
 Equation.prototype.div = function(s,u){
