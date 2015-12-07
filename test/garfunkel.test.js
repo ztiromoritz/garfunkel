@@ -1,19 +1,14 @@
 if( typeof window === 'undefined' ){
-	//Nodejs, iojs
-	
-	require('blanket')({
-    pattern: function (filename) {
-        return !/node_modules/.test(filename);
-   	 }
-	});
-	
+	//node
+	//console.log(_mocha);	
+
 	assert = require("assert");
 	sinon = require("sinon");
 	expect = require("chai").expect;
 	Garfunkel = require("../garfunkel").Garfunkel;
 	
 }else{
-	//in browser
+	//browser
 	expect = chai.expect;
 	assert = chai.assert;
 }
@@ -23,7 +18,12 @@ Vect = Garfunkel.Vect;
 Box = Garfunkel.Box;
 Segment = Garfunkel.Segment;
 Equation = Garfunkel.Equation;
+Calculator = Garfunkel.Calculator;
 Pool = Garfunkel.Pool;
+
+
+
+
 
 describe('Pool#constructor', function(){
 	it('should take initial size, constructor and initializer',
@@ -120,129 +120,54 @@ describe('Pool#get' , function(){
 });
 
 
-describe('Equation#get', function(){
-	it('should provide an Equation', function(){
-		var e = Equation.get();
-		expect(e).to.be.instanceOf(Equation);	
-	});
-});
-
-
-describe('Equation#_get()', function(){
-	it('should provide a Vect', function(){
-		var e = Equation.get();	
-		expect(e._get()).to.have.property('x');
-		expect(e._get()).to.have.property('y');
-		expect(e._get()).to.be.instanceof(Vect);
+describe('Calculator#relectOn', function(){
+	
+	var _ = Calculator.create();
 		
-	});
-	
-	
-	it('should set the values', function(){
-		var e = Equation.get();
-		var v = e._get(1,4);
-		expect(v.x).to.be.equal(1);
-		expect(v.y).to.be.equal(4);
-	});
-	
-	it('should provide a clean value', function(){
+	it('should do boing', function(){
+		var ref = new Vect(1,0);
+		var u = new Vect(1,2);
 		
-	});
+		var u_r = _.reflectOn(u, ref);
 		
-});
-
-
-describe('Strange bugs' , function(){
-	it('#1', function(){
-		var _ = Equation.get();	
-		var o1 = {x: 2, y: 3};
-		var o2 = {x: 3, y: 4};
-		var v_1 = _.v(o1.x,o1.y);
-		var v_2 = _.v(o2.x,o2.y);
+		assert.equal(  1, u_r.x);
+		assert.equal( -2, u_r.y);
+	});
+	
+	it('should do buff', function(){
+		var ref = new Vect(0,1);
+		var u = new Vect(1,-3);
 		
-		var dist = _.sub( v_1 , v_2 ).length();
+		var u_r = _.reflectOn(u,ref);
 		
-		expect(v_1.x).to.be.equal(2);
-		expect(v_1.y).to.be.equal(3);
-		expect(o1.x).to.be.equal(2);
-		expect(o1.y).to.be.equal(3);	
+		assert.equal( -1, u_r.x);
+		assert.equal( -3, u_r.y);
 	});
-});
-
-describe('Equation#v()', function(){
-	it('should provide a Vect', function(){
-		var e = Equation.get();	
-		expect(e.v()).to.have.property('x');
-		expect(e.v()).to.have.property('y');
-		expect(e.v()).to.be.instanceof(Vect);
+	
+	it('should do whiuuuuuuuu', function(){
+		var EPSILON = 0.0001;
+		var ref = new Vect(1,1);
+		var u = new Vect(1,0);
 		
-	});
-	
-	
-	it('should set the values', function(){
-		var e = Equation.get();
-		var v = e.v(1,4);
-		expect(v.x).to.be.equal(1);
-		expect(v.y).to.be.equal(4);
-	});
-	
-	
-	it('should handle adapt capacity', function(){
-		var e = Equation.get();
-		var v = null;
-		for(var n = 0; n < 100; n++){
-			v = e._get(n,n*2);
-			expect(v.x).to.be.equal(n);
-			expect(v.y).to.be.equal(n*2);
-		}
-			
-	});
-	
-	
+		var u_r = _.reflectOn(u,ref);
 		
-});
-
-
-describe('Equation.dispose' , function(){
-	it('should cleanup without error after a small equation', function(){
-		var e = Equation.get();
-		e.sub(e.v(3,4),e.v(3,5));
-		Equation.dispose(e);
+		assert( Math.abs(u_r.x) < EPSILON);
+		assert(	Math.abs( u_r.y - 1) < EPSILON);
 	});
-});
-
-describe('Equation#items', function(){
-	it('should count only own elements', function(){
-		var e = Equation.get();
+	 
+	 
+	 it('should do hää', function(){
+	 	var ref = new Vect(2,3);
 		var u = new Vect(2,3);
-		var v = e._get(23,7);
-		var w = e.add(u,v);
 		
-		expect(e.items.length).to.be.equal(2);
-		
-		expect(e.items[0].x).to.be.equal(23);
-		expect(e.items[1].x).to.be.equal(25);
-	});
-});
-
-
-describe('Equation#mul', function(){
-	it('should provide new object', function(){
-		var e = Equation.get();
-		var u = new Vect(2,3);
-		var v = e.mul(4,u);
-		expect(u.x).to.be.equal(2);
-		expect(u.y).to.be.equal(3);
+		var u_r = _.reflectOn(u,ref);
+		assert.equal( -2, u_r.x);
+		assert.equal( -3, u_r.y);
 	});
 	
-	it('should multiply by skalar', function(){
-		var e = Equation.get();
-		var u = new Vect(2,3);
-		var v = e.mul(4,u);
-		expect(v.x).to.be.equal(8);
-		expect(v.y).to.be.equal(12);
-	});
 });
+
+
 
 describe('Vect#constructor', function(){
  it('should keep values', function(){
@@ -332,6 +257,154 @@ describe('Vect#dot', function(){
 		var dot = v.dot(w);
 		assert.equal(dot, 21);
 	});
+});
+
+describe('Vect#normalize', function(){
+	it('should normalize normal vector', function(){
+		var v = new Vect(3,0);
+		var v_0 = v.normalize();
+		assert.equal(v_0.x,1);
+		assert.equal(v_0.y,0);
+	});
+
+	it('should normalize negative normal vector', function(){
+		var v = new Vect(0,-2);
+		var v_0 = v.normalize();
+		assert.equal(v_0.x,0);
+		assert.equal(v_0.y,-1);
+	});
+
+	it('should give default for zero vector', function(){
+		var v = new Vect(0,0);
+		var v_0 = v.normalize();
+		assert.equal(v_0.x,1);
+		assert.equal(v_0.y,0);
+	});
+
+});
+
+
+describe('Vect#distance', function(){
+	it('should give euclidian distance', function(){
+		var v = new Vect(3,0);
+		var w = new Vect(0,4);
+		var dist = v.distance(w);
+		assert.equal(dist,5);
+	});
+
+	it('should give euclidian distance, even for negative values', function(){
+		var v = new Vect(3,0);
+		var w = new Vect(0,-4);
+		var dist = v.distance(w);
+		assert.equal(dist,5);
+	});
+
+});
+
+describe('Vect#distanceSq', function(){
+	it('should give quadratic distance', function(){
+		var v = new Vect(3,0);
+		var w = new Vect(0,4);
+		var dist = v.distanceSq(w);
+		assert.equal(dist,25);
+	});
+
+	it('should give quadratic distance, even for negative values', function(){
+		var v = new Vect(3,0);
+		var w = new Vect(0,-4);
+		var dist = v.distanceSq(w);
+		assert.equal(dist,25);
+	});
+
+	it('should be symmetric', function(){
+		var v = new Vect(3,0);
+		var w = new Vect(0,-4);
+		assert.equal(v.distanceSq(w),w.distanceSq(v));
+	});
+});
+
+describe('Vect#manhatten', function(){
+	it('should give manhatten distance', function(){
+		var v = new Vect(3,0);
+		var w = new Vect(0,4);
+		var dist = v.manhatten(w);
+		assert.equal(dist,7);
+	});
+
+	it('should give manhatten distance, , even for negative values', function(){
+		var v = new Vect(3,0);
+		var w = new Vect(0,-4);
+		var dist = v.manhatten(w);
+		assert.equal(dist,7);
+	});
+});
+
+describe('Vect#angle', function(){
+		var EPSILON = 0.0001;
+	it('should give a 90° angle', function(){
+
+		var v = new Vect(0,1);
+		var w = new Vect(1,0);
+		var angle = v.angle(w);
+		assert(Math.abs(angle - Math.PI/2) < EPSILON);
+	});
+
+	/*
+	TODO: direction of the angle
+	it('both angles of two vectors added should give a full round', function(){
+		var v = new Vect(0,3);
+		var w = new Vect(-7,0);
+		var angle = v.angle(w) + w.angle(v) ;
+		console.log(angle);
+		assert(Math.abs(angle - 2* Math.PI) < EPSILON);
+	});
+	*/
+
+
+});
+
+describe('Vect#rotate', function(){
+	var EPSILON = 0.0001;
+	it('should rotate 180°', function(){
+		var v = new Vect(1,0);
+		v.rotate(Math.PI);
+
+		assert(Math.abs(v.x + 1) < EPSILON);
+		assert(Math.abs(v.y) < EPSILON);
+	});
+
+	it('should preserve length', function(){
+		var v = new Vect(3,7);
+		var before = v.length();
+		v.rotate(Math.PI/7);
+		var after = v.length();
+		assert(Math.abs(before - after) < EPSILON);
+	});
+
+});
+
+
+describe('Vect#rotateTo', function(){
+	var EPSILON = 0.0001;
+	it('should preserve length', function(){
+		var v = new Vect(3,7);
+		var before = v.length();
+		v.rotateTo(Math.PI/7);
+		var after = v.length();
+		assert(Math.abs(before - after) < EPSILON);
+	});
+
+
+	it('should set angle from (1,0)', function(){
+		var v = new Vect(3,7);
+		var w = new Vect(0,1);
+		v.rotateTo(Math.PI/7);
+		var angle = v.angle(w);
+		assert(Math.abs(angle - Math.PI/7) < EPSILON);
+	});
+
+
+
 });
 
 
@@ -784,11 +857,6 @@ describe('Box#intersect', function(){
 	
 });
 
-
-
-
-
-
 describe('Segment#intersect', function(){
 	
 	it('cross should intersect', function(){
@@ -822,7 +890,6 @@ describe('Segment#intersect', function(){
 			var seg2 = Segment.fromArray([0,0,1,1]);
 			assert(seg1.intersect(seg2));
 		});
-	});
-	
+	});	
 	
 });

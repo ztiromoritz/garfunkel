@@ -186,6 +186,12 @@ Vect.prototype.distance = function (v) {
 	return Math.sqrt(this.distanceSq(v));
 };
 
+Vect.prototype.manhatten = function(v) {
+	var dx = this.x - v.x;
+	var dy = this.y - v.y;
+	return Math.abs(dx) + Math.abs(dy);
+};
+
 Vect.prototype.isLeftOf = function(v){
 	if(X_IS_LEFT_TO_Y)
 		return this.cross(v) > 0;
@@ -264,6 +270,16 @@ Vect.prototype.rotateTo = function(angle){
 	return this;
 };
 
+
+
+/**
+ *  @function
+ *  "angle of incidence equal to the angle of reflexion"
+ *  Performs a simple reflection of this object on a surface 
+ *  the has the direction of the given vector u. 
+ *  
+ *  
+ */
 Vect.prototype.reflectOn = function( u ){
 	var l,n,r;
 	if(this.isRightOf(u)){
@@ -275,7 +291,7 @@ Vect.prototype.reflectOn = function( u ){
 		n = u.clone().rightNormal();
 		r = l.sub(n.clone().mul( n.dot(l) * (2) ));
 	}else{
-		r = this.clone().invert();;
+		r = this.clone().invert();
 	}
 	this.x = r.x;
 	this.y = r.y;
@@ -285,93 +301,201 @@ Vect.prototype.reflectOn = function( u ){
 
 
 /**
- * Experimental Equation API.
+ * Experimental Calculator API.
  *  * Include Object Pooling
+ * 
+ * 
+ * Usage:
+ * var _ = Calculator.create();
+ * 
+ * var v = _(3,4); //Creates a vector in the calculators scope
+ * 
+ * _.sub( _(3,4) , _(1,2) )
+ * 
+ * _.clear();
+ * 
+ * The vectors passed to a calculator function stay immutable. 
+ * The Vect function can be applied also so:
+ * 
+ * 
+ * var v = _( 2, 0 );
+ * var w = _.n( v );
+ * 
+ * // v ->  x: 2 y: 0
+ * // w ->  x: 1 y: 0;
+ * 
+ * var v = c( 2 , 0 );
+ * var w = v.normalize();
+ * // v ->  x: 1 y: 0
+ * // w ->  x: 1 y: 0;
+ * 
+ * 
+ * 
+ * All references to vectors produced in equation must not be used after.
+ * 
+ * 
+ *
  */
+var Calculator = {};
+Calculator.create = function(){
+	
 
-/**
- * @constructor
- */
-var Equation = function(){
-	this.items = []; //TODO: create destructor to empty this array
-};  
+	var pool = new Pool(16, Vect, Vect);
+	var active = []; 
+	
+	var maxActive = 0;
+			
+	/**
+	 * Create a Vector within the scope of the Calculator.
+	 * 
+	 * This means the instance is take from the internal Vect pool.
+	 * 
+	 * When the calculation is clear all references to the Vect object become invalid.
+	 * 
+	 * Usage:
+	 *  _(3,4) or _([3,4]) or _({x:3,y:4})
+	 * 
+	 * When working with the normal Vect methods _ can be seen as a clone with a clean up ability; 
+	 * 
+	 * 
+	 */	
+	var _ = function(){
+		var x,y;
+		if(arguments.length === 1){
+			if(arguments[0].constructor === Array){
+				x = arguments[0][0];
+				y = arguments[0][1];
+			}else{
+				x = arguments[0].x;
+				y = arguments[0].y;
+			}		
+		}else if(arguments === 2){
+			x = arguments[0];
+			y = arguments[1];	
+		}
+		var item = Pool.prototype.get.apply(pool, [x,y]);
+		active.push(item);
+		maxActive = Math.max(maxActive, active.length);
+		return item;
+	};
+	
+	_.clear = function(){
+		for(var i = 0; i< items.length; i++){
+			pool.dispose(equation.items[i]);
+		}
+		used.length = 0; 
+	};
+	
+	_.statistics = function(){
+		return {
+			currentPoolCapacity : pool.items.length,
+			currentActiveItems  : used.length,
+			maxActive : maxActive
+		};
+	};
+	
+	
+	//V x V -> V
+	_.add = function(u,v){
+		return _(u).add(v);
+	};
+	
+	_.sub = function(u,v){
+		return _(u).sub(v);
+	};
+	
+	
+	
+	//V x V -> S
+	_.cross = function(u,v){
+		return u.cross(v);
+	};
+	
+	_.dot = function(u,v){
+		return u.dot(v);
+	};
+	
+	_.distanceSq = function(u,v){
+        return u.distanceSq(v);
+	};
 
-var eqPool = new Pool(4,Equation, Equation);
-var vectPool = new Pool(16, Vect, Vect);
+	_.distance = function (u,v) {
+		return u.distance(u,v);
+	};
+	
+	_.turnLeft = function(u){
+		return _(u).turnLeft();
+	};
+	
+	_.turnRight = function(u){
+		return _(u).turnRight();
+	};
+	
+	_.leftNormal = function(u){
+		return _(u).turnLeft().normalize();
+	};
+	
+	_.rightNormal = function(u){
+		return _(u).turnRight().normalize();
+	};	
+	
+	//V -> S
+	_.length = function(u){
+		return u.length();
+	};
+	
+	_.lengthSq = function(u){
+		return u.lengthSq();
+	};
+	
+	_.angle = function(u){
+		return u.angle();
+	};
+	
+	//V -> V
+	_.normalize = function(u){
+		var length = u.length(); //TODO: u.length();
+		if (length === 0) {
+			return _(1,0);
+		} else {
+			return _.div(u,length);
+		}		
+	};
+	_.n = _.normalize;
+	
+	//S x V -> V
+	_.div = function(s,u){
+		return _.mul(1/s,u);
+	};
+	
+	_.mul = function(s,u){
+		return _(u).mul(s);
+	};
+	
+	
+	_.rotate = function(angle, u) {
+		return _(u).rotate(angle);
+	};
+	
+	_.rotateTo = function(angle, u){
+		return _(u).rotateTo(angle);	
+	};
+	
+	_.reflectOn = function(u,v){
+		var n;
+		if(u.isRightOf(v)){
+			n = _(v).leftNormal();
+		} else if(u.isLeftOf(v)){
+			n = _(v).rightNormal();
+		} else {
+			return _(u).invert();
+		}
+		return _.sub( u , _.mul( n.dot(u) * 2, n ));
+	};
 
-
-Equation.get = function(){
-	return eqPool.get();	
+	return _;
+	
 };
-
-/**
- * Dispose this equation and all the vectors produced by this equation
- * @param {Object} equation
- * @param {Object} disposeLastResult TODO not yet implementd
- */
-Equation.dispose = function( equation, disposeLast ){
-	for(var i = 0; i< equation.items.length; i++){
-		vectPool.dispose(equation.items[i]);
-	}
-	equation.items.length = 0; //No destructor needed ??
-	eqPool.dispose(equation);
-};
-
-
-Equation.prototype._get = function (){
-	var item = Pool.prototype.get.apply(vectPool, arguments);
-	this.items.push(item);
-	return item;
-};
-
-Equation.prototype.v = Equation.prototype._get;
-
-
-Equation.prototype.clone = function(u) {
-	return this._get(u.x,v.x);
-};
-
-Equation.prototype.add = function(u,v){
-	return this._get(u.x + v.x, u.y + v.y);
-};
-
-Equation.prototype.sub = function(u,v){
-	return this._get(u.x - v.x, u.y - v.y);
-};
-
-Equation.prototype.div = function(s,u){
-	return this.mul(1/s,u);
-};
-
-Equation.prototype.mul = function(s,u){
-	return this._get(u.x * s, u.y * s);
-};
-
-Equation.prototype.cross = function(u,v){
-	return (u.x * v.y ) - (u.y * v.x );
-};
-
-Equation.prototype.dot = function(u,v){
-	return u.x * v.x + u.y * v.y;
-};
-
-Equation.prototype.length = function(u){
-	return Math.sqrt(this.lengthSq(u));
-};
-
-Equation.prototype.lengthSq = function(u){
-	return u.x * u.x + u.y * u.y;
-};
-
-Equation.prototype.normalized = function(u){
-	var length = this.length(u); //TODO: u.length();
-	if (length === 0) {
-		return this._get(1,0);
-	} else {
-		return this.div(u,length);
-	}		
-};
-
 
 /**
  * A rectangular box with edges parallel to the coordinate axes.
@@ -487,7 +611,8 @@ Garfunkel.Vect = Vect;
 Garfunkel.Segment = Segment;
 Garfunkel.Box = Box;
 Garfunkel.Pool = Pool;
-Garfunkel.Equation = Equation;
+Garfunkel.Calculator = Calculator;
+
 
 
 global.Garfunkel = Garfunkel;
