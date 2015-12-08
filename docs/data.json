@@ -3,7 +3,7 @@
         "name": "garfunkel",
         "url": "https://github.com/ztiromoritz/garfunkel",
         "version": "0.2.1",
-        "logo": "../assets/logo.jpg",
+        "logo": "./assets/garfunkel.png",
         "description": "2D geometry toolbox"
     },
     "files": {
@@ -705,26 +705,5 @@
             "module": "Garfunkel"
         }
     ],
-    "warnings": [
-        {
-            "message": "replacing incorrect tag: returns with return",
-            "line": " /Users/mo/wc/garfunkel/garfunkel.js:15"
-        },
-        {
-            "message": "replacing incorrect tag: returns with return",
-            "line": " /Users/mo/wc/garfunkel/garfunkel.js:295"
-        },
-        {
-            "message": "replacing incorrect tag: returns with return",
-            "line": " /Users/mo/wc/garfunkel/garfunkel.js:387"
-        },
-        {
-            "message": "replacing incorrect tag: returns with return",
-            "line": " /Users/mo/wc/garfunkel/garfunkel.js:403"
-        },
-        {
-            "message": "replacing incorrect tag: returns with return",
-            "line": " /Users/mo/wc/garfunkel/garfunkel.js:415"
-        }
-    ]
+    "warnings": []
 }

@@ -9,13 +9,13 @@
     <link rel="stylesheet" href="../assets/css/custom.css">
     <link rel="stylesheet" href="../assets/css/lucid.css">
     <link rel="stylesheet" href="../assets/vendor/bootstrap/css/bootstrap.css">
-    <link rel="shortcut icon" type="image/png" href="../assets/logo.jpg">
+    <link rel="shortcut icon" type="image/png" href="../assets/garfunkel.png">
 </head>
 <body class="yui3-skin-sam">
 <div class="navbar navbar-fixed-top">
     <div class="navbar-inner">
         <h1 class="brand" style="padding: 10px 16px 10px; height: 20px; line-height: 20px; margin-left: 0;">
-	    <img alt="garfunkel" src="../../assets/logo.jpg" style="max-height: 65%;" title="garfunkel">
+	    <img alt="garfunkel" src="../assets/garfunkel.png" style="max-height: 65%;" title="garfunkel">
             garfunkel
         </h1>
 	<div class="nav">
@@ -53,7 +53,7 @@
 	    </div>
         </div>
         <div class="span9">
-                <form id="options-form" class="form-inline pull-right">
+                <form id="options-form" class="form-inline pull-right" style="display: none;">
                     Show:
                     <label for="api-show-inherited" class="checkbox">
                         <input type="checkbox" id="api-show-inherited" checked>
@@ -61,16 +61,16 @@
                     </label>
             
                     <label for="api-show-protected" class="checkbox">
-                        <input type="checkbox" id="api-show-protected">
+                        <input type="checkbox" id="api-show-protected" checked>
                         Protected
                     </label>
             
                     <label for="api-show-private" class="checkbox">
-                        <input type="checkbox" id="api-show-private">
+                        <input type="checkbox" id="api-show-private" checked>
                         Private
                     </label>
                     <label for="api-show-deprecated" class="checkbox">
-                        <input type="checkbox" id="api-show-deprecated">
+                        <input type="checkbox" id="api-show-deprecated" checked>
                         Deprecated
                     </label>
             
@@ -85,9 +85,12 @@
                         
                         
                         
+                        <!--
                         	<div class="well well-small">
                                     Module: <a href="../modules/Garfunkel.html">Garfunkel</a>
                             </div>
+                        
+                                -->
                         
                         
                         

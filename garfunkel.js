@@ -23,7 +23,7 @@
      * @static
      * @method getXIsLeftOfY
      * @default "true"
-     * @returns {boolean}
+     * @return {boolean}
      */
     Garfunkel.getXIsLeftOfY = function(){
         return X_IS_LEFT_TO_Y;
@@ -296,7 +296,7 @@
      * Manhatten/city block/Taxicab distance
      * @method manhatten
      * @param v
-     * @returns {number}
+     * @return {number}
      */
     Vect.prototype.manhatten = function (v) {
         var dx = this.x - v.x;
@@ -389,7 +389,7 @@
      * @chainable
      * @method rotate
      * @param {Number} angle in radians
-     * @returns {Vect} the rotated vector
+     * @return {Vect} the rotated vector
      */
     Vect.prototype.rotate = function (angle) {
         var _x = (this.x * Math.cos(angle)) - (this.y * Math.sin(angle));
@@ -405,7 +405,7 @@
      * @chainable
      * @method rotateTo
      * @param {number} angle in radians
-     * @returns {Vect} the rotated vector
+     * @return {Vect} the rotated vector
      */
     Vect.prototype.rotateTo = function (angle) {
         this.rotate(angle - this.angle());
@@ -426,7 +426,7 @@
      * @method rotateTowards
      * @param {number} angle - angle in radians
      * @param {number} stepSize - maximum angle to move towards angle
-     * @returns {Vect} the rotated vector
+     * @return {Vect} the rotated vector
      */
     Vect.prototype.rotateTowards = function (angle, stepSize) {
         this.rotate(angle - this.angle());
