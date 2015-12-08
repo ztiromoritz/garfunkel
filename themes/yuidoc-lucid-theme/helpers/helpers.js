@@ -13,6 +13,15 @@ module.exports = {
 
 		return ret;
 	},
+	filename : function(context, options) {
+		var ret = "";
+		if(context){
+			var split = context.split('/');
+			ret = split[split.length - 1];
+
+		}
+		return ret;
+	},
 	/**
 	 * Hack for:
 	 * https://github.com/yui/yuidoc/issues/198

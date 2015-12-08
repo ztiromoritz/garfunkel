@@ -6,7 +6,8 @@
     "options": {
         "paths": ".",
         "outdir": "docs",
-        "exclude": "lib,docs,build,bower_components,node_modules",
+        "tabtospace" : "4",
+        "exclude": "lib,docs,build,bower_components,node_modules,themes,test",
         "themedir": "themes/yuidoc-lucid-theme",
         "helpers": ["themes/yuidoc-lucid-theme/helpers/helpers.js"]
     }

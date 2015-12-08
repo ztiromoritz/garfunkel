@@ -59,7 +59,7 @@ describe('Pool#get' , function(){
 	});
 	
 	it('should take object not created by the pool', function(){
-		/**
+		/*
 		 * This might be unusual, because the object was not created under the control of this pool.
 		 * So for example another constructor was used. 
 		 * If the capacity is reached, desiposing a new object would increase the capacity.

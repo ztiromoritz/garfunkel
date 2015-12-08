@@ -1,12 +1,11 @@
 /**
- * garfunkel.js - my personal 2d geometry toolbox
+ * garfunkel.js - A 2D geometry toolbox
  * @module Garfunkel
- * @namespace Garfunkel
  */
 (function (global) {
 
 
-    /**
+    /*
      * Used for the isLeftOf, isRightOf, getLeftNormal, getRightNormal functions.
      *
      * FALSE, means the normal school book coordinates with (0,0) in the lower left corner.
@@ -20,29 +19,22 @@
     Garfunkel.setXisLeftOfY = function (value) {
         X_IS_LEFT_TO_Y = value;
     };
-
-
-    /**
+    
+    /*
      *
      *
      */
     Garfunkel.setGameCoords = function () {
         X_IS_LEFT_TO_Y = true;
     };
+
     Garfunkel.setSchoolCoords = function () {
         X_IS_LEFT_TO_Y = false;
     };
 
 
     /**
-     *
-     *
-     * @example
-     *    exponential growth
-     *      growth = function(capacity){return capacity === 0?1:2*capacity;};
-     * @memberOf Garfunkel
-     *
-     * @classdesc A simple object pool
+     * A simple object pool
      *
      * @class Pool
      *
@@ -65,7 +57,7 @@
     /**
      * CreateItems
      *
-     * @function createItems
+     * @method createItems
      *
      */
     Pool.prototype.createItems = function (size) {
@@ -75,7 +67,7 @@
     };
 
     /**
-     * @function
+     * @method get
      */
     Pool.prototype.get = function () {
         if (this.current === 0) {
@@ -91,7 +83,7 @@
     };
 
     /**
-     * @function
+     * @method dispose
      */
     Pool.prototype.dispose = function (obj) {
         this.current = this.items.push(obj);
@@ -99,9 +91,9 @@
     };
 
     /**
-     * @classdesc Represents a vector as well as a point.
+     *  Represents a vector as well as a point.
      *
-     * <br>
+     *
      * All Methods on a Vector that return a vector are
      * chainable and will change the initial vector to
      * the result of the operation.
@@ -131,7 +123,7 @@
     };
 
     /**
-     * @function
+     * @method clone
      */
     Vect.prototype.clone = function () {
         return new Vect(this.x, this.y);
@@ -148,6 +140,11 @@
 
     /**
      * Scalar multiplication.
+     * Each coordinate will be multiplied with the given scalar.
+     * @chainable
+     * @method mul
+     * @param {Number} a scalar to multiply the vector with
+     * @return {Vect}
      */
     Vect.prototype.mul = function (s) {
         this.x *= s;
@@ -155,92 +152,73 @@
         return this;
     };
 
+    /**
+     * Scalar division.
+     * Each coordinate will be devided by the given scalar.
+     * @chainable
+     * @method div
+     * @param {Number} a scalar to divide the vector with
+     * @return {Vect}
+     */
     Vect.prototype.div = function (s) {
         this.x /= s;
         this.y /= s;
         return this;
     };
 
+    /**
+     * Adds a vector.
+     * @chainable
+     * @method add
+     * @param {Vect} v
+     * @return {Vect}
+     */
     Vect.prototype.add = function (v) {
         this.x += v.x;
         this.y += v.y;
         return this;
     };
 
+    /**
+     * Substracts a vector.
+     * @chainable
+     * @method sub
+     * @param {Vect} v
+     * @return {Vect}
+     */
     Vect.prototype.sub = function (v) {
         this.x -= v.x;
         this.y -= v.y;
         return this;
     };
 
+    /**
+     * Dot product of this and the given vector.
+     * @method dot
+     * @param v
+     * @return {number}
+     */
     Vect.prototype.dot = function (v) {
         return this.x * v.x + this.y * v.y;
     };
 
-
+    /**
+     * Cross product of this and the given vector.
+     * @method cross
+     * @param v
+     * @return {number}
+     */
     Vect.prototype.cross = function (v) {
         return (this.x * v.y ) - (this.y * v.x );
     };
 
-    Vect.prototype.distanceSq = function (v) {
-        var dx = this.x - v.x;
-        var dy = this.y - v.y;
-        return dx * dx + dy * dy;
-    };
-
-    Vect.prototype.distance = function (v) {
-        return Math.sqrt(this.distanceSq(v));
-    };
-
-    Vect.prototype.manhatten = function (v) {
-        var dx = this.x - v.x;
-        var dy = this.y - v.y;
-        return Math.abs(dx) + Math.abs(dy);
-    };
-
-    Vect.prototype.isLeftOf = function (v) {
-        if (X_IS_LEFT_TO_Y)
-            return this.cross(v) > 0;
-        else
-            return this.cross(v) < 0;
-    };
-
-    Vect.prototype.isRightOf = function (v) {
-        if (X_IS_LEFT_TO_Y)
-            return this.cross(v) < 0;
-        else
-            return this.cross(v) > 0;
-    };
-
-    Vect.prototype.turnLeft = function () {
-        var x = this.y * ( X_IS_LEFT_TO_Y ? 1 : -1 );
-        var y = this.x * ( X_IS_LEFT_TO_Y ? -1 : 1 );
-        this.x = x;
-        this.y = y;
-        return this;
-    };
-
-    Vect.prototype.turnRight = function () {
-        var x = this.y * ( X_IS_LEFT_TO_Y ? -1 : 1 );
-        var y = this.x * ( X_IS_LEFT_TO_Y ? 1 : -1 );
-        this.x = x;
-        this.y = y;
-        return this;
-    };
-
-    Vect.prototype.leftNormal = function () {
-        this.turnLeft().normalize();
-        return this;
-    };
-
-    Vect.prototype.rightNormal = function () {
-        this.turnRight().normalize();
-        return this;
-    };
-
+    /**
+     * Normalize the given vector.
+     * @method normalize
+     * @return {Vect}
+     */
     Vect.prototype.normalize = function () {
         var length = this.length();
-
         if (length === 0) {
             this.x = 1;
             this.y = 0;
@@ -250,19 +228,145 @@
         return this;
     };
 
+    /**
+     * Quadratic length of the vector.
+     * @method lengthSq
+     * @return {number}
+     */
     Vect.prototype.lengthSq = function () {
         return this.x * this.x + this.y * this.y;
     };
 
+    /**
+     * Euclidean norm/length/magnitude of the vector.
+     * @method length
+     * @return {number}
+     */
     Vect.prototype.length = function () {
         return Math.sqrt(this.lengthSq());
     };
 
+    /**
+     * Quadratic distance of two vectors.
+     * @method distanceSq
+     * @param v
+     * @return {number}
+     */
+    Vect.prototype.distanceSq = function (v) {
+        var dx = this.x - v.x;
+        var dy = this.y - v.y;
+        return dx * dx + dy * dy;
+    };
 
+    /**
+     * Euclidean distance of two vectors.
+     * @method distance
+     * @param v
+     * @return {number}
+     */
+    Vect.prototype.distance = function (v) {
+        return Math.sqrt(this.distanceSq(v));
+    };
+
+    /**
+     * Manhatten/city block/Taxicab distance
+     * @method manhatten
+     * @param v
+     * @returns {number}
+     */
+    Vect.prototype.manhatten = function (v) {
+        var dx = this.x - v.x;
+        var dy = this.y - v.y;
+        return Math.abs(dx) + Math.abs(dy);
+    };
+
+    /**
+     * @method isLeftOf
+     * @param v
+     * @return {boolean}
+     */
+    Vect.prototype.isLeftOf = function (v) {
+        if (X_IS_LEFT_TO_Y)
+            return this.cross(v) > 0;
+        else
+            return this.cross(v) < 0;
+    };
+
+
+    /**
+     * @method isRightOf
+     * @param v
+     * @return {boolean}
+     */
+    Vect.prototype.isRightOf = function (v) {
+        if (X_IS_LEFT_TO_Y)
+            return this.cross(v) < 0;
+        else
+            return this.cross(v) > 0;
+    };
+
+    /**
+     * @chainable
+     * @method turnLeft
+     * @return {Vect}
+     */
+    Vect.prototype.turnLeft = function () {
+        var x = this.y * ( X_IS_LEFT_TO_Y ? 1 : -1 );
+        var y = this.x * ( X_IS_LEFT_TO_Y ? -1 : 1 );
+        this.x = x;
+        this.y = y;
+        return this;
+    };
+
+    /**
+     * @chainable
+     * @method turnRight
+     * @return {Vect}
+     */
+    Vect.prototype.turnRight = function () {
+        var x = this.y * ( X_IS_LEFT_TO_Y ? -1 : 1 );
+        var y = this.x * ( X_IS_LEFT_TO_Y ? 1 : -1 );
+        this.x = x;
+        this.y = y;
+        return this;
+    };
+
+    /**
+     * @chainable
+     * @method leftNormal
+     * @return {Vect}
+     */
+    Vect.prototype.leftNormal = function () {
+        this.turnLeft().normalize();
+        return this;
+    };
+
+    /**
+     * @chainable
+     * @method rightNormal
+     * @return {Vect}
+     */
+    Vect.prototype.rightNormal = function () {
+        this.turnRight().normalize();
+        return this;
+    };
+
+
+    /**
+     * @method angle
+     * @return {number}
+     */
     Vect.prototype.angle = function () {
         return Math.atan2(this.y, this.x);
     };
 
+    /**
+     * Rotates the vector by the given angle.
+     * @chainable
+     * @method rotate
+     * @param {Number} angle in radians
+     * @returns {Vect} the rotated vector
+     */
     Vect.prototype.rotate = function (angle) {
         var _x = (this.x * Math.cos(angle)) - (this.y * Math.sin(angle));
         var _y = (this.x * Math.sin(angle)) + (this.y * Math.cos(angle));
@@ -271,19 +375,47 @@
         return this;
     };
 
+
+    /**
+     * Rotates the vector to the given angle.
+     * @chainable
+     * @method rotateTo
+     * @param {number} angle in radians
+     * @returns {Vect} the rotated vector
+     */
     Vect.prototype.rotateTo = function (angle) {
+        this.rotate(angle - this.angle());
+        return this;
+    };
+
+    /**
+     * Rotates the vector towards the given angle.
+     * The rotation is limited by stepSize, so move a 0° vector towards 90° with limit 50°
+     * would result in a 50° vector. If the method with the same limit is reapplied again
+     * the result would be 90°.
+     *
+     * The rotation will take the "shortest way" towards the given angle.
+     *
+     * A 180° rotation will be clockwise(TODO???)
+     *
+     * @chainable
+     * @method rotateTowards
+     * @param {number} angle - angle in radians
+     * @param {number} stepSize - maximum angle to move towards angle
+     * @returns {Vect} the rotated vector
+     */
+    Vect.prototype.rotateTowards = function (angle, stepSize) {
         this.rotate(angle - this.angle());
         return this;
     };
 
 
     /**
-     *  @function
      *  "angle of incidence equal to the angle of reflexion"
      *  Performs a simple reflection of this object on a surface
-     *  the has the direction of the given vector u.
-     *
-     *
+     *  that has the direction of the given vector u.
+     *  @method reflectOn
+     *  @param {Vect} u
      */
     Vect.prototype.reflectOn = function (u) {
         var l, n, r;
@@ -304,8 +436,7 @@
     };
 
 
-    /**
-     *
+    /*
      *
      *
      * Experimental Calculator API.
@@ -352,7 +483,8 @@
 
         var maxActive = 0;
 
-        /**
+        /*
+         *  Calculator
          * Create a Vector within the scope of the Calculator.
          *
          * This means the instance is take from the internal Vect pool.
@@ -363,7 +495,6 @@
          *  _(3,4) or _([3,4]) or _({x:3,y:4})
          *
          * When working with the normal Vect methods _ can be seen as a clone with a clean up ability;
-         *
          *
          */
         var _ = function () {
@@ -504,11 +635,19 @@
     };
 
     /**
+     *
      * A rectangular box with edges parallel to the coordinate axes.
      *
      * So:
      *        Box#left &le; Box#right
      *        Box#top  &le; Box#bottom
+     *
+     * @class Box
+     * @constructor
+     * @param {Number} x0
+     * @param {Number} x1
+     * @param {Number} y0
+     * @param {Number} y1
      */
     var Box = function (x0, x1, y0, y1) {
         this.left = Math.min(x0, x1);
@@ -522,6 +661,9 @@
 
     /**
      * Bounding box of a given Segment
+     * @method fromSegment
+     * @static
+     * @param {Segment} segment
      */
     Box.fromSegment = function (segment) {
         return new Box(segment.p1.x, segment.p2.x, segment.p1.y, segment.p2.y);
@@ -531,6 +673,10 @@
         return new Box(obj.x0, obj.x1, obj.y0, obj.y1);
     };
 
+    /**
+     * @method toString
+     * @return {string}
+     */
     Box.prototype.toString = function () {
         return "[ left: " + this.left + " right: " + this.right + " top: " + this.top + " bottom: " + this.bottom + " ]";
     };
@@ -549,7 +695,8 @@
      * A line segment represented by two points.
      *
      * (The line segment has a orinentation given by the order or the two points.)
-     *
+     * @class Segment
+     * @constructor
      * @param {Object} p1
      * @param {Object} p2
      */

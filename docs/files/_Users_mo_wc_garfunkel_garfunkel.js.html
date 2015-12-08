@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>garfunkel.js</title>
+    <link rel="stylesheet" href="">
+    <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
+    <link rel="stylesheet" href="../assets/css/custom.css">
+    <link rel="stylesheet" href="../assets/css/lucid.css">
+    <link rel="stylesheet" href="../assets/vendor/bootstrap/css/bootstrap.css">
+    <link rel="shortcut icon" type="image/png" href="../assets/logo.jpg">
+</head>
+<body class="yui3-skin-sam">
+<div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+        <h1 class="brand" style="padding: 10px 16px 10px; height: 20px; line-height: 20px; margin-left: 0;">
+	    <img alt="garfunkel" src="../../assets/logo.jpg" style="max-height: 65%;" title="garfunkel">
+            garfunkel
+        </h1>
+	<div class="nav">
+            <li class="divider-vertical"></li>
+            <li>
+                <p class="navbar-text">
+                    API 0.2.1
+                </p>
+            </li>
+            <li><p class="navbar-text"><b>garfunkel.js</b></p></li>
+        </div>
+        <form class="navbar-form pull-right" style="line-height: 40px; height: 40px;">
+            <input style="margin-top: 0;" type="text" class="search-query" placeholder="Search for classes/modules..." data-obj='["classes/Box", "classes/Pool", "classes/Segment", "classes/Vect", "modules/Garfunkel"]'>
+        </form>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="span3">
+	    <div>
+	        <div id="sidebar">
+	            <h4>Classes</h4>
+	            <div id="classes">
+	                <ul id="api-classes" class="nav nav-list">
+	                        <li><a href="../classes/Box.html">Box</a></li>
+	                        <li><a href="../classes/Pool.html">Pool</a></li>
+	                        <li><a href="../classes/Segment.html">Segment</a></li>
+	                        <li><a href="../classes/Vect.html">Vect</a></li>
+	                </ul>
+	    
+	    
+	            </div>
+	        </div>
+	    </div>
+        </div>
+        <div class="span9">
+                <form id="options-form" class="form-inline pull-right">
+                    Show:
+                    <label for="api-show-inherited" class="checkbox">
+                        <input type="checkbox" id="api-show-inherited" checked>
+                        Inherited
+                    </label>
+            
+                    <label for="api-show-protected" class="checkbox">
+                        <input type="checkbox" id="api-show-protected">
+                        Protected
+                    </label>
+            
+                    <label for="api-show-private" class="checkbox">
+                        <input type="checkbox" id="api-show-private">
+                        Private
+                    </label>
+                    <label for="api-show-deprecated" class="checkbox">
+                        <input type="checkbox" id="api-show-deprecated">
+                        Deprecated
+                    </label>
+            
+                </form>
+            
+            <div class="apidocs">
+                <div id="docs-main">
+                    <div class="content">
+                        <div class="page-header">
+                            <h1>garfunkel.js <small>File</small></h1>
+                        </div>
+                        
+                        <div class="file">
+                            <pre class="prettyprint linenums">
+                        /**
+                         * garfunkel.js - A 2D geometry toolbox
+                         * @module Garfunkel
+                         */
+                        (function (global) {
+                        
+                        
+                            /*
+                             * Used for the isLeftOf, isRightOf, getLeftNormal, getRightNormal functions.
+                             *
+                             * FALSE, means the normal school book coordinates with (0,0) in the lower left corner.
+                             * TRUE, means the canvas or graphic coordinates with (0,0) in the upper left corner;
+                             *
+                             */
+                            var X_IS_LEFT_TO_Y = true;
+                        
+                            var Garfunkel = {};
+                        
+                            Garfunkel.setXisLeftOfY = function (value) {
+                                X_IS_LEFT_TO_Y = value;
+                            };
+                        
+                        
+                            /*
+                             *
+                             *
+                             */
+                            Garfunkel.setGameCoords = function () {
+                                X_IS_LEFT_TO_Y = true;
+                            };
+                        
+                            Garfunkel.setSchoolCoords = function () {
+                                X_IS_LEFT_TO_Y = false;
+                            };
+                        
+                        
+                            /**
+                             * A simple object pool
+                             *
+                             * @class Pool
+                             *
+                             * @constructor
+                             * @param {Number} capacity The initial capacity.
+                             */
+                            var Pool = function (capacity, constructor, initializer, growth) {
+                                this.items = new Array(capacity);
+                                this.capacity = capacity;
+                                this.current = capacity;
+                                this.initializer = initializer;
+                                this.constructor = constructor;
+                                this.growth = growth || function (cap) {
+                                        return 1;
+                                    };//
+                                this.createItems(capacity);
+                            };
+                        
+                        
+                            /**
+                             * CreateItems
+                             *
+                             * @method createItems
+                             *
+                             */
+                            Pool.prototype.createItems = function (size) {
+                                this.items.length = size;
+                                for (var i = 0; i &lt; size; i++)
+                                    this.items[i] = new this.constructor();
+                            };
+                        
+                            /**
+                             * @method get
+                             */
+                            Pool.prototype.get = function () {
+                                if (this.current === 0) {
+                                    var growth = this.growth(this.capacity);
+                                    this.capacity += growth;
+                                    this.current = growth;
+                                    this.createItems(growth);
+                                }
+                                this.current--;
+                                var item = this.items[this.current];
+                                this.initializer.apply(item, arguments);
+                                return item;
+                            };
+                        
+                            /**
+                             * @method dispose
+                             */
+                            Pool.prototype.dispose = function (obj) {
+                                this.current = this.items.push(obj);
+                                this.capacity = Math.max(this.capacity, this.current);
+                            };
+                        
+                            /**
+                             *  Represents a vector as well as a point.
+                             *
+                             *
+                             * All Methods on a Vector that return a vector are
+                             * chainable and will change the initial vector to
+                             * the result of the operation.
+                             *
+                             * @class Vect
+                             * @constructor
+                             * @param {Number} x
+                             * @param {Number} y
+                             */
+                            var Vect = function (x, y) {
+                                this.x = x || 0;
+                                this.y = y || 0;
+                            };
+                        
+                            var ZERO = new Vect(0, 0);
+                        
+                        
+                            /**
+                             * &lt;img src=&quot;../assets/logo.jpg&quot;&gt;&lt;/img&gt;
+                             * @example
+                             * &lt;pre&gt;new Vector(2,4).toString() -&gt; &quot;x: 2 y: 4&quot; &lt;/pre&gt;
+                             * @method toString
+                             * @return {String}
+                             */
+                            Vect.prototype.toString = function () {
+                                return &#x27;x: &#x27; + this.x + &#x27; y: &#x27; + this.y;
+                            };
+                        
+                            /**
+                             * @method clone
+                             */
+                            Vect.prototype.clone = function () {
+                                return new Vect(this.x, this.y);
+                            };
+                        
+                            Vect.prototype.cl = Vect.prototype.clone;
+                        
+                        
+                            Vect.prototype.invert = function () {
+                                this.x = -this.x;
+                                this.y = -this.y;
+                                return this;
+                            };
+                        
+                            /**
+                             * Scalar multiplication.
+                             * Each coordinate will be multiplied with the given scalar.
+                             * @chainable
+                             * @method mul
+                             * @param {Number} a scalar to multiply the vector with
+                             * @return {Vect}
+                             */
+                            Vect.prototype.mul = function (s) {
+                                this.x *= s;
+                                this.y *= s;
+                                return this;
+                            };
+                        
+                            /**
+                             * Scalar division.
+                             * Each coordinate will be devided by the given scalar.
+                             * @chainable
+                             * @method div
+                             * @param {Number} a scalar to divide the vector with
+                             * @return {Vect}
+                             */
+                            Vect.prototype.div = function (s) {
+                                this.x /= s;
+                                this.y /= s;
+                                return this;
+                            };
+                        
+                            /**
+                             * Adds a vector.
+                             * @chainable
+                             * @method add
+                             * @param {Vect} v
+                             * @return {Vect}
+                             */
+                            Vect.prototype.add = function (v) {
+                                this.x += v.x;
+                                this.y += v.y;
+                                return this;
+                            };
+                        
+                            /**
+                             * Substracts a vector.
+                             * @chainable
+                             * @method sub
+                             * @param {Vect} v
+                             * @return {Vect}
+                             */
+                            Vect.prototype.sub = function (v) {
+                                this.x -= v.x;
+                                this.y -= v.y;
+                                return this;
+                            };
+                        
+                            /**
+                             * Dot product of this and the given vector.
+                             * @method dot
+                             * @param v
+                             * @return {number}
+                             */
+                            Vect.prototype.dot = function (v) {
+                                return this.x * v.x + this.y * v.y;
+                            };
+                        
+                            /**
+                             * Cross product of this and the given vector.
+                             * @method cross
+                             * @param v
+                             * @return {number}
+                             */
+                            Vect.prototype.cross = function (v) {
+                                return (this.x * v.y ) - (this.y * v.x );
+                            };
+                        
+                            /**
+                             * Normalize the given vector.
+                             * @method normalize
+                             * @return {Vect}
+                             */
+                            Vect.prototype.normalize = function () {
+                                var length = this.length();
+                                if (length === 0) {
+                                    this.x = 1;
+                                    this.y = 0;
+                                } else {
+                                    this.div(length);
+                                }
+                                return this;
+                            };
+                        
+                            /**
+                             * Quadratic length of the vector.
+                             * @method lengthSq
+                             * @return {number}
+                             */
+                            Vect.prototype.lengthSq = function () {
+                                return this.x * this.x + this.y * this.y;
+                            };
+                        
+                            /**
+                             * Euclidean norm/length/magnitude of the vector.
+                             * @method length
+                             * @return {number}
+                             */
+                            Vect.prototype.length = function () {
+                                return Math.sqrt(this.lengthSq());
+                            };
+                        
+                            /**
+                             * Quadratic distance of two vectors.
+                             * @method distanceSq
+                             * @param v
+                             * @return {number}
+                             */
+                            Vect.prototype.distanceSq = function (v) {
+                                var dx = this.x - v.x;
+                                var dy = this.y - v.y;
+                                return dx * dx + dy * dy;
+                            };
+                        
+                            /**
+                             * Euclidean distance of two vectors.
+                             * @method distance
+                             * @param v
+                             * @return {number}
+                             */
+                            Vect.prototype.distance = function (v) {
+                                return Math.sqrt(this.distanceSq(v));
+                            };
+                        
+                            /**
+                             * Manhatten/city block/Taxicab distance
+                             * @method manhatten
+                             * @param v
+                             * @returns {number}
+                             */
+                            Vect.prototype.manhatten = function (v) {
+                                var dx = this.x - v.x;
+                                var dy = this.y - v.y;
+                                return Math.abs(dx) + Math.abs(dy);
+                            };
+                        
+                            /**
+                             * @method isLeftOf
+                             * @param v
+                             * @return {boolean}
+                             */
+                            Vect.prototype.isLeftOf = function (v) {
+                                if (X_IS_LEFT_TO_Y)
+                                    return this.cross(v) &gt; 0;
+                                else
+                                    return this.cross(v) &lt; 0;
+                            };
+                        
+                        
+                            /**
+                             * @method isRightOf
+                             * @param v
+                             * @return {boolean}
+                             */
+                            Vect.prototype.isRightOf = function (v) {
+                                if (X_IS_LEFT_TO_Y)
+                                    return this.cross(v) &lt; 0;
+                                else
+                                    return this.cross(v) &gt; 0;
+                            };
+                        
+                            /**
+                             * @chainable
+                             * @method turnLeft
+                             * @return {Vect}
+                             */
+                            Vect.prototype.turnLeft = function () {
+                                var x = this.y * ( X_IS_LEFT_TO_Y ? 1 : -1 );
+                                var y = this.x * ( X_IS_LEFT_TO_Y ? -1 : 1 );
+                                this.x = x;
+                                this.y = y;
+                                return this;
+                            };
+                        
+                            /**
+                             * @chainable
+                             * @method turnRight
+                             * @return {Vect}
+                             */
+                            Vect.prototype.turnRight = function () {
+                                var x = this.y * ( X_IS_LEFT_TO_Y ? -1 : 1 );
+                                var y = this.x * ( X_IS_LEFT_TO_Y ? 1 : -1 );
+                                this.x = x;
+                                this.y = y;
+                                return this;
+                            };
+                        
+                            /**
+                             * @chainable
+                             * @method leftNormal
+                             * @return {Vect}
+                             */
+                            Vect.prototype.leftNormal = function () {
+                                this.turnLeft().normalize();
+                                return this;
+                            };
+                        
+                            /**
+                             * @chainable
+                             * @method rightNormal
+                             * @return {Vect}
+                             */
+                            Vect.prototype.rightNormal = function () {
+                                this.turnRight().normalize();
+                                return this;
+                            };
+                        
+                        
+                            /**
+                             * @method angle
+                             * @return {number}
+                             */
+                            Vect.prototype.angle = function () {
+                                return Math.atan2(this.y, this.x);
+                            };
+                        
+                            /**
+                             * Rotates the vector by the given angle.
+                             * @chainable
+                             * @method rotate
+                             * @param {Number} angle in radians
+                             * @returns {Vect} the rotated vector
+                             */
+                            Vect.prototype.rotate = function (angle) {
+                                var _x = (this.x * Math.cos(angle)) - (this.y * Math.sin(angle));
+                                var _y = (this.x * Math.sin(angle)) + (this.y * Math.cos(angle));
+                                this.x = _x;
+                                this.y = _y;
+                                return this;
+                            };
+                        
+                        
+                            /**
+                             * Rotates the vector to the given angle.
+                             * @chainable
+                             * @method rotateTo
+                             * @param {number} angle in radians
+                             * @returns {Vect} the rotated vector
+                             */
+                            Vect.prototype.rotateTo = function (angle) {
+                                this.rotate(angle - this.angle());
+                                return this;
+                            };
+                        
+                            /**
+                             * Rotates the vector towards the given angle.
+                             * The rotation is limited by stepSize, so move a 0° vector towards 90° with limit 50°
+                             * would result in a 50° vector. If the method with the same limit is reapplied again
+                             * the result would be 90°.
+                             *
+                             * The rotation will take the &quot;shortest way&quot; towards the given angle.
+                             *
+                             * A 180° rotation will be clockwise(TODO???)
+                             *
+                             * @chainable
+                             * @method rotateTowards
+                             * @param {number} angle - angle in radians
+                             * @param {number} stepSize - maximum angle to move towards angle
+                             * @returns {Vect} the rotated vector
+                             */
+                            Vect.prototype.rotateTowards = function (angle, stepSize) {
+                                this.rotate(angle - this.angle());
+                                return this;
+                            };
+                        
+                        
+                            /**
+                             *  &quot;angle of incidence equal to the angle of reflexion&quot;
+                             *  Performs a simple reflection of this object on a surface
+                             *  that has the direction of the given vector u.
+                             *  @method reflectOn
+                             *  @param {Vect} u
+                             */
+                            Vect.prototype.reflectOn = function (u) {
+                                var l, n, r;
+                                if (this.isRightOf(u)) {
+                                    l = this.clone();
+                                    n = u.clone().leftNormal();
+                                    r = l.sub(n.clone().mul(n.dot(l) * (2)));
+                                } else if (this.isLeftOf(u)) {
+                                    l = this.clone();
+                                    n = u.clone().rightNormal();
+                                    r = l.sub(n.clone().mul(n.dot(l) * (2)));
+                                } else {
+                                    r = this.clone().invert();
+                                }
+                                this.x = r.x;
+                                this.y = r.y;
+                                return this;
+                            };
+                        
+                        
+                            /*
+                             *
+                             *
+                             * Experimental Calculator API.
+                             *  * Include Object Pooling
+                             *
+                             *
+                             * Usage:
+                             * var _ = Calculator.create();
+                             *
+                             * var v = _(3,4); //Creates a vector in the calculators scope
+                             *
+                             * _.sub( _(3,4) , _(1,2) )
+                             *
+                             * _.clear();
+                             *
+                             * The vectors passed to a calculator function stay immutable.
+                             * The Vect function can be applied also so:
+                             *
+                             *
+                             * var v = _( 2, 0 );
+                             * var w = _.n( v );
+                             *
+                             * // v -&gt;  x: 2 y: 0
+                             * // w -&gt;  x: 1 y: 0;
+                             *
+                             * var v = c( 2 , 0 );
+                             * var w = v.normalize();
+                             * // v -&gt;  x: 1 y: 0
+                             * // w -&gt;  x: 1 y: 0;
+                             *
+                             *
+                             *
+                             * All references to vectors produced in equation must not be used after.
+                             *
+                             *
+                             *
+                             */
+                            var Calculator = {};
+                            Calculator.create = function () {
+                        
+                        
+                                var pool = new Pool(16, Vect, Vect);
+                                var active = [];
+                        
+                                var maxActive = 0;
+                        
+                                /*
+                                 *  Calculator
+                                 * Create a Vector within the scope of the Calculator.
+                                 *
+                                 * This means the instance is take from the internal Vect pool.
+                                 *
+                                 * When the calculation is clear all references to the Vect object become invalid.
+                                 *
+                                 * Usage:
+                                 *  _(3,4) or _([3,4]) or _({x:3,y:4})
+                                 *
+                                 * When working with the normal Vect methods _ can be seen as a clone with a clean up ability;
+                                 *
+                                 */
+                                var _ = function () {
+                                    var x, y;
+                                    if (arguments.length === 1) {
+                                        if (arguments[0].constructor === Array) {
+                                            x = arguments[0][0];
+                                            y = arguments[0][1];
+                                        } else {
+                                            x = arguments[0].x;
+                                            y = arguments[0].y;
+                                        }
+                                    } else if (arguments === 2) {
+                                        x = arguments[0];
+                                        y = arguments[1];
+                                    }
+                                    var item = Pool.prototype.get.apply(pool, [x, y]);
+                                    active.push(item);
+                                    maxActive = Math.max(maxActive, active.length);
+                                    return item;
+                                };
+                        
+                                _.clear = function () {
+                                    for (var i = 0; i &lt; items.length; i++) {
+                                        pool.dispose(equation.items[i]);
+                                    }
+                                    used.length = 0;
+                                };
+                        
+                                _.statistics = function () {
+                                    return {
+                                        currentPoolCapacity: pool.items.length,
+                                        currentActiveItems: used.length,
+                                        maxActive: maxActive
+                                    };
+                                };
+                        
+                        
+                                //V x V -&gt; V
+                                _.add = function (u, v) {
+                                    return _(u).add(v);
+                                };
+                        
+                                _.sub = function (u, v) {
+                                    return _(u).sub(v);
+                                };
+                        
+                        
+                                //V x V -&gt; S
+                                _.cross = function (u, v) {
+                                    return u.cross(v);
+                                };
+                        
+                                _.dot = function (u, v) {
+                                    return u.dot(v);
+                                };
+                        
+                                _.distanceSq = function (u, v) {
+                                    return u.distanceSq(v);
+                                };
+                        
+                                _.distance = function (u, v) {
+                                    return u.distance(u, v);
+                                };
+                        
+                                _.turnLeft = function (u) {
+                                    return _(u).turnLeft();
+                                };
+                        
+                                _.turnRight = function (u) {
+                                    return _(u).turnRight();
+                                };
+                        
+                                _.leftNormal = function (u) {
+                                    return _(u).turnLeft().normalize();
+                                };
+                        
+                                _.rightNormal = function (u) {
+                                    return _(u).turnRight().normalize();
+                                };
+                        
+                                //V -&gt; S
+                                _.length = function (u) {
+                                    return u.length();
+                                };
+                        
+                                _.lengthSq = function (u) {
+                                    return u.lengthSq();
+                                };
+                        
+                                _.angle = function (u) {
+                                    return u.angle();
+                                };
+                        
+                                //V -&gt; V
+                                _.normalize = function (u) {
+                                    var length = u.length(); //TODO: u.length();
+                                    if (length === 0) {
+                                        return _(1, 0);
+                                    } else {
+                                        return _.div(u, length);
+                                    }
+                                };
+                                _.n = _.normalize;
+                        
+                                //S x V -&gt; V
+                                _.div = function (s, u) {
+                                    return _.mul(1 / s, u);
+                                };
+                        
+                                _.mul = function (s, u) {
+                                    return _(u).mul(s);
+                                };
+                        
+                        
+                                _.rotate = function (angle, u) {
+                                    return _(u).rotate(angle);
+                                };
+                        
+                                _.rotateTo = function (angle, u) {
+                                    return _(u).rotateTo(angle);
+                                };
+                        
+                                _.reflectOn = function (u, v) {
+                                    var n;
+                                    if (u.isRightOf(v)) {
+                                        n = _(v).leftNormal();
+                                    } else if (u.isLeftOf(v)) {
+                                        n = _(v).rightNormal();
+                                    } else {
+                                        return _(u).invert();
+                                    }
+                                    return _.sub(u, _.mul(n.dot(u) * 2, n));
+                                };
+                        
+                                return _;
+                        
+                            };
+                        
+                            /**
+                             *
+                             * A rectangular box with edges parallel to the coordinate axes.
+                             *
+                             * So:
+                             *        Box#left &amp;le; Box#right
+                             *        Box#top  &amp;le; Box#bottom
+                             *
+                             * @class Box
+                             * @constructor
+                             * @param {Number} x0
+                             * @param {Number} x1
+                             * @param {Number} y0
+                             * @param {Number} y1
+                             */
+                            var Box = function (x0, x1, y0, y1) {
+                                this.left = Math.min(x0, x1);
+                                this.right = Math.max(x0, x1);
+                        
+                                this.y_min = Math.min(y0, y1);
+                                this.y_max = Math.max(y0, y1);
+                                this.top = X_IS_LEFT_TO_Y ? this.y_min : this.y_max;
+                                this.bottom = X_IS_LEFT_TO_Y ? this.y_max : this.y_min;
+                            };
+                        
+                            /**
+                             * Bounding box of a given Segment
+                             * @method fromSegment
+                             * @static
+                             * @param {Segment} segment
+                             */
+                            Box.fromSegment = function (segment) {
+                                return new Box(segment.p1.x, segment.p2.x, segment.p1.y, segment.p2.y);
+                            };
+                        
+                            Box.fromObject = function (obj) {
+                                return new Box(obj.x0, obj.x1, obj.y0, obj.y1);
+                            };
+                        
+                            /**
+                             * @method toString
+                             * @return {string}
+                             */
+                            Box.prototype.toString = function () {
+                                return &quot;[ left: &quot; + this.left + &quot; right: &quot; + this.right + &quot; top: &quot; + this.top + &quot; bottom: &quot; + this.bottom + &quot; ]&quot;;
+                            };
+                        
+                            Box.prototype.containsPoint = function (p) {
+                                return this.left &lt;= p.x &amp;&amp; p.x &lt;= this.right//
+                                    &amp;&amp; this.y_min &lt;= p.y &amp;&amp; p.y &lt;= this.y_max;
+                            };
+                        
+                            Box.prototype.intersect = function (box) {
+                                return this.left &lt;= box.right &amp;&amp; box.left &lt;= this.right//
+                                    &amp;&amp; this.y_min &lt;= box.y_max &amp;&amp; box.y_min &lt;= this.y_max;
+                            };
+                        
+                            /**
+                             * A line segment represented by two points.
+                             *
+                             * (The line segment has a orinentation given by the order or the two points.)
+                             * @class Segment
+                             * @constructor
+                             * @param {Object} p1
+                             * @param {Object} p2
+                             */
+                            var Segment = function (p1, p2) {
+                                this.p1 = p1 || new Vect(0, 0);
+                                this.p2 = p2 || new Vect(1, 1);
+                                this.boundingBox = new Box.fromSegment(this);
+                                this.connection = this.p2.clone().sub(this.p1);
+                            };
+                        
+                            Segment.prototype.toString = function () {
+                                return &#x27;[ &#x27; + this.p1 + &#x27; , &#x27; + this.p2 + &#x27; ]&#x27;;
+                            };
+                        
+                            Segment.fromArray = function (arr) {
+                                return new Segment(new Vect(arr[0], arr[1]), new Vect(arr[2], arr[3]));
+                            };
+                        
+                            Segment.fromObject = function (obj) {
+                                return new Segment(obj.p1, obj.p2);
+                            };
+                        
+                            Segment.prototype.clone = function () {
+                                return new Segment(this.p1.clone(), this.p2.clone());
+                            };
+                        
+                            Segment.prototype.toCenter = function () {
+                                this.p2 = this.connection.clone();
+                                this.p1 = ZERO.clone();
+                                return this;
+                            };
+                        
+                        
+                            Segment.prototype.length = function () {
+                                return this.p1.clone().sub(this.p2).length();
+                            };
+                        
+                            Segment.prototype.lengthSq = function () {
+                                return this.p1.clone().sub(this.p2).lengthSq();
+                            };
+                        
+                            Segment.prototype.intersect = function (s) {
+                                var EPSILON = 0.000001;
+                        
+                                var touchOrCross = function (s1, s2) {
+                        
+                                    // X as line, Y as two points
+                                    // Move this.p1 to ZERO
+                                    var u = s1.clone().toCenter().p2;
+                                    var v = s2.p1.clone().sub(s1.p1);
+                                    var w = s2.p2.clone().sub(s1.p1);
+                        
+                                    var c1 = v.cross(u);
+                                    var c2 = w.cross(u);
+                                    if (Math.abs(c1) &lt; EPSILON || Math.abs(c2) &lt; EPSILON)
+                                        return true;
+                                    //Y touches X
+                                    return (c1 &gt; 0) !== (c2 &gt; 0);
+                                    // Y cross X
+                                };
+                                return this.boundingBox.intersect(s.boundingBox) &amp;&amp; touchOrCross(this, s) &amp;&amp; touchOrCross(s, this);
+                            };
+                        
+                            Garfunkel.Vect = Vect;
+                            Garfunkel.Segment = Segment;
+                            Garfunkel.Box = Box;
+                            Garfunkel.Pool = Pool;
+                            Garfunkel.Calculator = Calculator;
+                        
+                        
+                            global.Garfunkel = Garfunkel;
+                        
+                        })(this);
+                        
+                            </pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../assets/vendor/jquery/jquery-1.8.2.min.js"></script>
+<script src="../assets/vendor/bootstrap/js/bootstrap.js"></script>
+<script src="../assets/vendor/prettify/prettify-min.js"></script>
+<script src="../assets/js/yuidoc-bootstrap.js"></script>
+<script>prettyPrint();</script>
+</body>
+</html>
