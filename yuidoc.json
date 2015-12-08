@@ -1,0 +1,13 @@
+{
+    "name": "garfunkel",
+    "url": "https://github.com/ztiromoritz/garfunkel",
+    "version": "0.2.1",
+    "logo" : "../assets/logo.jpg",
+    "options": {
+        "paths": ".",
+        "outdir": "docs",
+        "exclude": "lib,docs,build,bower_components,node_modules",
+        "themedir": "themes/yuidoc-lucid-theme",
+        "helpers": ["themes/yuidoc-lucid-theme/helpers/helpers.js"]
+    }
+}

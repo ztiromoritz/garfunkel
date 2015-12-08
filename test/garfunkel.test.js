@@ -609,9 +609,7 @@ describe('Vector#turnRight',function(){
 
 
 describe('Vect#reflectOn', function(){
-	
 
-	
 	it('should do boing', function(){
 		var ref = new Vect(1,0);
 		var u = new Vect(1,2);

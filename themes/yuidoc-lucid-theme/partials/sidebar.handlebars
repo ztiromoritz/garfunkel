@@ -1,0 +1,24 @@
+<div>
+    <div id="sidebar">
+        <h4>Classes</h4>
+        <div id="classes">
+            <ul id="api-classes" class="nav nav-list">
+                {{#publicClasses classes}}
+                    <li><a href="{{../projectRoot}}classes/{{name}}.html">{{displayName}}</a></li>
+                {{/publicClasses}}
+            </ul>
+
+
+        </div>
+        {{#if methods}}
+        <h4>Methods</h4>
+        <div id="methods">
+            <ul id="api-methods" class="nav nav-list">
+                {{#methods}}
+                    <li><a href="#methods_{{name}}">{{name}}</a></li>
+                {{/methods}}
+            </ul>
+        </div>
+        {{/if}}
+    </div>
+</div>

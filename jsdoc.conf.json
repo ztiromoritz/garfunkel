@@ -8,14 +8,17 @@
     },
     "plugins": [],
     "templates": {
-        "cleverLinks": false,
-        "monospaceLinks": false,
+        "cleverLinks": true,
+        "monospaceLinks": true,
         "default": {
             "outputSourceFiles": false
+        },
+        "staticFiles": {
+            "include": ["./assets/"]
         }
     },
     "opts" :{
-	"template": "templates/garfunkel", 
+	"template": "node_modules/ink-docstrap/template",
 	"readme" : "README.md",
 	"destination": "./docs/"
     }
