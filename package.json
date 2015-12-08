@@ -8,7 +8,7 @@
 		"test-cov" : "mocha -R html-cov test/coverage/blanket-wrapper.js > test/coverage/coverage.html",
 		"lint" : "jshint **.js;true",
 		"build" : "(echo '/*!' ; cat ./LICENSE ; echo '*/' ; browserify garfunkel.js) > build/garfunkel.js",
-		"doc" : "yuidoc --no-sort"
+		"doc" : "yuidoc --no-sort --no-code"
 		
 	},
 	"repository": {

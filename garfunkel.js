@@ -4,30 +4,54 @@
  */
 (function (global) {
 
+    var X_IS_LEFT_TO_Y = true;
 
-    /*
+    /**
+     * Static Method
+     * @class Garfunkel
+     */
+    var Garfunkel = {};
+
+    /**
+     * General orientation of the coordinate system. This is a global setting for this module.
+     *
      * Used for the isLeftOf, isRightOf, getLeftNormal, getRightNormal functions.
      *
      * FALSE, means the normal school book coordinates with (0,0) in the lower left corner.
      * TRUE, means the canvas or graphic coordinates with (0,0) in the upper left corner;
      *
+     * @static
+     * @method getXIsLeftOfY
+     * @default "true"
+     * @returns {boolean}
      */
-    var X_IS_LEFT_TO_Y = true;
+    Garfunkel.getXIsLeftOfY = function(){
+        return X_IS_LEFT_TO_Y;
+    };
 
-    var Garfunkel = {};
-
+    /**
+     *
+     * @static
+     * @method setXIsLeftOfY
+     * @default "true"
+     * @param {boolean} value
+     */
     Garfunkel.setXisLeftOfY = function (value) {
         X_IS_LEFT_TO_Y = value;
     };
-    
-    /*
-     *
-     *
+
+    /**
+     * @static
+     * @method setGameCoords
      */
     Garfunkel.setGameCoords = function () {
         X_IS_LEFT_TO_Y = true;
     };
 
+    /**
+     * @static
+     * @method setSchoolCoords
+     */
     Garfunkel.setSchoolCoords = function () {
         X_IS_LEFT_TO_Y = false;
     };
