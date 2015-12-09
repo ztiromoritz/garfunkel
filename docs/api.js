@@ -2,9 +2,13 @@ YUI.add("yuidoc-meta", function(Y) {
    Y.YUIDoc = { meta: {
     "classes": [
         "Box",
+        "Circle",
         "Garfunkel",
+        "Line",
         "Pool",
+        "Ray",
         "Segment",
+        "Triangle",
         "Vect"
     ],
     "modules": [

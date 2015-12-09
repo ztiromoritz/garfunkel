@@ -14,10 +14,14 @@
             },
             "classes": {
                 "Garfunkel": 1,
-                "Pool": 1,
                 "Vect": 1,
                 "Box": 1,
-                "Segment": 1
+                "Segment": 1,
+                "Line": 1,
+                "Ray": 1,
+                "Triangle": 1,
+                "Circle": 1,
+                "Pool": 1
             },
             "fors": {},
             "namespaces": {}
@@ -30,16 +34,20 @@
             "elements": {},
             "classes": {
                 "Garfunkel": 1,
-                "Pool": 1,
                 "Vect": 1,
                 "Box": 1,
-                "Segment": 1
+                "Segment": 1,
+                "Line": 1,
+                "Ray": 1,
+                "Triangle": 1,
+                "Circle": 1,
+                "Pool": 1
             },
             "fors": {},
             "namespaces": {},
             "tag": "module",
             "file": "/Users/mo/wc/garfunkel/garfunkel.js",
-            "line": 718,
+            "line": 591,
             "description": "garfunkel.js - A 2D geometry toolbox"
         }
     },
@@ -58,28 +66,6 @@
             "line": 9,
             "description": "Static Method"
         },
-        "Pool": {
-            "name": "Pool",
-            "shortname": "Pool",
-            "classitems": [],
-            "plugins": [],
-            "extensions": [],
-            "plugin_for": [],
-            "extension_for": [],
-            "module": "Garfunkel",
-            "namespace": "",
-            "file": "/Users/mo/wc/garfunkel/garfunkel.js",
-            "line": 60,
-            "description": "A simple object pool",
-            "is_constructor": 1,
-            "params": [
-                {
-                    "name": "capacity",
-                    "description": "The initial capacity.",
-                    "type": "Number"
-                }
-            ]
-        },
         "Vect": {
             "name": "Vect",
             "shortname": "Vect",
@@ -91,7 +77,7 @@
             "module": "Garfunkel",
             "namespace": "",
             "file": "/Users/mo/wc/garfunkel/garfunkel.js",
-            "line": 117,
+            "line": 59,
             "description": "Represents a vector as well as a point.\n\n\n All Methods on a Vector that return a vector are\n chainable and will change the initial vector to\n the result of the operation.",
             "is_constructor": 1,
             "params": [
@@ -118,7 +104,7 @@
             "module": "Garfunkel",
             "namespace": "",
             "file": "/Users/mo/wc/garfunkel/garfunkel.js",
-            "line": 661,
+            "line": 425,
             "description": "A rectangular box with edges parallel to the coordinate axes.\nSo:\n        Box#left &le; Box#right\n        Box#top  &le; Box#bottom",
             "is_constructor": 1,
             "params": [
@@ -155,7 +141,7 @@
             "module": "Garfunkel",
             "namespace": "",
             "file": "/Users/mo/wc/garfunkel/garfunkel.js",
-            "line": 718,
+            "line": 482,
             "description": "A line segment represented by two points.\n\n(The line segment has a orinentation given by the order or the two points.)",
             "is_constructor": 1,
             "params": [
@@ -168,6 +154,120 @@
                     "name": "p2",
                     "description": "",
                     "type": "Object"
+                }
+            ]
+        },
+        "Line": {
+            "name": "Line",
+            "shortname": "Line",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "Garfunkel",
+            "namespace": "",
+            "file": "/Users/mo/wc/garfunkel/garfunkel.js",
+            "line": 551,
+            "params": [
+                {
+                    "name": "segment",
+                    "description": ""
+                }
+            ],
+            "is_constructor": 1
+        },
+        "Ray": {
+            "name": "Ray",
+            "shortname": "Ray",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "Garfunkel",
+            "namespace": "",
+            "file": "/Users/mo/wc/garfunkel/garfunkel.js",
+            "line": 560,
+            "params": [
+                {
+                    "name": "segment",
+                    "description": ""
+                }
+            ],
+            "is_constructor": 1
+        },
+        "Triangle": {
+            "name": "Triangle",
+            "shortname": "Triangle",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "Garfunkel",
+            "namespace": "",
+            "file": "/Users/mo/wc/garfunkel/garfunkel.js",
+            "line": 569,
+            "params": [
+                {
+                    "name": "a",
+                    "description": ""
+                },
+                {
+                    "name": "b",
+                    "description": ""
+                },
+                {
+                    "name": "c",
+                    "description": ""
+                }
+            ],
+            "is_constructor": 1
+        },
+        "Circle": {
+            "name": "Circle",
+            "shortname": "Circle",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "Garfunkel",
+            "namespace": "",
+            "file": "/Users/mo/wc/garfunkel/garfunkel.js",
+            "line": 580,
+            "params": [
+                {
+                    "name": "p",
+                    "description": ""
+                },
+                {
+                    "name": "radius",
+                    "description": ""
+                }
+            ],
+            "is_constructor": 1
+        },
+        "Pool": {
+            "name": "Pool",
+            "shortname": "Pool",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "Garfunkel",
+            "namespace": "",
+            "file": "/Users/mo/wc/garfunkel/garfunkel.js",
+            "line": 591,
+            "description": "A simple object pool",
+            "is_constructor": 1,
+            "params": [
+                {
+                    "name": "capacity",
+                    "description": "The initial capacity.",
+                    "type": "Number"
                 }
             ]
         }
@@ -226,32 +326,7 @@
         },
         {
             "file": "/Users/mo/wc/garfunkel/garfunkel.js",
-            "line": 81,
-            "description": "CreateItems",
-            "itemtype": "method",
-            "name": "createItems",
-            "class": "Pool",
-            "module": "Garfunkel"
-        },
-        {
-            "file": "/Users/mo/wc/garfunkel/garfunkel.js",
-            "line": 93,
-            "itemtype": "method",
-            "name": "get",
-            "class": "Pool",
-            "module": "Garfunkel"
-        },
-        {
-            "file": "/Users/mo/wc/garfunkel/garfunkel.js",
-            "line": 109,
-            "itemtype": "method",
-            "name": "dispose",
-            "class": "Pool",
-            "module": "Garfunkel"
-        },
-        {
-            "file": "/Users/mo/wc/garfunkel/garfunkel.js",
-            "line": 138,
+            "line": 82,
             "description": "<img src=\"../assets/logo.jpg\"></img>",
             "example": [
                 "\n<pre>new Vector(2,4).toString() -> \"x: 2 y: 4\" </pre>"
@@ -267,7 +342,7 @@
         },
         {
             "file": "/Users/mo/wc/garfunkel/garfunkel.js",
-            "line": 149,
+            "line": 93,
             "itemtype": "method",
             "name": "clone",
             "class": "Vect",
@@ -275,7 +350,7 @@
         },
         {
             "file": "/Users/mo/wc/garfunkel/garfunkel.js",
-            "line": 165,
+            "line": 109,
             "description": "Scalar multiplication.\nEach coordinate will be multiplied with the given scalar.",
             "chainable": 1,
             "itemtype": "method",
@@ -296,7 +371,7 @@
         },
         {
             "file": "/Users/mo/wc/garfunkel/garfunkel.js",
-            "line": 179,
+            "line": 123,
             "description": "Scalar division.\nEach coordinate will be devided by the given scalar.",
             "chainable": 1,
             "itemtype": "method",
@@ -317,7 +392,7 @@
         },
         {
             "file": "/Users/mo/wc/garfunkel/garfunkel.js",
-            "line": 193,
+            "line": 137,
             "description": "Adds a vector.",
             "chainable": 1,
             "itemtype": "method",
@@ -338,7 +413,7 @@
         },
         {
             "file": "/Users/mo/wc/garfunkel/garfunkel.js",
-            "line": 206,
+            "line": 150,
             "description": "Substracts a vector.",
             "chainable": 1,
             "itemtype": "method",
@@ -359,7 +434,7 @@
         },
         {
             "file": "/Users/mo/wc/garfunkel/garfunkel.js",
-            "line": 219,
+            "line": 163,
             "description": "Dot product of this and the given vector.",
             "itemtype": "method",
             "name": "dot",
@@ -378,7 +453,7 @@
         },
         {
             "file": "/Users/mo/wc/garfunkel/garfunkel.js",
-            "line": 229,
+            "line": 173,
             "description": "Cross product of this and the given vector.",
             "itemtype": "method",
             "name": "cross",
@@ -397,7 +472,7 @@
         },
         {
             "file": "/Users/mo/wc/garfunkel/garfunkel.js",
-            "line": 239,
+            "line": 183,
             "description": "Normalize the given vector.",
             "itemtype": "method",
             "name": "normalize",
@@ -410,7 +485,7 @@
         },
         {
             "file": "/Users/mo/wc/garfunkel/garfunkel.js",
-            "line": 255,
+            "line": 199,
             "description": "Quadratic length of the vector.",
             "itemtype": "method",
             "name": "lengthSq",
@@ -423,7 +498,7 @@
         },
         {
             "file": "/Users/mo/wc/garfunkel/garfunkel.js",
-            "line": 264,
+            "line": 208,
             "description": "Euclidean norm/length/magnitude of the vector.",
             "itemtype": "method",
             "name": "length",
@@ -436,7 +511,7 @@
         },
         {
             "file": "/Users/mo/wc/garfunkel/garfunkel.js",
-            "line": 273,
+            "line": 217,
             "description": "Quadratic distance of two vectors.",
             "itemtype": "method",
             "name": "distanceSq",
@@ -455,7 +530,7 @@
         },
         {
             "file": "/Users/mo/wc/garfunkel/garfunkel.js",
-            "line": 285,
+            "line": 229,
             "description": "Euclidean distance of two vectors.",
             "itemtype": "method",
             "name": "distance",
@@ -474,7 +549,7 @@
         },
         {
             "file": "/Users/mo/wc/garfunkel/garfunkel.js",
-            "line": 295,
+            "line": 239,
             "description": "Manhatten/city block/Taxicab distance",
             "itemtype": "method",
             "name": "manhatten",
@@ -493,7 +568,7 @@
         },
         {
             "file": "/Users/mo/wc/garfunkel/garfunkel.js",
-            "line": 307,
+            "line": 251,
             "itemtype": "method",
             "name": "isLeftOf",
             "params": [
@@ -511,7 +586,7 @@
         },
         {
             "file": "/Users/mo/wc/garfunkel/garfunkel.js",
-            "line": 320,
+            "line": 264,
             "itemtype": "method",
             "name": "isRightOf",
             "params": [
@@ -529,7 +604,7 @@
         },
         {
             "file": "/Users/mo/wc/garfunkel/garfunkel.js",
-            "line": 332,
+            "line": 276,
             "chainable": 1,
             "itemtype": "method",
             "name": "turnLeft",
@@ -542,7 +617,7 @@
         },
         {
             "file": "/Users/mo/wc/garfunkel/garfunkel.js",
-            "line": 345,
+            "line": 289,
             "chainable": 1,
             "itemtype": "method",
             "name": "turnRight",
@@ -555,7 +630,7 @@
         },
         {
             "file": "/Users/mo/wc/garfunkel/garfunkel.js",
-            "line": 358,
+            "line": 302,
             "chainable": 1,
             "itemtype": "method",
             "name": "leftNormal",
@@ -568,7 +643,7 @@
         },
         {
             "file": "/Users/mo/wc/garfunkel/garfunkel.js",
-            "line": 368,
+            "line": 312,
             "chainable": 1,
             "itemtype": "method",
             "name": "rightNormal",
@@ -581,9 +656,17 @@
         },
         {
             "file": "/Users/mo/wc/garfunkel/garfunkel.js",
-            "line": 379,
+            "line": 323,
+            "description": "Gives the angle between a reference vector and this.\nThe result is between [0,2*Pi).\nIn school coordinates, the angle is counted <strong>counter clockwise</strong>\nfrom reference to the vector. In game coordinates, the angle is counted <strong>clockwise</strong>\nfrom reference to the vector.",
             "itemtype": "method",
             "name": "angle",
+            "params": [
+                {
+                    "name": "ref",
+                    "description": "[optional] reference vector. default: (1,0).",
+                    "type": "Vector"
+                }
+            ],
             "return": {
                 "description": "",
                 "type": "Number"
@@ -593,7 +676,7 @@
         },
         {
             "file": "/Users/mo/wc/garfunkel/garfunkel.js",
-            "line": 387,
+            "line": 349,
             "description": "Rotates the vector by the given angle.",
             "chainable": 1,
             "itemtype": "method",
@@ -614,7 +697,7 @@
         },
         {
             "file": "/Users/mo/wc/garfunkel/garfunkel.js",
-            "line": 403,
+            "line": 366,
             "description": "Rotates the vector to the given angle.",
             "chainable": 1,
             "itemtype": "method",
@@ -635,8 +718,8 @@
         },
         {
             "file": "/Users/mo/wc/garfunkel/garfunkel.js",
-            "line": 415,
-            "description": "Rotates the vector towards the given angle.\nThe rotation is limited by stepSize, so move a 0° vector towards 90° with limit 50°\nwould result in a 50° vector. If the method with the same limit is reapplied again\nthe result would be 90°.\n\nThe rotation will take the \"shortest way\" towards the given angle.\n\nA 180° rotation will be clockwise(TODO???)",
+            "line": 378,
+            "description": "Rotates the vector towards the given angle.\nThe rotation is limited by stepSize, so move a 0° vector towards 90° with limit 50°\nwould result in a 50° vector. If the method with the same limit is reapplied again\nthe result would be 90°.\n\nThe rotation will take the \"shortest way\" towards the given angle.",
             "chainable": 1,
             "itemtype": "method",
             "name": "rotateTowards",
@@ -661,7 +744,7 @@
         },
         {
             "file": "/Users/mo/wc/garfunkel/garfunkel.js",
-            "line": 437,
+            "line": 399,
             "description": "\"angle of incidence equal to the angle of reflexion\"\nPerforms a simple reflection of this object on a surface\nthat has the direction of the given vector u.",
             "itemtype": "method",
             "name": "reflectOn",
@@ -677,7 +760,7 @@
         },
         {
             "file": "/Users/mo/wc/garfunkel/garfunkel.js",
-            "line": 686,
+            "line": 450,
             "description": "Bounding box of a given Segment",
             "itemtype": "method",
             "name": "fromSegment",
@@ -694,7 +777,7 @@
         },
         {
             "file": "/Users/mo/wc/garfunkel/garfunkel.js",
-            "line": 700,
+            "line": 464,
             "itemtype": "method",
             "name": "toString",
             "return": {
@@ -702,6 +785,31 @@
                 "type": "String"
             },
             "class": "Box",
+            "module": "Garfunkel"
+        },
+        {
+            "file": "/Users/mo/wc/garfunkel/garfunkel.js",
+            "line": 612,
+            "description": "CreateItems",
+            "itemtype": "method",
+            "name": "createItems",
+            "class": "Pool",
+            "module": "Garfunkel"
+        },
+        {
+            "file": "/Users/mo/wc/garfunkel/garfunkel.js",
+            "line": 624,
+            "itemtype": "method",
+            "name": "get",
+            "class": "Pool",
+            "module": "Garfunkel"
+        },
+        {
+            "file": "/Users/mo/wc/garfunkel/garfunkel.js",
+            "line": 640,
+            "itemtype": "method",
+            "name": "dispose",
+            "class": "Pool",
             "module": "Garfunkel"
         }
     ],

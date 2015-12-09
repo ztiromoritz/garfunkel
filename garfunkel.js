@@ -25,7 +25,7 @@
      * @default "true"
      * @return {boolean}
      */
-    Garfunkel.getXIsLeftOfY = function(){
+    Garfunkel.getXIsLeftOfY = function () {
         return X_IS_LEFT_TO_Y;
     };
 
@@ -56,64 +56,6 @@
         X_IS_LEFT_TO_Y = false;
     };
 
-
-    /**
-     * A simple object pool
-     *
-     * @class Pool
-     *
-     * @constructor
-     * @param {Number} capacity The initial capacity.
-     */
-    var Pool = function (capacity, constructor, initializer, growth) {
-        this.items = new Array(capacity);
-        this.capacity = capacity;
-        this.current = capacity;
-        this.initializer = initializer;
-        this.constructor = constructor;
-        this.growth = growth || function (cap) {
-                return 1;
-            };//
-        this.createItems(capacity);
-    };
-
-
-    /**
-     * CreateItems
-     *
-     * @method createItems
-     *
-     */
-    Pool.prototype.createItems = function (size) {
-        this.items.length = size;
-        for (var i = 0; i < size; i++)
-            this.items[i] = new this.constructor();
-    };
-
-    /**
-     * @method get
-     */
-    Pool.prototype.get = function () {
-        if (this.current === 0) {
-            var growth = this.growth(this.capacity);
-            this.capacity += growth;
-            this.current = growth;
-            this.createItems(growth);
-        }
-        this.current--;
-        var item = this.items[this.current];
-        this.initializer.apply(item, arguments);
-        return item;
-    };
-
-    /**
-     * @method dispose
-     */
-    Pool.prototype.dispose = function (obj) {
-        this.current = this.items.push(obj);
-        this.capacity = Math.max(this.capacity, this.current);
-    };
-
     /**
      *  Represents a vector as well as a point.
      *
@@ -133,6 +75,8 @@
     };
 
     var ZERO = new Vect(0, 0);
+    var ABSCISSA = new Vect(1, 0);
+    var ORDINATE = new Vect(0, 1);
 
 
     /**
@@ -377,18 +321,37 @@
 
 
     /**
+     * Gives the angle between a reference vector and this.
+     * The result is between [0,2*Pi).
+     * In school coordinates, the angle is counted <strong>counter clockwise</strong>
+     * from reference to the vector. In game coordinates, the angle is counted <strong>clockwise</strong>
+     * from reference to the vector.
+     *
      * @method angle
+     * @param {Vector} ref
+     *  [optional] reference vector. default: (1,0).
      * @return {number}
      */
-    Vect.prototype.angle = function () {
-        return Math.atan2(this.y, this.x);
+    Vect.prototype.angle = function (ref) {
+        var result;
+        if (!(ref instanceof Vect)) {
+            result = Math.atan2(this.y, this.x); // (- Math.atan2(0,1))
+        } else {
+            result = Math.atan2(this.y, this.x) - Math.atan2(ref.y, ref.x);
+        }
+        if (result > 0) {
+            return result;
+        } else {
+            return 2 * Math.PI + result;
+        }
     };
 
     /**
      * Rotates the vector by the given angle.
+     *
      * @chainable
      * @method rotate
-     * @param {Number} angle in radians
+     * @param {number} angle in radians
      * @return {Vect} the rotated vector
      */
     Vect.prototype.rotate = function (angle) {
@@ -420,8 +383,6 @@
      *
      * The rotation will take the "shortest way" towards the given angle.
      *
-     * A 180° rotation will be clockwise(TODO???)
-     *
      * @chainable
      * @method rotateTowards
      * @param {number} angle - angle in radians
@@ -430,6 +391,7 @@
      */
     Vect.prototype.rotateTowards = function (angle, stepSize) {
         this.rotate(angle - this.angle());
+        //TODO
         return this;
     };
 
@@ -457,6 +419,230 @@
         this.x = r.x;
         this.y = r.y;
         return this;
+    };
+
+
+    /**
+     *
+     * A rectangular box with edges parallel to the coordinate axes.
+     *
+     * So:
+     *        Box#left &le; Box#right
+     *        Box#top  &le; Box#bottom
+     *
+     * @class Box
+     * @constructor
+     * @param {Number} x0
+     * @param {Number} x1
+     * @param {Number} y0
+     * @param {Number} y1
+     */
+    var Box = function (x0, x1, y0, y1) {
+        this.left = Math.min(x0, x1);
+        this.right = Math.max(x0, x1);
+
+        this.y_min = Math.min(y0, y1);
+        this.y_max = Math.max(y0, y1);
+        this.top = X_IS_LEFT_TO_Y ? this.y_min : this.y_max;
+        this.bottom = X_IS_LEFT_TO_Y ? this.y_max : this.y_min;
+    };
+
+    /**
+     * Bounding box of a given Segment
+     * @method fromSegment
+     * @static
+     * @param {Segment} segment
+     */
+    Box.fromSegment = function (segment) {
+        return new Box(segment.p1.x, segment.p2.x, segment.p1.y, segment.p2.y);
+    };
+
+    Box.fromObject = function (obj) {
+        return new Box(obj.x0, obj.x1, obj.y0, obj.y1);
+    };
+
+    /**
+     * @method toString
+     * @return {string}
+     */
+    Box.prototype.toString = function () {
+        return "[ left: " + this.left + " right: " + this.right + " top: " + this.top + " bottom: " + this.bottom + " ]";
+    };
+
+    Box.prototype.containsPoint = function (p) {
+        return this.left <= p.x && p.x <= this.right//
+            && this.y_min <= p.y && p.y <= this.y_max;
+    };
+
+    Box.prototype.intersect = function (box) {
+        return this.left <= box.right && box.left <= this.right//
+            && this.y_min <= box.y_max && box.y_min <= this.y_max;
+    };
+
+    /**
+     * A line segment represented by two points.
+     *
+     * (The line segment has a orinentation given by the order or the two points.)
+     * @class Segment
+     * @constructor
+     * @param {Object} p1
+     * @param {Object} p2
+     */
+    var Segment = function (p1, p2) {
+        this.p1 = p1 || new Vect(0, 0);
+        this.p2 = p2 || new Vect(1, 1);
+        this.boundingBox = new Box.fromSegment(this);
+        this.connection = this.p2.clone().sub(this.p1);
+    };
+
+    Segment.prototype.toString = function () {
+        return '[ ' + this.p1 + ' , ' + this.p2 + ' ]';
+    };
+
+    Segment.fromArray = function (arr) {
+        return new Segment(new Vect(arr[0], arr[1]), new Vect(arr[2], arr[3]));
+    };
+
+    Segment.fromObject = function (obj) {
+        return new Segment(obj.p1, obj.p2);
+    };
+
+    Segment.prototype.clone = function () {
+        return new Segment(this.p1.clone(), this.p2.clone());
+    };
+
+    Segment.prototype.toCenter = function () {
+        this.p2 = this.connection.clone();
+        this.p1 = ZERO.clone();
+        return this;
+    };
+
+
+    Segment.prototype.length = function () {
+        return this.p1.clone().sub(this.p2).length();
+    };
+
+    Segment.prototype.lengthSq = function () {
+        return this.p1.clone().sub(this.p2).lengthSq();
+    };
+
+    Segment.prototype.intersect = function (s) {
+        var EPSILON = 0.000001;
+
+        var touchOrCross = function (s1, s2) {
+
+            // X as line, Y as two points
+            // Move this.p1 to ZERO
+            var u = s1.clone().toCenter().p2;
+            var v = s2.p1.clone().sub(s1.p1);
+            var w = s2.p2.clone().sub(s1.p1);
+
+            var c1 = v.cross(u);
+            var c2 = w.cross(u);
+            if (Math.abs(c1) < EPSILON || Math.abs(c2) < EPSILON)
+                return true;
+            //Y touches X
+            return (c1 > 0) !== (c2 > 0);
+            // Y cross X
+        };
+        return this.boundingBox.intersect(s.boundingBox) && touchOrCross(this, s) && touchOrCross(s, this);
+    };
+
+    /**
+     * @class Line
+     * @param segment
+     * @constructor
+     */
+    var Line = function (segment) {
+
+    };
+
+    /**
+     * @class Ray
+     * @param segment
+     * @constructor
+     */
+    var Ray = function (segment) {
+
+    };
+
+    /**
+     * @class Triangle
+     * @param a
+     * @param b
+     * @param c
+     * @constructor
+     */
+    var Triangle = function (a, b, c) {
+
+    };
+
+    /**
+     * @class Circle
+     * @param p
+     * @param radius
+     * @constructor
+     */
+    var Circle = function (p, radius) {
+
+    };
+
+
+    /**
+     * A simple object pool
+     *
+     * @class Pool
+     *
+     * @constructor
+     * @param {Number} capacity The initial capacity.
+     */
+    var Pool = function (capacity, constructor, initializer, growth) {
+        this.items = new Array(capacity);
+        this.capacity = capacity;
+        this.current = capacity;
+        this.initializer = initializer;
+        this.constructor = constructor;
+        this.growth = growth || function (cap) {
+                return 1;
+            };//
+        this.createItems(capacity);
+    };
+
+
+    /**
+     * CreateItems
+     *
+     * @method createItems
+     *
+     */
+    Pool.prototype.createItems = function (size) {
+        this.items.length = size;
+        for (var i = 0; i < size; i++)
+            this.items[i] = new this.constructor();
+    };
+
+    /**
+     * @method get
+     */
+    Pool.prototype.get = function () {
+        if (this.current === 0) {
+            var growth = this.growth(this.capacity);
+            this.capacity += growth;
+            this.current = growth;
+            this.createItems(growth);
+        }
+        this.current--;
+        var item = this.items[this.current];
+        this.initializer.apply(item, arguments);
+        return item;
+    };
+
+    /**
+     * @method dispose
+     */
+    Pool.prototype.dispose = function (obj) {
+        this.current = this.items.push(obj);
+        this.capacity = Math.max(this.capacity, this.current);
     };
 
 
@@ -658,138 +844,15 @@
 
     };
 
-    /**
-     *
-     * A rectangular box with edges parallel to the coordinate axes.
-     *
-     * So:
-     *        Box#left &le; Box#right
-     *        Box#top  &le; Box#bottom
-     *
-     * @class Box
-     * @constructor
-     * @param {Number} x0
-     * @param {Number} x1
-     * @param {Number} y0
-     * @param {Number} y1
-     */
-    var Box = function (x0, x1, y0, y1) {
-        this.left = Math.min(x0, x1);
-        this.right = Math.max(x0, x1);
-
-        this.y_min = Math.min(y0, y1);
-        this.y_max = Math.max(y0, y1);
-        this.top = X_IS_LEFT_TO_Y ? this.y_min : this.y_max;
-        this.bottom = X_IS_LEFT_TO_Y ? this.y_max : this.y_min;
-    };
-
-    /**
-     * Bounding box of a given Segment
-     * @method fromSegment
-     * @static
-     * @param {Segment} segment
-     */
-    Box.fromSegment = function (segment) {
-        return new Box(segment.p1.x, segment.p2.x, segment.p1.y, segment.p2.y);
-    };
-
-    Box.fromObject = function (obj) {
-        return new Box(obj.x0, obj.x1, obj.y0, obj.y1);
-    };
-
-    /**
-     * @method toString
-     * @return {string}
-     */
-    Box.prototype.toString = function () {
-        return "[ left: " + this.left + " right: " + this.right + " top: " + this.top + " bottom: " + this.bottom + " ]";
-    };
-
-    Box.prototype.containsPoint = function (p) {
-        return this.left <= p.x && p.x <= this.right//
-            && this.y_min <= p.y && p.y <= this.y_max;
-    };
-
-    Box.prototype.intersect = function (box) {
-        return this.left <= box.right && box.left <= this.right//
-            && this.y_min <= box.y_max && box.y_min <= this.y_max;
-    };
-
-    /**
-     * A line segment represented by two points.
-     *
-     * (The line segment has a orinentation given by the order or the two points.)
-     * @class Segment
-     * @constructor
-     * @param {Object} p1
-     * @param {Object} p2
-     */
-    var Segment = function (p1, p2) {
-        this.p1 = p1 || new Vect(0, 0);
-        this.p2 = p2 || new Vect(1, 1);
-        this.boundingBox = new Box.fromSegment(this);
-        this.connection = this.p2.clone().sub(this.p1);
-    };
-
-    Segment.prototype.toString = function () {
-        return '[ ' + this.p1 + ' , ' + this.p2 + ' ]';
-    };
-
-    Segment.fromArray = function (arr) {
-        return new Segment(new Vect(arr[0], arr[1]), new Vect(arr[2], arr[3]));
-    };
-
-    Segment.fromObject = function (obj) {
-        return new Segment(obj.p1, obj.p2);
-    };
-
-    Segment.prototype.clone = function () {
-        return new Segment(this.p1.clone(), this.p2.clone());
-    };
-
-    Segment.prototype.toCenter = function () {
-        this.p2 = this.connection.clone();
-        this.p1 = ZERO.clone();
-        return this;
-    };
-
-
-    Segment.prototype.length = function () {
-        return this.p1.clone().sub(this.p2).length();
-    };
-
-    Segment.prototype.lengthSq = function () {
-        return this.p1.clone().sub(this.p2).lengthSq();
-    };
-
-    Segment.prototype.intersect = function (s) {
-        var EPSILON = 0.000001;
-
-        var touchOrCross = function (s1, s2) {
-
-            // X as line, Y as two points
-            // Move this.p1 to ZERO
-            var u = s1.clone().toCenter().p2;
-            var v = s2.p1.clone().sub(s1.p1);
-            var w = s2.p2.clone().sub(s1.p1);
-
-            var c1 = v.cross(u);
-            var c2 = w.cross(u);
-            if (Math.abs(c1) < EPSILON || Math.abs(c2) < EPSILON)
-                return true;
-            //Y touches X
-            return (c1 > 0) !== (c2 > 0);
-            // Y cross X
-        };
-        return this.boundingBox.intersect(s.boundingBox) && touchOrCross(this, s) && touchOrCross(s, this);
-    };
-
     Garfunkel.Vect = Vect;
-    Garfunkel.Segment = Segment;
     Garfunkel.Box = Box;
+    Garfunkel.Segment = Segment;
+    Garfunkel.Line = Line;
+    Garfunkel.Ray = Ray;
+    Garfunkel.Circle = Circle;
+    Garfunkel.Triangle = Triangle;
     Garfunkel.Pool = Pool;
     Garfunkel.Calculator = Calculator;
-
 
     global.Garfunkel = Garfunkel;
 
