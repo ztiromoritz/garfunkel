@@ -172,6 +172,7 @@
 
     /**
      * Cross product of this and the given vector.
+     *
      * @method cross
      * @param v
      * @return {number}
@@ -322,7 +323,7 @@
 
     /**
      * Gives the angle between a reference vector and this.
-     * The result is between [0,2*Pi).
+     * The result is between [PI,-PI).
      * In school coordinates, the angle is counted <strong>counter clockwise</strong>
      * from reference to the vector. In game coordinates, the angle is counted <strong>clockwise</strong>
      * from reference to the vector.
@@ -335,28 +336,38 @@
     Vect.prototype.angle = function (ref) {
         var result;
         if (!(ref instanceof Vect)) {
-            result = Math.atan2(this.y, this.x); // (- Math.atan2(0,1))
+            return Math.atan2(this.y, this.x); // (- Math.atan2(0,1))
         } else {
             result = Math.atan2(this.y, this.x) - Math.atan2(ref.y, ref.x);
+            if (result > Math.PI) {
+                result = result - Math.PI * 2;
+            } else if (result < -Math.PI) {
+                result = Math.PI * 2 + result;
+            }
         }
-        if (result > 0) {
-            return result;
-        } else {
-            return 2 * Math.PI + result;
-        }
+        return result;
     };
 
     /**
      * Rotates the vector by the given angle.
+     * If you take the vector as a point, the default pivot is {x:0,y:0}
      *
      * @chainable
      * @method rotate
-     * @param {number} angle in radians
+     * @param {number} angle
+     *      in radians
+     * @param {Vect} pivot
+     *      [optional] default is {x:0,y:0}
      * @return {Vect} the rotated vector
      */
-    Vect.prototype.rotate = function (angle) {
-        var _x = (this.x * Math.cos(angle)) - (this.y * Math.sin(angle));
-        var _y = (this.x * Math.sin(angle)) + (this.y * Math.cos(angle));
+    Vect.prototype.rotate = function (angle, pivot) {
+        pivot = pivot || ZERO;
+        var _x = pivot.x
+            + ((this.x - pivot.x) * Math.cos(angle))
+            - ((this.y - pivot.y) * Math.sin(angle));
+        var _y = pivot.y
+            + ((this.x - pivot.x) * Math.sin(angle))
+            + ((this.y - pivot.y) * Math.cos(angle));
         this.x = _x;
         this.y = _y;
         return this;
@@ -479,6 +490,15 @@
             && this.y_min <= box.y_max && box.y_min <= this.y_max;
     };
 
+    Box.prototype.translate = function (v) {
+        this.left += v.x;
+        this.right += v.x;
+        this.y_min += v.y;
+        this.y_max += v.y;
+        this.top += v.y;
+        this.bottom += v.y;
+    };
+
     /**
      * A line segment represented by two points.
      *
@@ -488,11 +508,17 @@
      * @param {Object} p1
      * @param {Object} p2
      */
-    var Segment = function (p1, p2) {
+    var Segment = function (p1, p2) {//clone TODO:
         this.p1 = p1 || new Vect(0, 0);
         this.p2 = p2 || new Vect(1, 1);
-        this.boundingBox = new Box.fromSegment(this);
-        this.connection = this.p2.clone().sub(this.p1);
+    };
+
+    Segment.prototype.getBoundingBox = function () {
+        return new Box.fromSegment(this);
+    };
+
+    Segment.prototype.getConnection = function () {
+        return this.p2.clone().sub(this.p1);
     };
 
     Segment.prototype.toString = function () {
@@ -511,19 +537,84 @@
         return new Segment(this.p1.clone(), this.p2.clone());
     };
 
+
+    /**
+     * Move Segment to center. Keeps direction and length
+     */
     Segment.prototype.toCenter = function () {
-        this.p2 = this.connection.clone();
-        this.p1 = ZERO.clone();
+        return this.translate(ZERO.clone().sub(this.p1));
+    };
+
+    /**
+     * Move every point by v
+     * @param v
+     */
+    Segment.prototype.translate = function (v) {
+        this.p1.add(v);
+        this.p2.add(v);
         return this;
     };
 
 
+    /**
+     * Gives a point on the segment.
+     * number:
+     *  0   -> p1
+     *  1   -> p2
+     *  0.5 -> middle between p1,p2
+     *  <0  -> a point beyond p1 on the line the segment defines
+     *  >1  -> a point beyond p2 on the line the segment defines
+     *
+     *
+     * @param {number} position
+     *   number between [0,1] to get a point between p1 and p2.
+     *
+     */
+    Segment.prototype.getPoint = function(position){
+        return new Vect(this.p2.x*position + this.p1.x * (1-position),
+            this.p2.y*position + this.p1.y * (1-position));
+    };
+
+    /**
+     * Return the middle between p1 and p2
+     * @return {Vect}
+     *      middle point of the Segment
+     */
+    Segment.prototype.getMiddle = function(){
+        return this.getPoint(0.5);
+    };
+
+
+
+    /**
+     * Rotate the Segment
+     * @param {number} angle
+     *      in radians
+     * @param {Vect} pivot
+     *      [optional] default is this.p1, *not* {x:0,y:0}
+     * @returns {Segment}
+     */
+    Segment.prototype.rotate = function (angle, pivot) {
+        if (pivot) {
+            this.p1.rotate(angle, pivot);
+        } else {
+            pivot = this.p1;
+        }
+        this.p2.rotate(angle, pivot);
+        return this;
+    };
+
+    Segment.prototype.angle = function (ref) {
+        return this.getConnection().angle(ref);
+    };
+
+
     Segment.prototype.length = function () {
-        return this.p1.clone().sub(this.p2).length();
+        return this.getConnection().length();
     };
 
     Segment.prototype.lengthSq = function () {
-        return this.p1.clone().sub(this.p2).lengthSq();
+        return this.getConnection().lengthSq();
     };
 
     Segment.prototype.intersect = function (s) {
@@ -545,7 +636,7 @@
             return (c1 > 0) !== (c2 > 0);
             // Y cross X
         };
-        return this.boundingBox.intersect(s.boundingBox) && touchOrCross(this, s) && touchOrCross(s, this);
+        return this.getBoundingBox().intersect(s.getBoundingBox()) && touchOrCross(this, s) && touchOrCross(s, this);
     };
 
     /**
@@ -573,9 +664,28 @@
      * @param c
      * @constructor
      */
-    var Triangle = function (a, b, c) {
-
+    var Triangle = function (a, b, c, clone) {
+        if (clone) {
+            this.a = a.clone();
+            this.b = b.clone();
+            this.c = c.clone();
+        } else {
+            this.a = a;
+            this.b = b;
+            this.c = c;
+        }
     };
+
+
+    Triangle.prototype.angleA = function () {
+        var v = this.b.clone().sub(this.a);
+        var w = this.c.clone().sub(this.a);
+        var angle = v.angle(w);
+        if (angle >= Math.PI)
+            return w.angle(v);
+        return angle;
+    };
+
 
     /**
      * @class Circle

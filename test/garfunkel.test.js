@@ -350,6 +350,13 @@ describe('Vect#manhatten', function () {
 
 describe('Vect#angle', function () {
     var EPSILON = 0.0001;
+
+    it('should give a 0° angle', function () {
+        var v = new Vect(1, 0);
+        var angle = v.angle();
+        assert(angle  < EPSILON, Math.degrees(angle) + "°");
+    });
+
     it('should give a 90° angle', function () {
         var v = new Vect(0, 1);
         var angle = v.angle();
@@ -362,11 +369,11 @@ describe('Vect#angle', function () {
         assert(Math.abs(angle - Math.PI) < EPSILON, Math.degrees(angle) + "°");
     });
 
-    it('should give a 270° angle', function () {
+    it('should give a -90° angle', function () {
         var v = new Vect(0, -1);
         var angle = v.angle();
         console.log(angle, angle / Math.PI * 180);
-        assert(Math.abs(angle - 1.5 * Math.PI) < EPSILON, Math.degrees(angle) + "°");
+        assert(Math.abs(angle +  Math.PI/2) < EPSILON, Math.degrees(angle) + "°");
     });
 
 
@@ -391,6 +398,13 @@ describe('Vect#angle', function () {
         assert(Math.abs(angle - Math.PI / 2) < EPSILON, Math.degrees(angle) + "°");
     });
 
+    it('should give a -90° angle between (-1,1) and a reference of (-1,-1)', function () {
+        var ref = new Vect(-1, -1);
+        var w = new Vect(-1, 1);
+        var angle = w.angle(ref);
+        assert(Math.abs(angle + Math.PI / 2) < EPSILON, Math.degrees(angle) + "°");
+    });
+
     it('should give a 90° angle between (1,-1)  and a reference of (-1,-1)', function () {
         var ref = new Vect(-1, -1);
         var w = new Vect(1, -1);
@@ -404,15 +418,6 @@ describe('Vect#angle', function () {
         var angle = w.angle(ref);
         assert(Math.abs(angle - Math.PI) < EPSILON, Math.degrees(angle) + "°");
     });
-
-
-    it('both angles of two vectors added should give a full round', function () {
-        var v = new Vect(0, 3);
-        var w = new Vect(-7, 0);
-        var angle = v.angle(w) + w.angle(v);
-        assert(Math.abs(angle - 2 * Math.PI) < EPSILON);
-    });
-
 
 });
 
@@ -434,6 +439,21 @@ describe('Vect#rotate', function () {
         assert(Math.abs(before - after) < EPSILON);
     });
 
+});
+
+
+
+describe('Vect#rotate with pivot', function () {
+    var EPSILON = 0.0001;
+    it('should rotate 90°', function () {
+        var v = new Vect(3, 2);
+        var pivot = new Vect(2,1);
+
+        v.rotate(Math.PI/2 , pivot);
+
+        assert(Math.abs(v.x - 1) < EPSILON);
+        assert(Math.abs(v.y - 2) < EPSILON);
+    });
 });
 
 
@@ -713,6 +733,20 @@ describe('Segment#fromArray', function () {
         assert.equal(0, segment.p2.x);
         assert.equal(0, segment.p2.y);
     });
+
+
+    it('should have a connection vector', function(){
+        var connection =  segment.getConnection();
+        assert.equal(-3,connection.x);
+        assert.equal(-3,connection.y);
+    });
+
+    it('should give a bounding box', function(){
+        var box = segment.getBoundingBox();
+        assert.equal(3, box.right);
+        assert.equal(3, box.bottom);
+    });
+
 });
 
 
@@ -726,14 +760,106 @@ describe('Segment#intersect', function () {
         assert.equal(0, v.toCenter().p2.y);
     });
 
+});
+
+
+describe('Segment#translate', function(){
+
+    it('keeps length', function () {
+        var segment = new Segment(new Vect(3, 3), new Vect(4, 3));
+        var v = new Vect(4,5);
+        assert.equal(segment.length(), segment.translate(v).length());
+    });
+
+    it('keeps the connection', function(){
+        var segment = new Segment(new Vect(3, 3), new Vect(4, 3));
+        var v = new Vect(4,5);
+        var c_1 = segment.getConnection();
+        segment.translate(v);
+        var c_2 = segment.getConnection();
+        assert.equal(c_1.x, c_2.x);
+        assert.equal(c_1.y, c_2.y);
+    });
+
+    it('updates the bounding box', function(){
+        var segment = new Segment(new Vect(3, 3), new Vect(4, 3));
+        var v = new Vect(4,5);
+        var b_1 = segment.getBoundingBox();
+        segment.translate(v);
+        var b_2 = segment.getBoundingBox();
+        assert.equal(b_1.left+4, b_2.left);
+        assert.equal(b_1.right+4, b_2.right);
+        assert.equal(b_1.top+5, b_2.top);
+        assert.equal(b_1.bottom+5, b_2.bottom);
+    });
+
+});
+
+describe('Segment#toCenter', function(){
+
+    it('moves the segment to the center', function(){
+        var v = new Segment(new Vect(3, 3), new Vect(4, 3));
+        v.toCenter();
+        assert.equal(v.p1.x,0);
+        assert.equal(v.p1.y,0);
+        assert.equal(v.p2.x,1);
+        assert.equal(v.p2.y,0);
+    });
 
     it('keeps length', function () {
         var v = new Segment(new Vect(3, 3), new Vect(4, 3));
         assert.equal(v.length(), v.toCenter().length());
     });
 
+});
+
+
+describe('Segment#getMiddle', function(){
+
+    it('should get the middle', function(){
+        var s = new Segment(new Vect(2, 3), new Vect(4, 5));
+        var m = s.getMiddle();
+        assert.equal(m.x,3);
+        assert.equal(m.y,4);
+    });
+
+
 
 });
+
+describe('Segment#getPoint', function(){
+
+    it('should find the right point between p1 and p2', function(){
+        var s = new Segment(new Vect(3, 3), new Vect(7, 3));
+        var p = s.getPoint(1/4);
+        assert.equal(p.x,4);
+        assert.equal(p.y,3);
+    });
+
+    it('should find p1 ', function(){
+        var s = new Segment(new Vect(3, 9), new Vect(7, 3));
+        var p = s.getPoint(0);
+        assert.equal(p.x,3);
+        assert.equal(p.y,9);
+    });
+
+    it('should find p2', function(){
+        var s = new Segment(new Vect(3, 9), new Vect(7, 3));
+        var p = s.getPoint(1);
+        assert.equal(p.x,7);
+        assert.equal(p.y,3);
+    });
+
+    it('should go beyond p2', function(){
+        var s = new Segment(new Vect(3, 3), new Vect(7, 7));
+        var p = s.getPoint(2);
+        assert.equal(p.x,11);
+        assert.equal(p.y,11);
+    });
+    
+});
+
+
 
 
 describe('Box#constructor', function () {
