@@ -56,6 +56,28 @@
         X_IS_LEFT_TO_Y = false;
     };
 
+    Garfunkel.isVect = function isVect(obj) {
+        return obj instanceof Garfunkel.Vect;
+    };
+
+    Garfunkel.isBox = function isBox(obj) {
+        return obj instanceof Garfunkel.Box;
+    };
+
+    Garfunkel.isSegment = function isSegment(obj) {
+        return obj instanceof Garfunkel.Segment;
+    };
+
+    Garfunkel.isLine = function isLine(obj) {
+        return obj instanceof Garfunkel.Line;
+    };
+
+    Garfunkel.isRay = function isRay(obj) {
+        return obj instanceof Garfunkel.Ray;
+    };
+
+    var EPSILON = 0.000001;
+
     /**
      *  Represents a vector as well as a point.
      *
@@ -171,7 +193,14 @@
     };
 
     /**
-     * Cross product of this and the given vector.
+     * Not exactly the cross product, because seems not to be defined for 2d vectors.
+     *
+     * "Gives the Z-component of 3d cross product, if the two given
+     * vectors where extended to 3d vectors."
+     * or
+     * "Determinant of a 2x2 matrix build by the two vectors."
+     *
+     * Usefull to find the orientation of the two vectors.
      *
      * @method cross
      * @param v
@@ -183,19 +212,29 @@
 
     /**
      * Normalize the given vector.
+     *
+     * Optional parameter length can be used ass abbreviation.
+     * v.normalize.mul(33) -> v.normalize(33);
      * @method normalize
+     * @param {number} length
+     *  [optional] length of the target vector. If not set, length is 1.0.
+     *
      * @return {Vect}
      */
-    Vect.prototype.normalize = function () {
-        var length = this.length();
-        if (length === 0) {
+    Vect.prototype.normalize = function (length) {
+        var currenLength = this.length();
+        if (currenLength === 0) {
             this.x = 1;
             this.y = 0;
         } else {
-            this.div(length);
+            this.div(currenLength);
         }
+        if(length)
+            this.mul(length);
         return this;
     };
+
+
 
     /**
      * Quadratic length of the vector.
@@ -508,17 +547,23 @@
      * @param {Object} p1
      * @param {Object} p2
      */
-    var Segment = function (p1, p2) {//clone TODO:
-        this.p1 = p1 || new Vect(0, 0);
-        this.p2 = p2 || new Vect(1, 1);
+    var Segment = function (p1, p2) {
+        this.p1 = (p1 || new Vect(0, 0)).clone();
+        this.p2 = (p2 || new Vect(1, 0)).clone();
     };
 
     Segment.prototype.getBoundingBox = function () {
         return new Box.fromSegment(this);
     };
 
-    Segment.prototype.getConnection = function () {
+
+    Segment.prototype.connection = function () {
         return this.p2.clone().sub(this.p1);
+    };
+    //Segment.prototype.getConnection = Segment.prototype.connection;
+
+    Segment.prototype.direction = function () {
+        return this.connection().normalize();
     };
 
     Segment.prototype.toString = function () {
@@ -570,9 +615,9 @@
      *   number between [0,1] to get a point between p1 and p2.
      *
      */
-    Segment.prototype.getPoint = function(position){
-        return new Vect(this.p2.x*position + this.p1.x * (1-position),
-            this.p2.y*position + this.p1.y * (1-position));
+    Segment.prototype.getPoint = function (position) {
+        return new Vect(this.p2.x * position + this.p1.x * (1 - position),
+            this.p2.y * position + this.p1.y * (1 - position));
     };
 
     /**
@@ -580,11 +625,9 @@
      * @return {Vect}
      *      middle point of the Segment
      */
-    Segment.prototype.getMiddle = function(){
+    Segment.prototype.getMiddle = function () {
         return this.getPoint(0.5);
     };
-
-
 
     /**
      * Rotate the Segment
@@ -605,38 +648,49 @@
     };
 
     Segment.prototype.angle = function (ref) {
-        return this.getConnection().angle(ref);
+        return this.connection().angle(ref);
     };
 
 
     Segment.prototype.length = function () {
-        return this.getConnection().length();
+        return this.connection().length();
     };
 
     Segment.prototype.lengthSq = function () {
-        return this.getConnection().lengthSq();
+        return this.connection().lengthSq();
     };
 
+
+    /**
+     *
+     * @param s
+     * @returns {boolean}
+     *      true, if the both segments intersect
+     */
     Segment.prototype.intersect = function (s) {
-        var EPSILON = 0.000001;
 
         var touchOrCross = function (s1, s2) {
 
-            // X as line, Y as two points
-            // Move this.p1 to ZERO
-            var u = s1.clone().toCenter().p2;
+            // s1 as line, s2 as two points
+            var u = s1.connection(); // Move this.p1 to ZERO
             var v = s2.p1.clone().sub(s1.p1);
             var w = s2.p2.clone().sub(s1.p1);
 
+            // Check on which side the points of s2 are
             var c1 = v.cross(u);
             var c2 = w.cross(u);
             if (Math.abs(c1) < EPSILON || Math.abs(c2) < EPSILON)
-                return true;
-            //Y touches X
+                return true; // s2 touches s1
             return (c1 > 0) !== (c2 > 0);
-            // Y cross X
+            // if both points on opposite sites -> s2 cross s1
         };
-        return this.getBoundingBox().intersect(s.getBoundingBox()) && touchOrCross(this, s) && touchOrCross(s, this);
+        return this.getBoundingBox().intersect(s.getBoundingBox())
+            && touchOrCross(this, s)
+            && touchOrCross(s, this);
+    };
+
+    Segment.prototype.intersect2 = function (s) {
+
     };
 
     /**
@@ -644,9 +698,173 @@
      * @param segment
      * @constructor
      */
-    var Line = function (segment) {
-
+    var Line = function (p1, p2) {
+        this.p1 = p1.clone();
+        this.p2 = p2.clone();
     };
+
+    Line.fromSegment = function (segment) {
+        this.p1 = segment.p1.clone();
+        this.p2 = segment.p2.clone();
+    };
+
+    Line.fromArray = function (arr) {
+        return new Line(new Vect(arr[0], arr[1]), new Vect(arr[2], arr[3]));
+    };
+
+    Line.prototype.direction = function () { //TODO: connection vs direction
+        return this.p2.clone().sub(this.p1).normalize();
+    };
+
+
+    Line.EQUAL = 1;
+    Line.PARALLEL = 2;
+
+    /**
+     *
+     * @param line
+     * @returns {Vect|Line.PARALLEL|Line.EQUIVALENT} - Intersection is
+     */
+    Line.prototype.intersect = function (line) {
+
+        // this: x = a + b*t
+        // line: x = c + d*s
+
+        //direction vectors
+        var b = this.direction();
+        var d = line.direction();
+
+        //support vectors
+        var a = this.p1;
+        var c = line.p1;
+
+        //difference between support vector
+        var z = c.clone().sub(a);
+
+        var cross = b.cross(d);
+        var numerator = z.cross(d); //(this.p1.y-line.p1.y)*d.x - (this.p1.x-line.p1.x)* d.y;
+
+        if (Math.abs(cross) < EPSILON) { //directions are parallel
+            if (Math.abs(numerator) < EPSILON) { //connection of support is parallel to direction
+                return Line.EQUAL;
+            } else {
+                return Line.PARALLEL;
+            }
+        }
+        var t = numerator / cross;
+        return this.p1.clone().add(b.mul(t));
+    };
+
+
+    /**
+     * General intersection method for all combinations of lines, segments, rays.
+     *
+     * @param {Segment|Ray|Line} g
+     * @param {Segment|Ray|Line} h
+     * @returns {Vect|Segment|Ray|Line|null}
+     *      An object that describes the intersection. Can be null.
+     */
+    function lineIntersect(g, h) {
+
+        // g: x = g.p1 + (g.p2-g.p1)*t = a + b*t
+        // h: x = h.p1 + (h.p2-h.p1)*s = c + d*s
+
+        //direction vectors
+        var b = g.direction();
+        var d = h.direction();
+
+        //support vectors
+        var a = g.p1;
+        var c = h.p1;
+
+        //difference between support vector
+        var z = c.clone().sub(a); // (c-a)
+
+        var cross_directions = b.cross(d);
+        var dot_directions = b.dot(d);
+        var cross_support_direction = z.cross(d); //(this.p1.y-line.p1.y)*d.x - (this.p1.x-line.p1.x)* d.y;
+        var dot_support_direction = z.dot(d);
+
+        if (Math.abs(cross_directions) < EPSILON) { //directions are parallel
+            if (Math.abs(cross_support_direction) < EPSILON) { //connection of support is parallel to direction
+                if (isLine(g)) {
+                    return h.clone();
+                }
+                if (isLine(h)) {
+                    return g.clone();
+                }
+                if (isRay(g) && isRay(h)) {
+                    if (dot_directions > 0) {
+                        //both rays in same direction
+                        if (dot_support_direction > 0)
+                            return h.clone();
+                        else
+                            return g.clone();
+                    } else {
+                        //both ray in different directions
+                        if (dot_support_direction > 0)
+                            return null;
+                        else
+                            return new Segment(g.p1, h.p1);
+                    }
+                }
+                if (isSegment(g) && isSegment(h)) {
+
+                    var gp1 = g.containsPoint(h.p1);
+                    var gp2 = g.containsPoint(h.p2);
+                    var hp1 = h.containsPoint(g.p1);
+                    var hp2 = h.containsPoint(g.p2);
+
+                    // 0000 => null;
+                    // 1000 => XXX
+                    // 0100 => XXX
+                    // 1100 => return h
+                    // 0010 => XXX
+                    // 1010 => [hp1,gp1]
+                    // 0110 => [hp2,gp1]
+                    // 1110 => return h (touch)
+                    // 0001 => XXX
+                    // 1001 => [hp1,gp2]
+                    // 0101 => [hp2,gp2]
+                    // 1101 => return h
+                    // 0011 => return g
+                    // 1011 => return g
+                    // 0111 => return g
+                    // 1111 => return g (or h)
+
+                    if (gp1 && gp2)
+                        return h.clone();
+                    if (hp1 && hp2)
+                        return g.clone();
+                    if (gp1 && hp1)
+                        return new Segment(h.p1, g.p1);
+                    if (gp2 && hp1)
+                        return new Segment(h.p2, g.p1);
+                    if (gp1 && hp2)
+                        return new Segment(h.p1, g.p2);
+                    if (gp2 && hp2)
+                        return new Segment(h.p2, g.p2);
+                    return null;
+                }
+                if (isSegment(g)) { //h is ray
+                    //TODO
+                    if(g.containsPoint(h.p1)){
+
+                    }
+                } else { //h is segment, g is ray
+                    //TODO
+                    if(h.containsPoint(g.p2)){
+
+                    }
+                }
+            } else {
+                return null; //no intersection Line.PARALLEL;
+            }
+        }
+        var t = cross_support_direction / cross_directions;
+        return g.p1.clone().add(b.mul(t));
+    }
+
 
     /**
      * @class Ray
@@ -664,22 +882,34 @@
      * @param c
      * @constructor
      */
-    var Triangle = function (a, b, c, clone) {
-        if (clone) {
-            this.a = a.clone();
-            this.b = b.clone();
-            this.c = c.clone();
-        } else {
-            this.a = a;
-            this.b = b;
-            this.c = c;
-        }
+    var Triangle = function (a, b, c) {
+        this.a = a.clone();
+        this.b = b.clone();
+        this.c = c.clone();
     };
 
 
     Triangle.prototype.angleA = function () {
         var v = this.b.clone().sub(this.a);
         var w = this.c.clone().sub(this.a);
+        var angle = v.angle(w);
+        if (angle >= Math.PI)
+            return w.angle(v);
+        return angle;
+    };
+
+    Triangle.prototype.angleB = function () {
+        var v = this.a.clone().sub(this.b);
+        var w = this.c.clone().sub(this.b);
+        var angle = v.angle(w);
+        if (angle >= Math.PI)
+            return w.angle(v);
+        return angle;
+    };
+
+    Triangle.prototype.angleC = function () {
+        var v = this.a.clone().sub(this.c);
+        var w = this.b.clone().sub(this.c);
         var angle = v.angle(w);
         if (angle >= Math.PI)
             return w.angle(v);
@@ -963,6 +1193,8 @@
     Garfunkel.Triangle = Triangle;
     Garfunkel.Pool = Pool;
     Garfunkel.Calculator = Calculator;
+
+    //Garfunkel.lineIntersect = lineIntersect;
 
     global.Garfunkel = Garfunkel;
 
