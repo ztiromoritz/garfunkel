@@ -122,6 +122,18 @@
     Vect.prototype.cl = Vect.prototype.clone;
 
 
+    /**
+     * Sets the coordinates of this Vect.
+     * (Without instantiating a new object)
+     * @param {Number} x
+     * @param {Number} y
+     */
+    Vect.prototype.set = function(x,y){
+        this.x = x || 0;
+        this.y = y || 0;
+        return this;
+    };
+
     Vect.prototype.invert = function () {
         this.x = -this.x;
         this.y = -this.y;
