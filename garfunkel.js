@@ -2,7 +2,19 @@
  * garfunkel.js - A 2D geometry toolbox
  * @module Garfunkel
  */
-(function (global) {
+(function (root, factory) {
+    /*global module, define, define*/
+    if (typeof exports === 'object') {
+        // COMMON-JS
+        module.exports = factory();
+    } else if (typeof define === 'function' && define['amd']) {
+        // Asynchronous Module Definition AMD
+        define([], factory);
+    } else {
+        //GLOBAL (e.g. browser)
+        root['TPP_API'] = factory();
+    }
+}(this, function () {
 
     var X_IS_LEFT_TO_Y = true;
 
@@ -1208,6 +1220,6 @@
 
     //Garfunkel.lineIntersect = lineIntersect;
 
-    global.Garfunkel = Garfunkel;
+    return Garfunkel;
 
-})(this);
+}));

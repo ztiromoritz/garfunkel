@@ -5,7 +5,7 @@ if (typeof window === 'undefined') {
     assert = require("assert");
     sinon = require("sinon");
     expect = require("chai").expect;
-    Garfunkel = require("../garfunkel").Garfunkel;
+    Garfunkel = require("../garfunkel");
 
 } else {
     //browser
