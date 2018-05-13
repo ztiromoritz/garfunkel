@@ -3,38 +3,39 @@
 	"main": "./garfunkel.js",
 	"version": "0.1.1",
 	"description": "2D geometry toolbox",
-	"scripts" : {
-		"test" : "mocha",
-		"test-cov" : "mocha -R html-cov test/coverage/blanket-wrapper.js > test/coverage/coverage.html",
-		"lint" : "jshint **.js;true",
-		"build" : "(echo '/*!' ; cat ./LICENSE ; echo '*/' ; browserify garfunkel.js) > build/garfunkel.js",
-		"doc" : "yuidoc --no-sort --no-code"
-		
+	"scripts": {
+		"test": "mocha",
+		"test-cov": "mocha -R html-cov test/coverage/blanket-wrapper.js > test/coverage/coverage.html",
+		"lint": "jshint **.js;true",
+		"build": "(echo '/*!' ; cat ./LICENSE ; echo '*/' ; browserify garfunkel.js) > build/garfunkel.js",
+		"doc": "yuidoc --no-sort --no-code"
 	},
 	"repository": {
-    		"type": "git",
-    		"url": "git://github.com/ztiromoritz/garfunkel.git"
-  	},
+		"type": "git",
+		"url": "git://github.com/ztiromoritz/garfunkel.git"
+	},
 	"devDependencies": {
 		"mocha": "~2.2.0",
 		"chai": "~2.2.0",
 		"sinon": "~1.14.0",
-		"browserify" : "latest",
-		"jshint" : "latest",
+		"browserify": "latest",
+		"jshint": "latest",
 		"blanket": "latest"
 	},
-
-	"licenses" : [
+	"licenses": [
 		{
-    		"type": "MIT",
-    		"url": "https://raw.githubusercontent.com/ztiromoritz/garfunkel/master/LICENSE"
-  		}
+			"type": "MIT",
+			"url": "https://raw.githubusercontent.com/ztiromoritz/garfunkel/master/LICENSE"
+		}
 	],
-	
 	"config": {
-      "blanket": {
-        "pattern": [ "src" ],
-        "data-cover-never": [ "node_modules" ]
-      }
-    }
+		"blanket": {
+			"pattern": [
+				"src"
+			],
+			"data-cover-never": [
+				"node_modules"
+			]
+		}
+	}
 }
