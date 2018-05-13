@@ -15,9 +15,9 @@
 		"url": "git://github.com/ztiromoritz/garfunkel.git"
 	},
 	"devDependencies": {
-		"mocha": "~2.2.0",
-		"chai": "~2.2.0",
-		"sinon": "~1.14.0",
+		"mocha": "^5.1.1",
+		"chai": "^4.1.2",
+		"sinon": "^5.0.7",
 		"browserify": "latest",
 		"jshint": "latest",
 		"blanket": "latest"
@@ -37,5 +37,9 @@
 				"node_modules"
 			]
 		}
+	},
+	"dependencies": {
+		"esdoc": "^1.1.0",
+		"esdoc-standard-plugin": "^1.0.0"
 	}
 }

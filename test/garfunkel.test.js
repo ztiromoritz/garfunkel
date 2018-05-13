@@ -55,8 +55,8 @@ describe('Pool#get', function () {
 
     beforeEach(function () {
         pool = new Pool(4, constructorSpy, initializerSpy);
-        constructorSpy.reset();
-        initializerSpy.reset();
+        constructorSpy.resetHistory();
+        initializerSpy.resetHistory();
     });
 
 
@@ -125,6 +125,7 @@ describe('Pool#get', function () {
     });
 
     it('should work with parameters', function () {
+        pool = new Pool(4, Vect, Vect);  // works only spyfree
         var v = pool.get(2, 9);
         assert.equal(v.x, 2);
         assert.equal(v.y, 9);
@@ -385,7 +386,6 @@ describe('Vect#angle', function () {
     it('should give a -90° angle', function () {
         var v = new Vect(0, -1);
         var angle = v.angle();
-        console.log(angle, angle / Math.PI * 180);
         assert(Math.abs(angle + Math.PI / 2) < EPSILON, Math.degrees(angle) + "°");
     });
 
