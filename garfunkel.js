@@ -1,3 +1,4 @@
+
 /**
  * garfunkel.js - A 2D geometry toolbox
  * @module Garfunkel
@@ -12,7 +13,7 @@
         define([], factory);
     } else {
         //GLOBAL (e.g. browser)
-        root['TPP_API'] = factory();
+        root['Garfunkel'] = factory();
     }
 }(this, function () {
 
