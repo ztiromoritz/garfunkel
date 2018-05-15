@@ -8,19 +8,24 @@
 		"test-cov": "mocha -R html-cov test/coverage/blanket-wrapper.js > test/coverage/coverage.html",
 		"lint": "jshint **.js;true",
 		"build": "(echo '/*!' ; cat ./LICENSE ; echo '*/' ; browserify garfunkel.js) > build/garfunkel.js",
-		"doc": "yuidoc --no-sort --no-code"
+		"_doc_old": "yuidoc --no-sort --no-code",
+		"doc": "documentation build garfunkel.js -f html -o docs -t ./themes/documentation_default_theme/"
 	},
 	"repository": {
 		"type": "git",
 		"url": "git://github.com/ztiromoritz/garfunkel.git"
 	},
 	"devDependencies": {
-		"mocha": "^5.1.1",
-		"chai": "^4.1.2",
-		"sinon": "^5.0.7",
+		"blanket": "latest",
 		"browserify": "latest",
+		"chai": "^4.1.2",
+		"documentation": "^6.3.2",
+		"jsdoc": "^3.5.5",
 		"jshint": "latest",
-		"blanket": "latest"
+		"mocha": "^5.1.1",
+		"sinon": "^5.0.7",
+		"watch": "^1.0.2",
+		"yuidocjs": "^0.10.2"
 	},
 	"licenses": [
 		{

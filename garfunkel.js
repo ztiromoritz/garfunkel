@@ -21,7 +21,7 @@
 
     /**
      * Static Method
-     * @class Garfunkel
+     * @private
      */
     var Garfunkel = {};
 
@@ -34,7 +34,6 @@
      * TRUE, means the canvas or graphic coordinates with (0,0) in the upper left corner;
      *
      * @static
-     * @method getXIsLeftOfY
      * @default "true"
      * @return {boolean}
      */
@@ -45,7 +44,6 @@
     /**
      *
      * @static
-     * @method setXIsLeftOfY
      * @default "true"
      * @param {boolean} value
      */
@@ -54,16 +52,26 @@
     };
 
     /**
+     * @example
+     * Garfunkel.setGameCoords();
+     * var v = new Vect(2,2);
+     * var w = v.clone().turnLeft().mul(0.5);
+     * draw(v, 'red');
+     * draw(w, 'green');
      * @static
-     * @method setGameCoords
      */
     Garfunkel.setGameCoords = function () {
         X_IS_LEFT_TO_Y = true;
     };
 
     /**
+     * @example
+     * Garfunkel.setSchoolCoords();
+     * var v = new Vect(2,2);
+     * var w = v.clone().turnLeft().mul(0.5);
+     * draw(v, 'red');
+     * draw(w, 'green');
      * @static
-     * @method setSchoolCoords
      */
     Garfunkel.setSchoolCoords = function () {
         X_IS_LEFT_TO_Y = false;
@@ -92,14 +100,12 @@
     var EPSILON = 0.000001;
 
     /**
-     *  Represents a vector as well as a point.
-     *
-     *
-     * All Methods on a Vector that return a vector are
-     * chainable and will change the initial vector to
-     * the result of the operation.
-     *
-     * @class Vect
+     * Represents a vector as well as a point.
+     * Methods that transform the mutable vector are chainable.
+     * @example
+     * print("sadf","fooooo");
+     * print("foo");
+     * draw({x:2,y:4});
      * @constructor
      * @param {Number} x
      * @param {Number} y
@@ -115,10 +121,8 @@
 
 
     /**
-     * <img src="../assets/logo.jpg"></img>
      * @example
-     * <pre>new Vector(2,4).toString() -> "x: 2 y: 4" </pre>
-     * @method toString
+     * print(new Vector(2,4).toString());
      * @return {String}
      */
     Vect.prototype.toString = function () {
@@ -126,7 +130,8 @@
     };
 
     /**
-     * @method clone
+     * Clone!
+     * @return {Vect}
      */
     Vect.prototype.clone = function () {
         return new Vect(this.x, this.y);
@@ -157,7 +162,6 @@
      * Scalar multiplication.
      * Each coordinate will be multiplied with the given scalar.
      * @chainable
-     * @method mul
      * @param {Number} a scalar to multiply the vector with
      * @return {Vect}
      */
@@ -171,7 +175,6 @@
      * Scalar division.
      * Each coordinate will be devided by the given scalar.
      * @chainable
-     * @method div
      * @param {Number} a scalar to divide the vector with
      * @return {Vect}
      */
@@ -184,7 +187,6 @@
     /**
      * Adds a vector.
      * @chainable
-     * @method add
      * @param {Vect} v
      * @return {Vect}
      */
@@ -197,7 +199,6 @@
     /**
      * Substracts a vector.
      * @chainable
-     * @method sub
      * @param {Vect} v
      * @return {Vect}
      */
@@ -209,7 +210,6 @@
 
     /**
      * Dot product of this and the given vector.
-     * @method dot
      * @param v
      * @return {number}
      */
@@ -227,7 +227,6 @@
      *
      * Usefull to find the orientation of the two vectors.
      *
-     * @method cross
      * @param v
      * @return {number}
      */
@@ -240,7 +239,6 @@
      *
      * Optional parameter length can be used ass abbreviation.
      * v.normalize.mul(33) -> v.normalize(33);
-     * @method normalize
      * @param {number} length
      *  [optional] length of the target vector. If not set, length is 1.0.
      *
@@ -263,7 +261,7 @@
 
     /**
      * Quadratic length of the vector.
-     * @method lengthSq
+     * y lengthSq
      * @return {number}
      */
     Vect.prototype.lengthSq = function () {
@@ -272,7 +270,6 @@
 
     /**
      * Euclidean norm/length/magnitude of the vector.
-     * @method length
      * @return {number}
      */
     Vect.prototype.length = function () {
@@ -281,7 +278,6 @@
 
     /**
      * Quadratic distance of two vectors.
-     * @method distanceSq
      * @param v
      * @return {number}
      */
@@ -293,7 +289,6 @@
 
     /**
      * Euclidean distance of two vectors.
-     * @method distance
      * @param v
      * @return {number}
      */
@@ -303,7 +298,6 @@
 
     /**
      * Manhatten/city block/Taxicab distance
-     * @method manhatten
      * @param v
      * @return {number}
      */
@@ -314,7 +308,7 @@
     };
 
     /**
-     * @method isLeftOf
+     * y isLeftOf
      * @param v
      * @return {boolean}
      */
@@ -327,7 +321,6 @@
 
 
     /**
-     * @method isRightOf
      * @param v
      * @return {boolean}
      */
@@ -340,7 +333,6 @@
 
     /**
      * @chainable
-     * @method turnLeft
      * @return {Vect}
      */
     Vect.prototype.turnLeft = function () {
@@ -353,7 +345,6 @@
 
     /**
      * @chainable
-     * @method turnRight
      * @return {Vect}
      */
     Vect.prototype.turnRight = function () {
@@ -366,7 +357,6 @@
 
     /**
      * @chainable
-     * @method leftNormal
      * @return {Vect}
      */
     Vect.prototype.leftNormal = function () {
@@ -376,7 +366,6 @@
 
     /**
      * @chainable
-     * @method rightNormal
      * @return {Vect}
      */
     Vect.prototype.rightNormal = function () {
@@ -392,7 +381,6 @@
      * from reference to the vector. In game coordinates, the angle is counted <strong>clockwise</strong>
      * from reference to the vector.
      *
-     * @method angle
      * @param {Vector} ref
      *  [optional] reference vector. default: (1,0).
      * @return {number}
@@ -417,7 +405,6 @@
      * If you take the vector as a point, the default pivot is {x:0,y:0}
      *
      * @chainable
-     * @method rotate
      * @param {number} angle
      *      in radians
      * @param {Vect} pivot
@@ -441,7 +428,6 @@
     /**
      * Rotates the vector to the given angle.
      * @chainable
-     * @method rotateTo
      * @param {number} angle in radians
      * @return {Vect} the rotated vector
      */
@@ -459,7 +445,6 @@
      * The rotation will take the "shortest way" towards the given angle.
      *
      * @chainable
-     * @method rotateTowards
      * @param {number} angle - angle in radians
      * @param {number} stepSize - maximum angle to move towards angle
      * @return {Vect} the rotated vector
@@ -475,7 +460,6 @@
      *  "angle of incidence equal to the angle of reflexion"
      *  Performs a simple reflection of this object on a surface
      *  that has the direction of the given vector u.
-     *  @method reflectOn
      *  @param {Vect} u
      */
     Vect.prototype.reflectOn = function (u) {
@@ -524,7 +508,6 @@
 
     /**
      * Bounding box of a given Segment
-     * @method fromSegment
      * @static
      * @param {Segment} segment
      */
@@ -537,7 +520,6 @@
     };
 
     /**
-     * @method toString
      * @return {string}
      */
     Box.prototype.toString = function () {
@@ -783,7 +765,7 @@
 
     /**
      * General intersection method for all combinations of lines, segments, rays.
-     *
+     * @private
      * @param {Segment|Ray|Line} g
      * @param {Segment|Ray|Line} h
      * @returns {Vect|Segment|Ray|Line|null}
@@ -977,7 +959,6 @@
     /**
      * CreateItems
      *
-     * @method createItems
      *
      */
     Pool.prototype.createItems = function (size) {
@@ -987,7 +968,6 @@
     };
 
     /**
-     * @method get
      */
     Pool.prototype.get = function () {
         if (this.current === 0) {
@@ -1003,7 +983,6 @@
     };
 
     /**
-     * @method dispose
      */
     Pool.prototype.dispose = function (obj) {
         this.current = this.items.push(obj);

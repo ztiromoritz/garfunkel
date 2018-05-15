@@ -1,0 +1,137 @@
+<!doctype html>
+<html>
+<head>
+
+
+
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+        }
+
+        .wrapper {
+            display: flex;
+            background-color: lightblue;
+
+        }
+
+        code {
+            background-color: #fff;
+            width: 350px;
+            height: 200px;
+            overflow: auto;
+            margin: 5px;
+        }
+
+        svg {
+            background-color: #fff;
+            margin: 5px;
+        }
+    </style>
+</head>
+<body>
+<div class="wrapper">
+    <code id="resultArea">
+    </code>
+    <!-- Todo schoolCords, gameCoords -->
+    <svg viewBox="-60 -60 120 120" xmlns="http://www.w3.org/2000/svg" id="resultSvg" width="200" height="200">
+        <defs>
+            <marker id="Triangle" viewBox="0 0 10 10" refX="1" refY="5"
+                    markerWidth="6" markerHeight="6" orient="auto">
+                <path d="M 0 0 L 10 5 L 0 10 z"/>
+            </marker>
+        </defs>
+
+
+        <line x1="-40" y1="-50" x2="-40" y2="50" stroke="#bbf" stroke-width="0.6"/>
+        <line x1="-30" y1="-50" x2="-30" y2="50" stroke="#bbf" stroke-width="0.6"/>
+        <line x1="-20" y1="-50" x2="-20" y2="50" stroke="#bbf" stroke-width="0.6"/>
+        <line x1="-10" y1="-50" x2="-10" y2="50" stroke="#bbf" stroke-width="0.6"/>
+        <line x1="10"  y1="-50" x2="10"  y2="50" stroke="#bbf" stroke-width="0.6"/>
+        <line x1="20"  y1="-50" x2="20"  y2="50" stroke="#bbf" stroke-width="0.6"/>
+        <line x1="30"  y1="-50" x2="30"  y2="50" stroke="#bbf" stroke-width="0.6"/>
+        <line x1="40"  y1="-50" x2="40"  y2="50" stroke="#bbf" stroke-width="0.6"/>
+
+        <line y1="-40" x1="-50" y2="-40" x2="50" stroke="#bbf" stroke-width="0.6"/>
+        <line y1="-30" x1="-50" y2="-30" x2="50" stroke="#bbf" stroke-width="0.6"/>
+        <line y1="-20" x1="-50" y2="-20" x2="50" stroke="#bbf" stroke-width="0.6"/>
+        <line y1="-10" x1="-50" y2="-10" x2="50" stroke="#bbf" stroke-width="0.6"/>
+        <line y1="10"  x1="-50" y2="10"  x2="50" stroke="#bbf" stroke-width="0.6"/>
+        <line y1="20"  x1="-50" y2="20"  x2="50" stroke="#bbf" stroke-width="0.6"/>
+        <line y1="30"  x1="-50" y2="30"  x2="50" stroke="#bbf" stroke-width="0.6"/>
+        <line y1="40"  x1="-50" y2="40"  x2="50" stroke="#bbf" stroke-width="0.6"/>
+
+        <line x1="-50" y1="0" x2="50" y2="0" stroke="black"/>
+        <line x1="0"   y1="-50" x2="0" y2="50" stroke="black"/>
+    </svg>
+</div>
+
+
+<script>
+    //<![CDATA[
+        <%= renderGarfunkel() %>
+    //]]>
+</script>
+<script>
+    //aliases
+    Vect = Garfunkel.Vect;
+    Box = Garfunkel.Box;
+    Segment = Garfunkel.Segment;
+    Equation = Garfunkel.Equation;
+    Calculator = Garfunkel.Calculator;
+    Pool = Garfunkel.Pool;
+    Line = Garfunkel.Line;
+</script>
+<script>
+    const resultArea = document.getElementById('resultArea');
+    const resultSvg = document.getElementById('resultSvg');
+
+    function print(...messages) {
+        messages.forEach((msg) => {
+            resultArea.innerText = resultArea.innerText + "\n" + msg;
+        });
+    }
+
+    const nextColor = function () {
+        const COLORS = [
+            '#ff0000',
+            '#ff00ff',
+            '#00ff00',
+            '#0000ff'
+        ];
+        let currentColor = 0;
+        return () => {
+            currentColor = (currentColor + 1) % COLORS.length;
+            return COLORS[currentColor];
+        }
+    }();
+
+    function draw(vect, color) {
+        //TODO: draw more then Vects
+        color = color || nextColor();
+        const newLine = document.createElementNS("http://www.w3.org/2000/svg", 'line');
+        newLine.setAttribute('x1', 0);
+        newLine.setAttribute('y1', 0);
+        newLine.setAttribute('x2', vect.x * 10);
+        newLine.setAttribute('y2', vect.y * 10 * (Garfunkel.getXIsLeftOfY()?1:-1));
+        newLine.setAttribute('marker-end', 'url(#Triangle)');
+        newLine.setAttribute('stroke', color);
+        resultSvg.appendChild(newLine);
+    }
+
+    window.addEventListener('message', (event) => {
+        if (event.data === 'REFRESH') {
+            document.location.reload();
+        }
+    });
+</script>
+<script>___EXAMPLE_CODE___</script>
+<script>
+    draw({x:0,y:5}, '#000');
+    draw({x:5,y:0}, '#000');
+
+</script>
+
+</body>
+</html>
