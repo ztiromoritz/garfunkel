@@ -144,9 +144,11 @@
     <% var exampleIndex = 0; %>
     <% section.examples.forEach(function(example) { %>
     <% var id=section.name+'_'+(exampleIndex++); %>
-    <textarea id="code_<%= id%>" class='exampleEditor'><%= example.description %></textarea>
-    <button id="run_<%= id%>">RUN</button>
-    <iframe id="result_<%= id%>" width="600" height="210" frameBorder="0"></iframe>
+    <div class="previewEditor">
+        <textarea id="code_<%= id%>" class='exampleEditor'><%= example.description %></textarea>
+        <div class="previewButton" id="run_<%= id%>">RUN</div>
+    </div>
+    <iframe class="previewFrame" id="result_<%= id%>" width="600" frameBorder="0"></iframe>
     <script>
         (function () {
             const codeArea = document.getElementById("code_<%= id%>");
@@ -157,6 +159,7 @@
                 // resultFrame.src = '';
                 resultFrame.src = 'data:text/html;charset=utf-8,' + RESULT_TEMPLATE.replace('___EXAMPLE_CODE___', encodeURI(editor.getValue()));
                 resultFrame.contentWindow.postMessage("REFRESH", "*");
+                resultFrame.classList.add('shown');
             };
             //editor.on('changes',onChange);
             button.addEventListener('click',onChange);

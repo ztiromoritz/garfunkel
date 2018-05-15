@@ -1,4 +1,3 @@
-
 /**
  * garfunkel.js - A 2D geometry toolbox
  * @module Garfunkel
@@ -58,6 +57,8 @@
      * var w = v.clone().turnLeft().mul(0.5);
      * draw(v, 'red');
      * draw(w, 'green');
+     * print(v)
+     * print(w)
      * @static
      */
     Garfunkel.setGameCoords = function () {
@@ -933,6 +934,29 @@
     var Circle = function (p, radius) {
 
     };
+
+    /**
+
+    var Polygon = function(...points) {
+
+    };
+
+    Polygon.prototype.isClockWise = function(){
+
+    };
+
+    Polygon.prototype.getConvexPoints= function(){
+
+    };
+
+    Polygon.prototype.getConcavePoints= function(){
+
+    };
+
+    var Graph =function(...points,...edges){
+
+    };
+     **/
 
 
     /**
