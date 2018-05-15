@@ -1,0 +1,3831 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset='utf-8'/>
+    <title>garfunkel 0.1.1 | Documentation</title>
+    <meta name='viewport' content='width=device-width,initial-scale=1'>
+    <link href='assets/bass.css' type='text/css' rel='stylesheet'/>
+    <link href='assets/github.css' type='text/css' rel='stylesheet'/>
+    <link href='assets/split.css' type='text/css' rel='stylesheet'/>
+    <link href='assets/libs/codemirror/codemirror.css' type='text/css' rel='stylesheet'/>
+    <link href='assets/style.css' type='text/css' rel='stylesheet'/>
+
+    <script src='assets/libs/codemirror/codemirror.js'></script>
+    <script src='assets/libs/codemirror/javascript.js'></script>
+    <script>
+        const RESULT_TEMPLATE="%3C!doctype%20html%3E%0A%3Chtml%3E%0A%3Chead%3E%0A%0A%0A%0A%20%20%20%20%3Cstyle%3E%0A%20%20%20%20%20%20%20%20html,%20body%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20margin:%200;%0A%20%20%20%20%20%20%20%20%20%20%20%20padding:%200;%0A%20%20%20%20%20%20%20%20%7D%0A%0A%20%20%20%20%20%20%20%20.wrapper%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20display:%20flex;%0A%20%20%20%20%20%20%20%20%20%20%20%20background-color:%20lightblue;%0A%0A%20%20%20%20%20%20%20%20%7D%0A%0A%20%20%20%20%20%20%20%20code%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20background-color:%20#fff;%0A%20%20%20%20%20%20%20%20%20%20%20%20width:%20350px;%0A%20%20%20%20%20%20%20%20%20%20%20%20height:%20200px;%0A%20%20%20%20%20%20%20%20%20%20%20%20overflow:%20auto;%0A%20%20%20%20%20%20%20%20%20%20%20%20margin:%205px;%0A%20%20%20%20%20%20%20%20%7D%0A%0A%20%20%20%20%20%20%20%20svg%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20background-color:%20#fff;%0A%20%20%20%20%20%20%20%20%20%20%20%20margin:%205px;%0A%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%3C/style%3E%0A%3C/head%3E%0A%3Cbody%3E%0A%3Cdiv%20class=%22wrapper%22%3E%0A%20%20%20%20%3Ccode%20id=%22resultArea%22%3E%0A%20%20%20%20%3C/code%3E%0A%20%20%20%20%3C!--%20Todo%20schoolCords,%20gameCoords%20--%3E%0A%20%20%20%20%3Csvg%20viewBox=%22-60%20-60%20120%20120%22%20xmlns=%22http://www.w3.org/2000/svg%22%20id=%22resultSvg%22%20width=%22200%22%20height=%22200%22%3E%0A%20%20%20%20%20%20%20%20%3Cdefs%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%3Cmarker%20id=%22Triangle%22%20viewBox=%220%200%2010%2010%22%20refX=%221%22%20refY=%225%22%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20markerWidth=%226%22%20markerHeight=%226%22%20orient=%22auto%22%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cpath%20d=%22M%200%200%20L%2010%205%20L%200%2010%20z%22/%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%3C/marker%3E%0A%20%20%20%20%20%20%20%20%3C/defs%3E%0A%0A%0A%20%20%20%20%20%20%20%20%3Cline%20x1=%22-40%22%20y1=%22-50%22%20x2=%22-40%22%20y2=%2250%22%20stroke=%22#bbf%22%20stroke-width=%220.6%22/%3E%0A%20%20%20%20%20%20%20%20%3Cline%20x1=%22-30%22%20y1=%22-50%22%20x2=%22-30%22%20y2=%2250%22%20stroke=%22#bbf%22%20stroke-width=%220.6%22/%3E%0A%20%20%20%20%20%20%20%20%3Cline%20x1=%22-20%22%20y1=%22-50%22%20x2=%22-20%22%20y2=%2250%22%20stroke=%22#bbf%22%20stroke-width=%220.6%22/%3E%0A%20%20%20%20%20%20%20%20%3Cline%20x1=%22-10%22%20y1=%22-50%22%20x2=%22-10%22%20y2=%2250%22%20stroke=%22#bbf%22%20stroke-width=%220.6%22/%3E%0A%20%20%20%20%20%20%20%20%3Cline%20x1=%2210%22%20%20y1=%22-50%22%20x2=%2210%22%20%20y2=%2250%22%20stroke=%22#bbf%22%20stroke-width=%220.6%22/%3E%0A%20%20%20%20%20%20%20%20%3Cline%20x1=%2220%22%20%20y1=%22-50%22%20x2=%2220%22%20%20y2=%2250%22%20stroke=%22#bbf%22%20stroke-width=%220.6%22/%3E%0A%20%20%20%20%20%20%20%20%3Cline%20x1=%2230%22%20%20y1=%22-50%22%20x2=%2230%22%20%20y2=%2250%22%20stroke=%22#bbf%22%20stroke-width=%220.6%22/%3E%0A%20%20%20%20%20%20%20%20%3Cline%20x1=%2240%22%20%20y1=%22-50%22%20x2=%2240%22%20%20y2=%2250%22%20stroke=%22#bbf%22%20stroke-width=%220.6%22/%3E%0A%0A%20%20%20%20%20%20%20%20%3Cline%20y1=%22-40%22%20x1=%22-50%22%20y2=%22-40%22%20x2=%2250%22%20stroke=%22#bbf%22%20stroke-width=%220.6%22/%3E%0A%20%20%20%20%20%20%20%20%3Cline%20y1=%22-30%22%20x1=%22-50%22%20y2=%22-30%22%20x2=%2250%22%20stroke=%22#bbf%22%20stroke-width=%220.6%22/%3E%0A%20%20%20%20%20%20%20%20%3Cline%20y1=%22-20%22%20x1=%22-50%22%20y2=%22-20%22%20x2=%2250%22%20stroke=%22#bbf%22%20stroke-width=%220.6%22/%3E%0A%20%20%20%20%20%20%20%20%3Cline%20y1=%22-10%22%20x1=%22-50%22%20y2=%22-10%22%20x2=%2250%22%20stroke=%22#bbf%22%20stroke-width=%220.6%22/%3E%0A%20%20%20%20%20%20%20%20%3Cline%20y1=%2210%22%20%20x1=%22-50%22%20y2=%2210%22%20%20x2=%2250%22%20stroke=%22#bbf%22%20stroke-width=%220.6%22/%3E%0A%20%20%20%20%20%20%20%20%3Cline%20y1=%2220%22%20%20x1=%22-50%22%20y2=%2220%22%20%20x2=%2250%22%20stroke=%22#bbf%22%20stroke-width=%220.6%22/%3E%0A%20%20%20%20%20%20%20%20%3Cline%20y1=%2230%22%20%20x1=%22-50%22%20y2=%2230%22%20%20x2=%2250%22%20stroke=%22#bbf%22%20stroke-width=%220.6%22/%3E%0A%20%20%20%20%20%20%20%20%3Cline%20y1=%2240%22%20%20x1=%22-50%22%20y2=%2240%22%20%20x2=%2250%22%20stroke=%22#bbf%22%20stroke-width=%220.6%22/%3E%0A%0A%20%20%20%20%20%20%20%20%3Cline%20x1=%22-50%22%20y1=%220%22%20x2=%2250%22%20y2=%220%22%20stroke=%22black%22/%3E%0A%20%20%20%20%20%20%20%20%3Cline%20x1=%220%22%20%20%20y1=%22-50%22%20x2=%220%22%20y2=%2250%22%20stroke=%22black%22/%3E%0A%20%20%20%20%3C/svg%3E%0A%3C/div%3E%0A%0A%0A%3Cscript%3E%0A%20%20%20%20//%3C!%5BCDATA%5B%0A%20%20%20%20%20%20%20%20%0A/**%0A%20*%20garfunkel.js%20-%20A%202D%20geometry%20toolbox%0A%20*%20@module%20Garfunkel%0A%20*/%0A(function%20(root,%20factory)%20%7B%0A%20%20%20%20/*global%20module,%20define,%20define*/%0A%20%20%20%20if%20(typeof%20exports%20===%20'object')%20%7B%0A%20%20%20%20%20%20%20%20//%20COMMON-JS%0A%20%20%20%20%20%20%20%20module.exports%20=%20factory();%0A%20%20%20%20%7D%20else%20if%20(typeof%20define%20===%20'function'%20&&%20define%5B'amd'%5D)%20%7B%0A%20%20%20%20%20%20%20%20//%20Asynchronous%20Module%20Definition%20AMD%0A%20%20%20%20%20%20%20%20define(%5B%5D,%20factory);%0A%20%20%20%20%7D%20else%20%7B%0A%20%20%20%20%20%20%20%20//GLOBAL%20(e.g.%20browser)%0A%20%20%20%20%20%20%20%20root%5B'Garfunkel'%5D%20=%20factory();%0A%20%20%20%20%7D%0A%7D(this,%20function%20()%20%7B%0A%0A%20%20%20%20var%20X_IS_LEFT_TO_Y%20=%20true;%0A%0A%20%20%20%20/**%0A%20%20%20%20%20*%20Static%20Method%0A%20%20%20%20%20*%20@private%0A%20%20%20%20%20*/%0A%20%20%20%20var%20Garfunkel%20=%20%7B%7D;%0A%0A%20%20%20%20/**%0A%20%20%20%20%20*%20General%20orientation%20of%20the%20coordinate%20system.%20This%20is%20a%20global%20setting%20for%20this%20module.%0A%20%20%20%20%20*%0A%20%20%20%20%20*%20Used%20for%20the%20isLeftOf,%20isRightOf,%20getLeftNormal,%20getRightNormal%20functions.%0A%20%20%20%20%20*%0A%20%20%20%20%20*%20FALSE,%20means%20the%20normal%20school%20book%20coordinates%20with%20(0,0)%20in%20the%20lower%20left%20corner.%0A%20%20%20%20%20*%20TRUE,%20means%20the%20canvas%20or%20graphic%20coordinates%20with%20(0,0)%20in%20the%20upper%20left%20corner;%0A%20%20%20%20%20*%0A%20%20%20%20%20*%20@static%0A%20%20%20%20%20*%20@default%20%22true%22%0A%20%20%20%20%20*%20@return%20%7Bboolean%7D%0A%20%20%20%20%20*/%0A%20%20%20%20Garfunkel.getXIsLeftOfY%20=%20function%20()%20%7B%0A%20%20%20%20%20%20%20%20return%20X_IS_LEFT_TO_Y;%0A%20%20%20%20%7D;%0A%0A%20%20%20%20/**%0A%20%20%20%20%20*%0A%20%20%20%20%20*%20@static%0A%20%20%20%20%20*%20@default%20%22true%22%0A%20%20%20%20%20*%20@param%20%7Bboolean%7D%20value%0A%20%20%20%20%20*/%0A%20%20%20%20Garfunkel.setXisLeftOfY%20=%20function%20(value)%20%7B%0A%20%20%20%20%20%20%20%20X_IS_LEFT_TO_Y%20=%20value;%0A%20%20%20%20%7D;%0A%0A%20%20%20%20/**%0A%20%20%20%20%20*%20@example%0A%20%20%20%20%20*%20Garfunkel.setGameCoords();%0A%20%20%20%20%20*%20var%20v%20=%20new%20Vect(2,2);%0A%20%20%20%20%20*%20var%20w%20=%20v.clone().turnLeft().mul(0.5);%0A%20%20%20%20%20*%20draw(v,%20'red');%0A%20%20%20%20%20*%20draw(w,%20'green');%0A%20%20%20%20%20*%20@static%0A%20%20%20%20%20*/%0A%20%20%20%20Garfunkel.setGameCoords%20=%20function%20()%20%7B%0A%20%20%20%20%20%20%20%20X_IS_LEFT_TO_Y%20=%20true;%0A%20%20%20%20%7D;%0A%0A%20%20%20%20/**%0A%20%20%20%20%20*%20@example%0A%20%20%20%20%20*%20Garfunkel.setSchoolCoords();%0A%20%20%20%20%20*%20var%20v%20=%20new%20Vect(2,2);%0A%20%20%20%20%20*%20var%20w%20=%20v.clone().turnLeft().mul(0.5);%0A%20%20%20%20%20*%20draw(v,%20'red');%0A%20%20%20%20%20*%20draw(w,%20'green');%0A%20%20%20%20%20*%20@static%0A%20%20%20%20%20*/%0A%20%20%20%20Garfunkel.setSchoolCoords%20=%20function%20()%20%7B%0A%20%20%20%20%20%20%20%20X_IS_LEFT_TO_Y%20=%20false;%0A%20%20%20%20%7D;%0A%0A%20%20%20%20Garfunkel.isVect%20=%20function%20isVect(obj)%20%7B%0A%20%20%20%20%20%20%20%20return%20obj%20instanceof%20Garfunkel.Vect;%0A%20%20%20%20%7D;%0A%0A%20%20%20%20Garfunkel.isBox%20=%20function%20isBox(obj)%20%7B%0A%20%20%20%20%20%20%20%20return%20obj%20instanceof%20Garfunkel.Box;%0A%20%20%20%20%7D;%0A%0A%20%20%20%20Garfunkel.isSegment%20=%20function%20isSegment(obj)%20%7B%0A%20%20%20%20%20%20%20%20return%20obj%20instanceof%20Garfunkel.Segment;%0A%20%20%20%20%7D;%0A%0A%20%20%20%20Garfunkel.isLine%20=%20function%20isLine(obj)%20%7B%0A%20%20%20%20%20%20%20%20return%20obj%20instanceof%20Garfunkel.Line;%0A%20%20%20%20%7D;%0A%0A%20%20%20%20Garfunkel.isRay%20=%20function%20isRay(obj)%20%7B%0A%20%20%20%20%20%20%20%20return%20obj%20instanceof%20Garfunkel.Ray;%0A%20%20%20%20%7D;%0A%0A%20%20%20%20var%20EPSILON%20=%200.000001;%0A%0A%20%20%20%20/**%0A%20%20%20%20%20*%20Represents%20a%20vector%20as%20well%20as%20a%20point.%0A%20%20%20%20%20*%20Methods%20that%20transform%20the%20mutable%20vector%20are%20chainable.%0A%20%20%20%20%20*%20@example%0A%20%20%20%20%20*%20print(%22sadf%22,%22fooooo%22);%0A%20%20%20%20%20*%20print(%22foo%22);%0A%20%20%20%20%20*%20draw(%7Bx:2,y:4%7D);%0A%20%20%20%20%20*%20@constructor%0A%20%20%20%20%20*%20@param%20%7BNumber%7D%20x%0A%20%20%20%20%20*%20@param%20%7BNumber%7D%20y%0A%20%20%20%20%20*/%0A%20%20%20%20var%20Vect%20=%20function%20(x,%20y)%20%7B%0A%20%20%20%20%20%20%20%20this.x%20=%20x%20%7C%7C%200;%0A%20%20%20%20%20%20%20%20this.y%20=%20y%20%7C%7C%200;%0A%20%20%20%20%7D;%0A%0A%20%20%20%20var%20ZERO%20=%20new%20Vect(0,%200);%0A%20%20%20%20var%20ABSCISSA%20=%20new%20Vect(1,%200);%0A%20%20%20%20var%20ORDINATE%20=%20new%20Vect(0,%201);%0A%0A%0A%20%20%20%20/**%0A%20%20%20%20%20*%20@example%0A%20%20%20%20%20*%20print(new%20Vector(2,4).toString());%0A%20%20%20%20%20*%20@return%20%7BString%7D%0A%20%20%20%20%20*/%0A%20%20%20%20Vect.prototype.toString%20=%20function%20()%20%7B%0A%20%20%20%20%20%20%20%20return%20'x:%20'%20+%20this.x%20+%20'%20y:%20'%20+%20this.y;%0A%20%20%20%20%7D;%0A%0A%20%20%20%20/**%0A%20%20%20%20%20*%20Clone!%0A%20%20%20%20%20*%20@return%20%7BVect%7D%0A%20%20%20%20%20*/%0A%20%20%20%20Vect.prototype.clone%20=%20function%20()%20%7B%0A%20%20%20%20%20%20%20%20return%20new%20Vect(this.x,%20this.y);%0A%20%20%20%20%7D;%0A%0A%20%20%20%20Vect.prototype.cl%20=%20Vect.prototype.clone;%0A%0A%0A%20%20%20%20/**%0A%20%20%20%20%20*%20Sets%20the%20coordinates%20of%20this%20Vect.%0A%20%20%20%20%20*%20(Without%20instantiating%20a%20new%20object)%0A%20%20%20%20%20*%20@param%20%7BNumber%7D%20x%0A%20%20%20%20%20*%20@param%20%7BNumber%7D%20y%0A%20%20%20%20%20*/%0A%20%20%20%20Vect.prototype.set%20=%20function(x,y)%7B%0A%20%20%20%20%20%20%20%20this.x%20=%20x%20%7C%7C%200;%0A%20%20%20%20%20%20%20%20this.y%20=%20y%20%7C%7C%200;%0A%20%20%20%20%20%20%20%20return%20this;%0A%20%20%20%20%7D;%0A%0A%20%20%20%20Vect.prototype.invert%20=%20function%20()%20%7B%0A%20%20%20%20%20%20%20%20this.x%20=%20-this.x;%0A%20%20%20%20%20%20%20%20this.y%20=%20-this.y;%0A%20%20%20%20%20%20%20%20return%20this;%0A%20%20%20%20%7D;%0A%0A%20%20%20%20/**%0A%20%20%20%20%20*%20Scalar%20multiplication.%0A%20%20%20%20%20*%20Each%20coordinate%20will%20be%20multiplied%20with%20the%20given%20scalar.%0A%20%20%20%20%20*%20@chainable%0A%20%20%20%20%20*%20@param%20%7BNumber%7D%20a%20scalar%20to%20multiply%20the%20vector%20with%0A%20%20%20%20%20*%20@return%20%7BVect%7D%0A%20%20%20%20%20*/%0A%20%20%20%20Vect.prototype.mul%20=%20function%20(s)%20%7B%0A%20%20%20%20%20%20%20%20this.x%20*=%20s;%0A%20%20%20%20%20%20%20%20this.y%20*=%20s;%0A%20%20%20%20%20%20%20%20return%20this;%0A%20%20%20%20%7D;%0A%0A%20%20%20%20/**%0A%20%20%20%20%20*%20Scalar%20division.%0A%20%20%20%20%20*%20Each%20coordinate%20will%20be%20devided%20by%20the%20given%20scalar.%0A%20%20%20%20%20*%20@chainable%0A%20%20%20%20%20*%20@param%20%7BNumber%7D%20a%20scalar%20to%20divide%20the%20vector%20with%0A%20%20%20%20%20*%20@return%20%7BVect%7D%0A%20%20%20%20%20*/%0A%20%20%20%20Vect.prototype.div%20=%20function%20(s)%20%7B%0A%20%20%20%20%20%20%20%20this.x%20/=%20s;%0A%20%20%20%20%20%20%20%20this.y%20/=%20s;%0A%20%20%20%20%20%20%20%20return%20this;%0A%20%20%20%20%7D;%0A%0A%20%20%20%20/**%0A%20%20%20%20%20*%20Adds%20a%20vector.%0A%20%20%20%20%20*%20@chainable%0A%20%20%20%20%20*%20@param%20%7BVect%7D%20v%0A%20%20%20%20%20*%20@return%20%7BVect%7D%0A%20%20%20%20%20*/%0A%20%20%20%20Vect.prototype.add%20=%20function%20(v)%20%7B%0A%20%20%20%20%20%20%20%20this.x%20+=%20v.x;%0A%20%20%20%20%20%20%20%20this.y%20+=%20v.y;%0A%20%20%20%20%20%20%20%20return%20this;%0A%20%20%20%20%7D;%0A%0A%20%20%20%20/**%0A%20%20%20%20%20*%20Substracts%20a%20vector.%0A%20%20%20%20%20*%20@chainable%0A%20%20%20%20%20*%20@param%20%7BVect%7D%20v%0A%20%20%20%20%20*%20@return%20%7BVect%7D%0A%20%20%20%20%20*/%0A%20%20%20%20Vect.prototype.sub%20=%20function%20(v)%20%7B%0A%20%20%20%20%20%20%20%20this.x%20-=%20v.x;%0A%20%20%20%20%20%20%20%20this.y%20-=%20v.y;%0A%20%20%20%20%20%20%20%20return%20this;%0A%20%20%20%20%7D;%0A%0A%20%20%20%20/**%0A%20%20%20%20%20*%20Dot%20product%20of%20this%20and%20the%20given%20vector.%0A%20%20%20%20%20*%20@param%20v%0A%20%20%20%20%20*%20@return%20%7Bnumber%7D%0A%20%20%20%20%20*/%0A%20%20%20%20Vect.prototype.dot%20=%20function%20(v)%20%7B%0A%20%20%20%20%20%20%20%20return%20this.x%20*%20v.x%20+%20this.y%20*%20v.y;%0A%20%20%20%20%7D;%0A%0A%20%20%20%20/**%0A%20%20%20%20%20*%20Not%20exactly%20the%20cross%20product,%20because%20seems%20not%20to%20be%20defined%20for%202d%20vectors.%0A%20%20%20%20%20*%0A%20%20%20%20%20*%20%22Gives%20the%20Z-component%20of%203d%20cross%20product,%20if%20the%20two%20given%0A%20%20%20%20%20*%20vectors%20where%20extended%20to%203d%20vectors.%22%0A%20%20%20%20%20*%20or%0A%20%20%20%20%20*%20%22Determinant%20of%20a%202x2%20matrix%20build%20by%20the%20two%20vectors.%22%0A%20%20%20%20%20*%0A%20%20%20%20%20*%20Usefull%20to%20find%20the%20orientation%20of%20the%20two%20vectors.%0A%20%20%20%20%20*%0A%20%20%20%20%20*%20@param%20v%0A%20%20%20%20%20*%20@return%20%7Bnumber%7D%0A%20%20%20%20%20*/%0A%20%20%20%20Vect.prototype.cross%20=%20function%20(v)%20%7B%0A%20%20%20%20%20%20%20%20return%20(this.x%20*%20v.y%20)%20-%20(this.y%20*%20v.x%20);%0A%20%20%20%20%7D;%0A%0A%20%20%20%20/**%0A%20%20%20%20%20*%20Normalize%20the%20given%20vector.%0A%20%20%20%20%20*%0A%20%20%20%20%20*%20Optional%20parameter%20length%20can%20be%20used%20ass%20abbreviation.%0A%20%20%20%20%20*%20v.normalize.mul(33)%20-%3E%20v.normalize(33);%0A%20%20%20%20%20*%20@param%20%7Bnumber%7D%20length%0A%20%20%20%20%20*%20%20%5Boptional%5D%20length%20of%20the%20target%20vector.%20If%20not%20set,%20length%20is%201.0.%0A%20%20%20%20%20*%0A%20%20%20%20%20*%20@return%20%7BVect%7D%0A%20%20%20%20%20*/%0A%20%20%20%20Vect.prototype.normalize%20=%20function%20(length)%20%7B%0A%20%20%20%20%20%20%20%20var%20currenLength%20=%20this.length();%0A%20%20%20%20%20%20%20%20if%20(currenLength%20===%200)%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20this.x%20=%201;%0A%20%20%20%20%20%20%20%20%20%20%20%20this.y%20=%200;%0A%20%20%20%20%20%20%20%20%7D%20else%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20this.div(currenLength);%0A%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20if(length)%0A%20%20%20%20%20%20%20%20%20%20%20%20this.mul(length);%0A%20%20%20%20%20%20%20%20return%20this;%0A%20%20%20%20%7D;%0A%0A%0A%0A%20%20%20%20/**%0A%20%20%20%20%20*%20Quadratic%20length%20of%20the%20vector.%0A%20%20%20%20%20*%20y%20lengthSq%0A%20%20%20%20%20*%20@return%20%7Bnumber%7D%0A%20%20%20%20%20*/%0A%20%20%20%20Vect.prototype.lengthSq%20=%20function%20()%20%7B%0A%20%20%20%20%20%20%20%20return%20this.x%20*%20this.x%20+%20this.y%20*%20this.y;%0A%20%20%20%20%7D;%0A%0A%20%20%20%20/**%0A%20%20%20%20%20*%20Euclidean%20norm/length/magnitude%20of%20the%20vector.%0A%20%20%20%20%20*%20@return%20%7Bnumber%7D%0A%20%20%20%20%20*/%0A%20%20%20%20Vect.prototype.length%20=%20function%20()%20%7B%0A%20%20%20%20%20%20%20%20return%20Math.sqrt(this.lengthSq());%0A%20%20%20%20%7D;%0A%0A%20%20%20%20/**%0A%20%20%20%20%20*%20Quadratic%20distance%20of%20two%20vectors.%0A%20%20%20%20%20*%20@param%20v%0A%20%20%20%20%20*%20@return%20%7Bnumber%7D%0A%20%20%20%20%20*/%0A%20%20%20%20Vect.prototype.distanceSq%20=%20function%20(v)%20%7B%0A%20%20%20%20%20%20%20%20var%20dx%20=%20this.x%20-%20v.x;%0A%20%20%20%20%20%20%20%20var%20dy%20=%20this.y%20-%20v.y;%0A%20%20%20%20%20%20%20%20return%20dx%20*%20dx%20+%20dy%20*%20dy;%0A%20%20%20%20%7D;%0A%0A%20%20%20%20/**%0A%20%20%20%20%20*%20Euclidean%20distance%20of%20two%20vectors.%0A%20%20%20%20%20*%20@param%20v%0A%20%20%20%20%20*%20@return%20%7Bnumber%7D%0A%20%20%20%20%20*/%0A%20%20%20%20Vect.prototype.distance%20=%20function%20(v)%20%7B%0A%20%20%20%20%20%20%20%20return%20Math.sqrt(this.distanceSq(v));%0A%20%20%20%20%7D;%0A%0A%20%20%20%20/**%0A%20%20%20%20%20*%20Manhatten/city%20block/Taxicab%20distance%0A%20%20%20%20%20*%20@param%20v%0A%20%20%20%20%20*%20@return%20%7Bnumber%7D%0A%20%20%20%20%20*/%0A%20%20%20%20Vect.prototype.manhatten%20=%20function%20(v)%20%7B%0A%20%20%20%20%20%20%20%20var%20dx%20=%20this.x%20-%20v.x;%0A%20%20%20%20%20%20%20%20var%20dy%20=%20this.y%20-%20v.y;%0A%20%20%20%20%20%20%20%20return%20Math.abs(dx)%20+%20Math.abs(dy);%0A%20%20%20%20%7D;%0A%0A%20%20%20%20/**%0A%20%20%20%20%20*%20y%20isLeftOf%0A%20%20%20%20%20*%20@param%20v%0A%20%20%20%20%20*%20@return%20%7Bboolean%7D%0A%20%20%20%20%20*/%0A%20%20%20%20Vect.prototype.isLeftOf%20=%20function%20(v)%20%7B%0A%20%20%20%20%20%20%20%20if%20(X_IS_LEFT_TO_Y)%0A%20%20%20%20%20%20%20%20%20%20%20%20return%20this.cross(v)%20%3E%200;%0A%20%20%20%20%20%20%20%20else%0A%20%20%20%20%20%20%20%20%20%20%20%20return%20this.cross(v)%20%3C%200;%0A%20%20%20%20%7D;%0A%0A%0A%20%20%20%20/**%0A%20%20%20%20%20*%20@param%20v%0A%20%20%20%20%20*%20@return%20%7Bboolean%7D%0A%20%20%20%20%20*/%0A%20%20%20%20Vect.prototype.isRightOf%20=%20function%20(v)%20%7B%0A%20%20%20%20%20%20%20%20if%20(X_IS_LEFT_TO_Y)%0A%20%20%20%20%20%20%20%20%20%20%20%20return%20this.cross(v)%20%3C%200;%0A%20%20%20%20%20%20%20%20else%0A%20%20%20%20%20%20%20%20%20%20%20%20return%20this.cross(v)%20%3E%200;%0A%20%20%20%20%7D;%0A%0A%20%20%20%20/**%0A%20%20%20%20%20*%20@chainable%0A%20%20%20%20%20*%20@return%20%7BVect%7D%0A%20%20%20%20%20*/%0A%20%20%20%20Vect.prototype.turnLeft%20=%20function%20()%20%7B%0A%20%20%20%20%20%20%20%20var%20x%20=%20this.y%20*%20(%20X_IS_LEFT_TO_Y%20?%201%20:%20-1%20);%0A%20%20%20%20%20%20%20%20var%20y%20=%20this.x%20*%20(%20X_IS_LEFT_TO_Y%20?%20-1%20:%201%20);%0A%20%20%20%20%20%20%20%20this.x%20=%20x;%0A%20%20%20%20%20%20%20%20this.y%20=%20y;%0A%20%20%20%20%20%20%20%20return%20this;%0A%20%20%20%20%7D;%0A%0A%20%20%20%20/**%0A%20%20%20%20%20*%20@chainable%0A%20%20%20%20%20*%20@return%20%7BVect%7D%0A%20%20%20%20%20*/%0A%20%20%20%20Vect.prototype.turnRight%20=%20function%20()%20%7B%0A%20%20%20%20%20%20%20%20var%20x%20=%20this.y%20*%20(%20X_IS_LEFT_TO_Y%20?%20-1%20:%201%20);%0A%20%20%20%20%20%20%20%20var%20y%20=%20this.x%20*%20(%20X_IS_LEFT_TO_Y%20?%201%20:%20-1%20);%0A%20%20%20%20%20%20%20%20this.x%20=%20x;%0A%20%20%20%20%20%20%20%20this.y%20=%20y;%0A%20%20%20%20%20%20%20%20return%20this;%0A%20%20%20%20%7D;%0A%0A%20%20%20%20/**%0A%20%20%20%20%20*%20@chainable%0A%20%20%20%20%20*%20@return%20%7BVect%7D%0A%20%20%20%20%20*/%0A%20%20%20%20Vect.prototype.leftNormal%20=%20function%20()%20%7B%0A%20%20%20%20%20%20%20%20this.turnLeft().normalize();%0A%20%20%20%20%20%20%20%20return%20this;%0A%20%20%20%20%7D;%0A%0A%20%20%20%20/**%0A%20%20%20%20%20*%20@chainable%0A%20%20%20%20%20*%20@return%20%7BVect%7D%0A%20%20%20%20%20*/%0A%20%20%20%20Vect.prototype.rightNormal%20=%20function%20()%20%7B%0A%20%20%20%20%20%20%20%20this.turnRight().normalize();%0A%20%20%20%20%20%20%20%20return%20this;%0A%20%20%20%20%7D;%0A%0A%0A%20%20%20%20/**%0A%20%20%20%20%20*%20Gives%20the%20angle%20between%20a%20reference%20vector%20and%20this.%0A%20%20%20%20%20*%20The%20result%20is%20between%20%5BPI,-PI).%0A%20%20%20%20%20*%20In%20school%20coordinates,%20the%20angle%20is%20counted%20%3Cstrong%3Ecounter%20clockwise%3C/strong%3E%0A%20%20%20%20%20*%20from%20reference%20to%20the%20vector.%20In%20game%20coordinates,%20the%20angle%20is%20counted%20%3Cstrong%3Eclockwise%3C/strong%3E%0A%20%20%20%20%20*%20from%20reference%20to%20the%20vector.%0A%20%20%20%20%20*%0A%20%20%20%20%20*%20@param%20%7BVector%7D%20ref%0A%20%20%20%20%20*%20%20%5Boptional%5D%20reference%20vector.%20default:%20(1,0).%0A%20%20%20%20%20*%20@return%20%7Bnumber%7D%0A%20%20%20%20%20*/%0A%20%20%20%20Vect.prototype.angle%20=%20function%20(ref)%20%7B%0A%20%20%20%20%20%20%20%20var%20result;%0A%20%20%20%20%20%20%20%20if%20(!(ref%20instanceof%20Vect))%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20return%20Math.atan2(this.y,%20this.x);%20//%20(-%20Math.atan2(0,1))%0A%20%20%20%20%20%20%20%20%7D%20else%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20result%20=%20Math.atan2(this.y,%20this.x)%20-%20Math.atan2(ref.y,%20ref.x);%0A%20%20%20%20%20%20%20%20%20%20%20%20if%20(result%20%3E%20Math.PI)%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20result%20=%20result%20-%20Math.PI%20*%202;%0A%20%20%20%20%20%20%20%20%20%20%20%20%7D%20else%20if%20(result%20%3C%20-Math.PI)%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20result%20=%20Math.PI%20*%202%20+%20result;%0A%20%20%20%20%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20return%20result;%0A%20%20%20%20%7D;%0A%0A%20%20%20%20/**%0A%20%20%20%20%20*%20Rotates%20the%20vector%20by%20the%20given%20angle.%0A%20%20%20%20%20*%20If%20you%20take%20the%20vector%20as%20a%20point,%20the%20default%20pivot%20is%20%7Bx:0,y:0%7D%0A%20%20%20%20%20*%0A%20%20%20%20%20*%20@chainable%0A%20%20%20%20%20*%20@param%20%7Bnumber%7D%20angle%0A%20%20%20%20%20*%20%20%20%20%20%20in%20radians%0A%20%20%20%20%20*%20@param%20%7BVect%7D%20pivot%0A%20%20%20%20%20*%20%20%20%20%20%20%5Boptional%5D%20default%20is%20%7Bx:0,y:0%7D%0A%20%20%20%20%20*%20@return%20%7BVect%7D%20the%20rotated%20vector%0A%20%20%20%20%20*/%0A%20%20%20%20Vect.prototype.rotate%20=%20function%20(angle,%20pivot)%20%7B%0A%20%20%20%20%20%20%20%20pivot%20=%20pivot%20%7C%7C%20ZERO;%0A%20%20%20%20%20%20%20%20var%20_x%20=%20pivot.x%0A%20%20%20%20%20%20%20%20%20%20%20%20+%20((this.x%20-%20pivot.x)%20*%20Math.cos(angle))%0A%20%20%20%20%20%20%20%20%20%20%20%20-%20((this.y%20-%20pivot.y)%20*%20Math.sin(angle));%0A%20%20%20%20%20%20%20%20var%20_y%20=%20pivot.y%0A%20%20%20%20%20%20%20%20%20%20%20%20+%20((this.x%20-%20pivot.x)%20*%20Math.sin(angle))%0A%20%20%20%20%20%20%20%20%20%20%20%20+%20((this.y%20-%20pivot.y)%20*%20Math.cos(angle));%0A%20%20%20%20%20%20%20%20this.x%20=%20_x;%0A%20%20%20%20%20%20%20%20this.y%20=%20_y;%0A%20%20%20%20%20%20%20%20return%20this;%0A%20%20%20%20%7D;%0A%0A%0A%20%20%20%20/**%0A%20%20%20%20%20*%20Rotates%20the%20vector%20to%20the%20given%20angle.%0A%20%20%20%20%20*%20@chainable%0A%20%20%20%20%20*%20@param%20%7Bnumber%7D%20angle%20in%20radians%0A%20%20%20%20%20*%20@return%20%7BVect%7D%20the%20rotated%20vector%0A%20%20%20%20%20*/%0A%20%20%20%20Vect.prototype.rotateTo%20=%20function%20(angle)%20%7B%0A%20%20%20%20%20%20%20%20this.rotate(angle%20-%20this.angle());%0A%20%20%20%20%20%20%20%20return%20this;%0A%20%20%20%20%7D;%0A%0A%20%20%20%20/**%0A%20%20%20%20%20*%20Rotates%20the%20vector%20towards%20the%20given%20angle.%0A%20%20%20%20%20*%20The%20rotation%20is%20limited%20by%20stepSize,%20so%20move%20a%200%C2%B0%20vector%20towards%2090%C2%B0%20with%20limit%2050%C2%B0%0A%20%20%20%20%20*%20would%20result%20in%20a%2050%C2%B0%20vector.%20If%20the%20method%20with%20the%20same%20limit%20is%20reapplied%20again%0A%20%20%20%20%20*%20the%20result%20would%20be%2090%C2%B0.%0A%20%20%20%20%20*%0A%20%20%20%20%20*%20The%20rotation%20will%20take%20the%20%22shortest%20way%22%20towards%20the%20given%20angle.%0A%20%20%20%20%20*%0A%20%20%20%20%20*%20@chainable%0A%20%20%20%20%20*%20@param%20%7Bnumber%7D%20angle%20-%20angle%20in%20radians%0A%20%20%20%20%20*%20@param%20%7Bnumber%7D%20stepSize%20-%20maximum%20angle%20to%20move%20towards%20angle%0A%20%20%20%20%20*%20@return%20%7BVect%7D%20the%20rotated%20vector%0A%20%20%20%20%20*/%0A%20%20%20%20Vect.prototype.rotateTowards%20=%20function%20(angle,%20stepSize)%20%7B%0A%20%20%20%20%20%20%20%20this.rotate(angle%20-%20this.angle());%0A%20%20%20%20%20%20%20%20//TODO%0A%20%20%20%20%20%20%20%20return%20this;%0A%20%20%20%20%7D;%0A%0A%0A%20%20%20%20/**%0A%20%20%20%20%20*%20%20%22angle%20of%20incidence%20equal%20to%20the%20angle%20of%20reflexion%22%0A%20%20%20%20%20*%20%20Performs%20a%20simple%20reflection%20of%20this%20object%20on%20a%20surface%0A%20%20%20%20%20*%20%20that%20has%20the%20direction%20of%20the%20given%20vector%20u.%0A%20%20%20%20%20*%20%20@param%20%7BVect%7D%20u%0A%20%20%20%20%20*/%0A%20%20%20%20Vect.prototype.reflectOn%20=%20function%20(u)%20%7B%0A%20%20%20%20%20%20%20%20var%20l,%20n,%20r;%0A%20%20%20%20%20%20%20%20if%20(this.isRightOf(u))%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20l%20=%20this.clone();%0A%20%20%20%20%20%20%20%20%20%20%20%20n%20=%20u.clone().leftNormal();%0A%20%20%20%20%20%20%20%20%20%20%20%20r%20=%20l.sub(n.clone().mul(n.dot(l)%20*%20(2)));%0A%20%20%20%20%20%20%20%20%7D%20else%20if%20(this.isLeftOf(u))%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20l%20=%20this.clone();%0A%20%20%20%20%20%20%20%20%20%20%20%20n%20=%20u.clone().rightNormal();%0A%20%20%20%20%20%20%20%20%20%20%20%20r%20=%20l.sub(n.clone().mul(n.dot(l)%20*%20(2)));%0A%20%20%20%20%20%20%20%20%7D%20else%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20r%20=%20this.clone().invert();%0A%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20this.x%20=%20r.x;%0A%20%20%20%20%20%20%20%20this.y%20=%20r.y;%0A%20%20%20%20%20%20%20%20return%20this;%0A%20%20%20%20%7D;%0A%0A%0A%20%20%20%20/**%0A%20%20%20%20%20*%0A%20%20%20%20%20*%20A%20rectangular%20box%20with%20edges%20parallel%20to%20the%20coordinate%20axes.%0A%20%20%20%20%20*%0A%20%20%20%20%20*%20So:%0A%20%20%20%20%20*%20%20%20%20%20%20%20%20Box#left%20&le;%20Box#right%0A%20%20%20%20%20*%20%20%20%20%20%20%20%20Box#top%20%20&le;%20Box#bottom%0A%20%20%20%20%20*%0A%20%20%20%20%20*%20@class%20Box%0A%20%20%20%20%20*%20@constructor%0A%20%20%20%20%20*%20@param%20%7BNumber%7D%20x0%0A%20%20%20%20%20*%20@param%20%7BNumber%7D%20x1%0A%20%20%20%20%20*%20@param%20%7BNumber%7D%20y0%0A%20%20%20%20%20*%20@param%20%7BNumber%7D%20y1%0A%20%20%20%20%20*/%0A%20%20%20%20var%20Box%20=%20function%20(x0,%20x1,%20y0,%20y1)%20%7B%0A%20%20%20%20%20%20%20%20this.left%20=%20Math.min(x0,%20x1);%0A%20%20%20%20%20%20%20%20this.right%20=%20Math.max(x0,%20x1);%0A%0A%20%20%20%20%20%20%20%20this.y_min%20=%20Math.min(y0,%20y1);%0A%20%20%20%20%20%20%20%20this.y_max%20=%20Math.max(y0,%20y1);%0A%20%20%20%20%20%20%20%20this.top%20=%20X_IS_LEFT_TO_Y%20?%20this.y_min%20:%20this.y_max;%0A%20%20%20%20%20%20%20%20this.bottom%20=%20X_IS_LEFT_TO_Y%20?%20this.y_max%20:%20this.y_min;%0A%20%20%20%20%7D;%0A%0A%20%20%20%20/**%0A%20%20%20%20%20*%20Bounding%20box%20of%20a%20given%20Segment%0A%20%20%20%20%20*%20@static%0A%20%20%20%20%20*%20@param%20%7BSegment%7D%20segment%0A%20%20%20%20%20*/%0A%20%20%20%20Box.fromSegment%20=%20function%20(segment)%20%7B%0A%20%20%20%20%20%20%20%20return%20new%20Box(segment.p1.x,%20segment.p2.x,%20segment.p1.y,%20segment.p2.y);%0A%20%20%20%20%7D;%0A%0A%20%20%20%20Box.fromObject%20=%20function%20(obj)%20%7B%0A%20%20%20%20%20%20%20%20return%20new%20Box(obj.x0,%20obj.x1,%20obj.y0,%20obj.y1);%0A%20%20%20%20%7D;%0A%0A%20%20%20%20/**%0A%20%20%20%20%20*%20@return%20%7Bstring%7D%0A%20%20%20%20%20*/%0A%20%20%20%20Box.prototype.toString%20=%20function%20()%20%7B%0A%20%20%20%20%20%20%20%20return%20%22%5B%20left:%20%22%20+%20this.left%20+%20%22%20right:%20%22%20+%20this.right%20+%20%22%20top:%20%22%20+%20this.top%20+%20%22%20bottom:%20%22%20+%20this.bottom%20+%20%22%20%5D%22;%0A%20%20%20%20%7D;%0A%0A%20%20%20%20Box.prototype.containsPoint%20=%20function%20(p)%20%7B%0A%20%20%20%20%20%20%20%20return%20this.left%20%3C=%20p.x%20&&%20p.x%20%3C=%20this.right//%0A%20%20%20%20%20%20%20%20%20%20%20%20&&%20this.y_min%20%3C=%20p.y%20&&%20p.y%20%3C=%20this.y_max;%0A%20%20%20%20%7D;%0A%0A%20%20%20%20Box.prototype.intersect%20=%20function%20(box)%20%7B%0A%20%20%20%20%20%20%20%20return%20this.left%20%3C=%20box.right%20&&%20box.left%20%3C=%20this.right//%0A%20%20%20%20%20%20%20%20%20%20%20%20&&%20this.y_min%20%3C=%20box.y_max%20&&%20box.y_min%20%3C=%20this.y_max;%0A%20%20%20%20%7D;%0A%0A%20%20%20%20Box.prototype.translate%20=%20function%20(v)%20%7B%0A%20%20%20%20%20%20%20%20this.left%20+=%20v.x;%0A%20%20%20%20%20%20%20%20this.right%20+=%20v.x;%0A%20%20%20%20%20%20%20%20this.y_min%20+=%20v.y;%0A%20%20%20%20%20%20%20%20this.y_max%20+=%20v.y;%0A%20%20%20%20%20%20%20%20this.top%20+=%20v.y;%0A%20%20%20%20%20%20%20%20this.bottom%20+=%20v.y;%0A%20%20%20%20%7D;%0A%0A%20%20%20%20/**%0A%20%20%20%20%20*%20A%20line%20segment%20represented%20by%20two%20points.%0A%20%20%20%20%20*%0A%20%20%20%20%20*%20(The%20line%20segment%20has%20a%20orinentation%20given%20by%20the%20order%20or%20the%20two%20points.)%0A%20%20%20%20%20*%20@class%20Segment%0A%20%20%20%20%20*%20@constructor%0A%20%20%20%20%20*%20@param%20%7BObject%7D%20p1%0A%20%20%20%20%20*%20@param%20%7BObject%7D%20p2%0A%20%20%20%20%20*/%0A%20%20%20%20var%20Segment%20=%20function%20(p1,%20p2)%20%7B%0A%20%20%20%20%20%20%20%20this.p1%20=%20(p1%20%7C%7C%20new%20Vect(0,%200)).clone();%0A%20%20%20%20%20%20%20%20this.p2%20=%20(p2%20%7C%7C%20new%20Vect(1,%200)).clone();%0A%20%20%20%20%7D;%0A%0A%20%20%20%20Segment.prototype.getBoundingBox%20=%20function%20()%20%7B%0A%20%20%20%20%20%20%20%20return%20new%20Box.fromSegment(this);%0A%20%20%20%20%7D;%0A%0A%0A%20%20%20%20Segment.prototype.connection%20=%20function%20()%20%7B%0A%20%20%20%20%20%20%20%20return%20this.p2.clone().sub(this.p1);%0A%20%20%20%20%7D;%0A%20%20%20%20//Segment.prototype.getConnection%20=%20Segment.prototype.connection;%0A%0A%20%20%20%20Segment.prototype.direction%20=%20function%20()%20%7B%0A%20%20%20%20%20%20%20%20return%20this.connection().normalize();%0A%20%20%20%20%7D;%0A%0A%20%20%20%20Segment.prototype.toString%20=%20function%20()%20%7B%0A%20%20%20%20%20%20%20%20return%20'%5B%20'%20+%20this.p1%20+%20'%20,%20'%20+%20this.p2%20+%20'%20%5D';%0A%20%20%20%20%7D;%0A%0A%20%20%20%20Segment.fromArray%20=%20function%20(arr)%20%7B%0A%20%20%20%20%20%20%20%20return%20new%20Segment(new%20Vect(arr%5B0%5D,%20arr%5B1%5D),%20new%20Vect(arr%5B2%5D,%20arr%5B3%5D));%0A%20%20%20%20%7D;%0A%0A%20%20%20%20Segment.fromObject%20=%20function%20(obj)%20%7B%0A%20%20%20%20%20%20%20%20return%20new%20Segment(obj.p1,%20obj.p2);%0A%20%20%20%20%7D;%0A%0A%20%20%20%20Segment.prototype.clone%20=%20function%20()%20%7B%0A%20%20%20%20%20%20%20%20return%20new%20Segment(this.p1.clone(),%20this.p2.clone());%0A%20%20%20%20%7D;%0A%0A%0A%20%20%20%20/**%0A%20%20%20%20%20*%20Move%20Segment%20to%20center.%20Keeps%20direction%20and%20length%0A%20%20%20%20%20*/%0A%20%20%20%20Segment.prototype.toCenter%20=%20function%20()%20%7B%0A%20%20%20%20%20%20%20%20return%20this.translate(ZERO.clone().sub(this.p1));%0A%20%20%20%20%7D;%0A%0A%20%20%20%20/**%0A%20%20%20%20%20*%20Move%20every%20point%20by%20v%0A%20%20%20%20%20*%20@param%20v%0A%20%20%20%20%20*/%0A%20%20%20%20Segment.prototype.translate%20=%20function%20(v)%20%7B%0A%20%20%20%20%20%20%20%20this.p1.add(v);%0A%20%20%20%20%20%20%20%20this.p2.add(v);%0A%20%20%20%20%20%20%20%20return%20this;%0A%20%20%20%20%7D;%0A%0A%0A%20%20%20%20/**%0A%20%20%20%20%20*%20Gives%20a%20point%20on%20the%20segment.%0A%20%20%20%20%20*%20number:%0A%20%20%20%20%20*%20%200%20%20%20-%3E%20p1%0A%20%20%20%20%20*%20%201%20%20%20-%3E%20p2%0A%20%20%20%20%20*%20%200.5%20-%3E%20middle%20between%20p1,p2%0A%20%20%20%20%20*%20%20%3C0%20%20-%3E%20a%20point%20beyond%20p1%20on%20the%20line%20the%20segment%20defines%0A%20%20%20%20%20*%20%20%3E1%20%20-%3E%20a%20point%20beyond%20p2%20on%20the%20line%20the%20segment%20defines%0A%20%20%20%20%20*%0A%20%20%20%20%20*%0A%20%20%20%20%20*%20@param%20%7Bnumber%7D%20position%0A%20%20%20%20%20*%20%20%20number%20between%20%5B0,1%5D%20to%20get%20a%20point%20between%20p1%20and%20p2.%0A%20%20%20%20%20*%0A%20%20%20%20%20*/%0A%20%20%20%20Segment.prototype.getPoint%20=%20function%20(position)%20%7B%0A%20%20%20%20%20%20%20%20return%20new%20Vect(this.p2.x%20*%20position%20+%20this.p1.x%20*%20(1%20-%20position),%0A%20%20%20%20%20%20%20%20%20%20%20%20this.p2.y%20*%20position%20+%20this.p1.y%20*%20(1%20-%20position));%0A%20%20%20%20%7D;%0A%0A%20%20%20%20/**%0A%20%20%20%20%20*%20Return%20the%20middle%20between%20p1%20and%20p2%0A%20%20%20%20%20*%20@return%20%7BVect%7D%0A%20%20%20%20%20*%20%20%20%20%20%20middle%20point%20of%20the%20Segment%0A%20%20%20%20%20*/%0A%20%20%20%20Segment.prototype.getMiddle%20=%20function%20()%20%7B%0A%20%20%20%20%20%20%20%20return%20this.getPoint(0.5);%0A%20%20%20%20%7D;%0A%0A%20%20%20%20/**%0A%20%20%20%20%20*%20Rotate%20the%20Segment%0A%20%20%20%20%20*%20@param%20%7Bnumber%7D%20angle%0A%20%20%20%20%20*%20%20%20%20%20%20in%20radians%0A%20%20%20%20%20*%20@param%20%7BVect%7D%20pivot%0A%20%20%20%20%20*%20%20%20%20%20%20%5Boptional%5D%20default%20is%20this.p1,%20*not*%20%7Bx:0,y:0%7D%0A%20%20%20%20%20*%20@returns%20%7BSegment%7D%0A%20%20%20%20%20*/%0A%20%20%20%20Segment.prototype.rotate%20=%20function%20(angle,%20pivot)%20%7B%0A%20%20%20%20%20%20%20%20if%20(pivot)%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20this.p1.rotate(angle,%20pivot);%0A%20%20%20%20%20%20%20%20%7D%20else%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20pivot%20=%20this.p1;%0A%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20this.p2.rotate(angle,%20pivot);%0A%20%20%20%20%20%20%20%20return%20this;%0A%20%20%20%20%7D;%0A%0A%20%20%20%20Segment.prototype.angle%20=%20function%20(ref)%20%7B%0A%20%20%20%20%20%20%20%20return%20this.connection().angle(ref);%0A%20%20%20%20%7D;%0A%0A%0A%20%20%20%20Segment.prototype.length%20=%20function%20()%20%7B%0A%20%20%20%20%20%20%20%20return%20this.connection().length();%0A%20%20%20%20%7D;%0A%0A%20%20%20%20Segment.prototype.lengthSq%20=%20function%20()%20%7B%0A%20%20%20%20%20%20%20%20return%20this.connection().lengthSq();%0A%20%20%20%20%7D;%0A%0A%0A%20%20%20%20/**%0A%20%20%20%20%20*%0A%20%20%20%20%20*%20@param%20s%0A%20%20%20%20%20*%20@returns%20%7Bboolean%7D%0A%20%20%20%20%20*%20%20%20%20%20%20true,%20if%20the%20both%20segments%20intersect%0A%20%20%20%20%20*/%0A%20%20%20%20Segment.prototype.intersect%20=%20function%20(s)%20%7B%0A%0A%20%20%20%20%20%20%20%20var%20touchOrCross%20=%20function%20(s1,%20s2)%20%7B%0A%0A%20%20%20%20%20%20%20%20%20%20%20%20//%20s1%20as%20line,%20s2%20as%20two%20points%0A%20%20%20%20%20%20%20%20%20%20%20%20var%20u%20=%20s1.connection();%20//%20Move%20this.p1%20to%20ZERO%0A%20%20%20%20%20%20%20%20%20%20%20%20var%20v%20=%20s2.p1.clone().sub(s1.p1);%0A%20%20%20%20%20%20%20%20%20%20%20%20var%20w%20=%20s2.p2.clone().sub(s1.p1);%0A%0A%20%20%20%20%20%20%20%20%20%20%20%20//%20Check%20on%20which%20side%20the%20points%20of%20s2%20are%0A%20%20%20%20%20%20%20%20%20%20%20%20var%20c1%20=%20v.cross(u);%0A%20%20%20%20%20%20%20%20%20%20%20%20var%20c2%20=%20w.cross(u);%0A%20%20%20%20%20%20%20%20%20%20%20%20if%20(Math.abs(c1)%20%3C%20EPSILON%20%7C%7C%20Math.abs(c2)%20%3C%20EPSILON)%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20return%20true;%20//%20s2%20touches%20s1%0A%20%20%20%20%20%20%20%20%20%20%20%20return%20(c1%20%3E%200)%20!==%20(c2%20%3E%200);%0A%20%20%20%20%20%20%20%20%20%20%20%20//%20if%20both%20points%20on%20opposite%20sites%20-%3E%20s2%20cross%20s1%0A%20%20%20%20%20%20%20%20%7D;%0A%20%20%20%20%20%20%20%20return%20this.getBoundingBox().intersect(s.getBoundingBox())%0A%20%20%20%20%20%20%20%20%20%20%20%20&&%20touchOrCross(this,%20s)%0A%20%20%20%20%20%20%20%20%20%20%20%20&&%20touchOrCross(s,%20this);%0A%20%20%20%20%7D;%0A%0A%20%20%20%20Segment.prototype.intersect2%20=%20function%20(s)%20%7B%0A%0A%20%20%20%20%7D;%0A%0A%20%20%20%20/**%0A%20%20%20%20%20*%20@class%20Line%0A%20%20%20%20%20*%20@param%20segment%0A%20%20%20%20%20*%20@constructor%0A%20%20%20%20%20*/%0A%20%20%20%20var%20Line%20=%20function%20(p1,%20p2)%20%7B%0A%20%20%20%20%20%20%20%20this.p1%20=%20p1.clone();%0A%20%20%20%20%20%20%20%20this.p2%20=%20p2.clone();%0A%20%20%20%20%7D;%0A%0A%20%20%20%20Line.fromSegment%20=%20function%20(segment)%20%7B%0A%20%20%20%20%20%20%20%20this.p1%20=%20segment.p1.clone();%0A%20%20%20%20%20%20%20%20this.p2%20=%20segment.p2.clone();%0A%20%20%20%20%7D;%0A%0A%20%20%20%20Line.fromArray%20=%20function%20(arr)%20%7B%0A%20%20%20%20%20%20%20%20return%20new%20Line(new%20Vect(arr%5B0%5D,%20arr%5B1%5D),%20new%20Vect(arr%5B2%5D,%20arr%5B3%5D));%0A%20%20%20%20%7D;%0A%0A%20%20%20%20Line.prototype.direction%20=%20function%20()%20%7B%20//TODO:%20connection%20vs%20direction%0A%20%20%20%20%20%20%20%20return%20this.p2.clone().sub(this.p1).normalize();%0A%20%20%20%20%7D;%0A%0A%0A%20%20%20%20Line.EQUAL%20=%201;%0A%20%20%20%20Line.PARALLEL%20=%202;%0A%0A%20%20%20%20/**%0A%20%20%20%20%20*%0A%20%20%20%20%20*%20@param%20line%0A%20%20%20%20%20*%20@returns%20%7BVect%7CLine.PARALLEL%7CLine.EQUIVALENT%7D%20-%20Intersection%20is%0A%20%20%20%20%20*/%0A%20%20%20%20Line.prototype.intersect%20=%20function%20(line)%20%7B%0A%0A%20%20%20%20%20%20%20%20//%20this:%20x%20=%20a%20+%20b*t%0A%20%20%20%20%20%20%20%20//%20line:%20x%20=%20c%20+%20d*s%0A%0A%20%20%20%20%20%20%20%20//direction%20vectors%0A%20%20%20%20%20%20%20%20var%20b%20=%20this.direction();%0A%20%20%20%20%20%20%20%20var%20d%20=%20line.direction();%0A%0A%20%20%20%20%20%20%20%20//support%20vectors%0A%20%20%20%20%20%20%20%20var%20a%20=%20this.p1;%0A%20%20%20%20%20%20%20%20var%20c%20=%20line.p1;%0A%0A%20%20%20%20%20%20%20%20//difference%20between%20support%20vector%0A%20%20%20%20%20%20%20%20var%20z%20=%20c.clone().sub(a);%0A%0A%20%20%20%20%20%20%20%20var%20cross%20=%20b.cross(d);%0A%20%20%20%20%20%20%20%20var%20numerator%20=%20z.cross(d);%20//(this.p1.y-line.p1.y)*d.x%20-%20(this.p1.x-line.p1.x)*%20d.y;%0A%0A%20%20%20%20%20%20%20%20if%20(Math.abs(cross)%20%3C%20EPSILON)%20%7B%20//directions%20are%20parallel%0A%20%20%20%20%20%20%20%20%20%20%20%20if%20(Math.abs(numerator)%20%3C%20EPSILON)%20%7B%20//connection%20of%20support%20is%20parallel%20to%20direction%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20return%20Line.EQUAL;%0A%20%20%20%20%20%20%20%20%20%20%20%20%7D%20else%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20return%20Line.PARALLEL;%0A%20%20%20%20%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20var%20t%20=%20numerator%20/%20cross;%0A%20%20%20%20%20%20%20%20return%20this.p1.clone().add(b.mul(t));%0A%20%20%20%20%7D;%0A%0A%0A%20%20%20%20/**%0A%20%20%20%20%20*%20General%20intersection%20method%20for%20all%20combinations%20of%20lines,%20segments,%20rays.%0A%20%20%20%20%20*%20@private%0A%20%20%20%20%20*%20@param%20%7BSegment%7CRay%7CLine%7D%20g%0A%20%20%20%20%20*%20@param%20%7BSegment%7CRay%7CLine%7D%20h%0A%20%20%20%20%20*%20@returns%20%7BVect%7CSegment%7CRay%7CLine%7Cnull%7D%0A%20%20%20%20%20*%20%20%20%20%20%20An%20object%20that%20describes%20the%20intersection.%20Can%20be%20null.%0A%20%20%20%20%20*/%0A%20%20%20%20function%20lineIntersect(g,%20h)%20%7B%0A%0A%20%20%20%20%20%20%20%20//%20g:%20x%20=%20g.p1%20+%20(g.p2-g.p1)*t%20=%20a%20+%20b*t%0A%20%20%20%20%20%20%20%20//%20h:%20x%20=%20h.p1%20+%20(h.p2-h.p1)*s%20=%20c%20+%20d*s%0A%0A%20%20%20%20%20%20%20%20//direction%20vectors%0A%20%20%20%20%20%20%20%20var%20b%20=%20g.direction();%0A%20%20%20%20%20%20%20%20var%20d%20=%20h.direction();%0A%0A%20%20%20%20%20%20%20%20//support%20vectors%0A%20%20%20%20%20%20%20%20var%20a%20=%20g.p1;%0A%20%20%20%20%20%20%20%20var%20c%20=%20h.p1;%0A%0A%20%20%20%20%20%20%20%20//difference%20between%20support%20vector%0A%20%20%20%20%20%20%20%20var%20z%20=%20c.clone().sub(a);%20//%20(c-a)%0A%0A%20%20%20%20%20%20%20%20var%20cross_directions%20=%20b.cross(d);%0A%20%20%20%20%20%20%20%20var%20dot_directions%20=%20b.dot(d);%0A%20%20%20%20%20%20%20%20var%20cross_support_direction%20=%20z.cross(d);%20//(this.p1.y-line.p1.y)*d.x%20-%20(this.p1.x-line.p1.x)*%20d.y;%0A%20%20%20%20%20%20%20%20var%20dot_support_direction%20=%20z.dot(d);%0A%0A%20%20%20%20%20%20%20%20if%20(Math.abs(cross_directions)%20%3C%20EPSILON)%20%7B%20//directions%20are%20parallel%0A%20%20%20%20%20%20%20%20%20%20%20%20if%20(Math.abs(cross_support_direction)%20%3C%20EPSILON)%20%7B%20//connection%20of%20support%20is%20parallel%20to%20direction%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20if%20(isLine(g))%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20return%20h.clone();%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20if%20(isLine(h))%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20return%20g.clone();%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20if%20(isRay(g)%20&&%20isRay(h))%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20if%20(dot_directions%20%3E%200)%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20//both%20rays%20in%20same%20direction%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20if%20(dot_support_direction%20%3E%200)%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20return%20h.clone();%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20else%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20return%20g.clone();%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%7D%20else%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20//both%20ray%20in%20different%20directions%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20if%20(dot_support_direction%20%3E%200)%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20return%20null;%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20else%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20return%20new%20Segment(g.p1,%20h.p1);%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20if%20(isSegment(g)%20&&%20isSegment(h))%20%7B%0A%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20var%20gp1%20=%20g.containsPoint(h.p1);%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20var%20gp2%20=%20g.containsPoint(h.p2);%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20var%20hp1%20=%20h.containsPoint(g.p1);%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20var%20hp2%20=%20h.containsPoint(g.p2);%0A%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20//%200000%20=%3E%20null;%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20//%201000%20=%3E%20XXX%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20//%200100%20=%3E%20XXX%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20//%201100%20=%3E%20return%20h%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20//%200010%20=%3E%20XXX%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20//%201010%20=%3E%20%5Bhp1,gp1%5D%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20//%200110%20=%3E%20%5Bhp2,gp1%5D%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20//%201110%20=%3E%20return%20h%20(touch)%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20//%200001%20=%3E%20XXX%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20//%201001%20=%3E%20%5Bhp1,gp2%5D%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20//%200101%20=%3E%20%5Bhp2,gp2%5D%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20//%201101%20=%3E%20return%20h%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20//%200011%20=%3E%20return%20g%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20//%201011%20=%3E%20return%20g%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20//%200111%20=%3E%20return%20g%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20//%201111%20=%3E%20return%20g%20(or%20h)%0A%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20if%20(gp1%20&&%20gp2)%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20return%20h.clone();%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20if%20(hp1%20&&%20hp2)%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20return%20g.clone();%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20if%20(gp1%20&&%20hp1)%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20return%20new%20Segment(h.p1,%20g.p1);%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20if%20(gp2%20&&%20hp1)%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20return%20new%20Segment(h.p2,%20g.p1);%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20if%20(gp1%20&&%20hp2)%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20return%20new%20Segment(h.p1,%20g.p2);%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20if%20(gp2%20&&%20hp2)%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20return%20new%20Segment(h.p2,%20g.p2);%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20return%20null;%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20if%20(isSegment(g))%20%7B%20//h%20is%20ray%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20//TODO%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20if(g.containsPoint(h.p1))%7B%0A%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%7D%20else%20%7B%20//h%20is%20segment,%20g%20is%20ray%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20//TODO%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20if(h.containsPoint(g.p2))%7B%0A%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20%20%20%20%20%7D%20else%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20return%20null;%20//no%20intersection%20Line.PARALLEL;%0A%20%20%20%20%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20var%20t%20=%20cross_support_direction%20/%20cross_directions;%0A%20%20%20%20%20%20%20%20return%20g.p1.clone().add(b.mul(t));%0A%20%20%20%20%7D%0A%0A%0A%20%20%20%20/**%0A%20%20%20%20%20*%20@class%20Ray%0A%20%20%20%20%20*%20@param%20segment%0A%20%20%20%20%20*%20@constructor%0A%20%20%20%20%20*/%0A%20%20%20%20var%20Ray%20=%20function%20(segment)%20%7B%0A%0A%20%20%20%20%7D;%0A%0A%20%20%20%20/**%0A%20%20%20%20%20*%20@class%20Triangle%0A%20%20%20%20%20*%20@param%20a%0A%20%20%20%20%20*%20@param%20b%0A%20%20%20%20%20*%20@param%20c%0A%20%20%20%20%20*%20@constructor%0A%20%20%20%20%20*/%0A%20%20%20%20var%20Triangle%20=%20function%20(a,%20b,%20c)%20%7B%0A%20%20%20%20%20%20%20%20this.a%20=%20a.clone();%0A%20%20%20%20%20%20%20%20this.b%20=%20b.clone();%0A%20%20%20%20%20%20%20%20this.c%20=%20c.clone();%0A%20%20%20%20%7D;%0A%0A%0A%20%20%20%20Triangle.prototype.angleA%20=%20function%20()%20%7B%0A%20%20%20%20%20%20%20%20var%20v%20=%20this.b.clone().sub(this.a);%0A%20%20%20%20%20%20%20%20var%20w%20=%20this.c.clone().sub(this.a);%0A%20%20%20%20%20%20%20%20var%20angle%20=%20v.angle(w);%0A%20%20%20%20%20%20%20%20if%20(angle%20%3E=%20Math.PI)%0A%20%20%20%20%20%20%20%20%20%20%20%20return%20w.angle(v);%0A%20%20%20%20%20%20%20%20return%20angle;%0A%20%20%20%20%7D;%0A%0A%20%20%20%20Triangle.prototype.angleB%20=%20function%20()%20%7B%0A%20%20%20%20%20%20%20%20var%20v%20=%20this.a.clone().sub(this.b);%0A%20%20%20%20%20%20%20%20var%20w%20=%20this.c.clone().sub(this.b);%0A%20%20%20%20%20%20%20%20var%20angle%20=%20v.angle(w);%0A%20%20%20%20%20%20%20%20if%20(angle%20%3E=%20Math.PI)%0A%20%20%20%20%20%20%20%20%20%20%20%20return%20w.angle(v);%0A%20%20%20%20%20%20%20%20return%20angle;%0A%20%20%20%20%7D;%0A%0A%20%20%20%20Triangle.prototype.angleC%20=%20function%20()%20%7B%0A%20%20%20%20%20%20%20%20var%20v%20=%20this.a.clone().sub(this.c);%0A%20%20%20%20%20%20%20%20var%20w%20=%20this.b.clone().sub(this.c);%0A%20%20%20%20%20%20%20%20var%20angle%20=%20v.angle(w);%0A%20%20%20%20%20%20%20%20if%20(angle%20%3E=%20Math.PI)%0A%20%20%20%20%20%20%20%20%20%20%20%20return%20w.angle(v);%0A%20%20%20%20%20%20%20%20return%20angle;%0A%20%20%20%20%7D;%0A%0A%0A%20%20%20%20/**%0A%20%20%20%20%20*%20@class%20Circle%0A%20%20%20%20%20*%20@param%20p%0A%20%20%20%20%20*%20@param%20radius%0A%20%20%20%20%20*%20@constructor%0A%20%20%20%20%20*/%0A%20%20%20%20var%20Circle%20=%20function%20(p,%20radius)%20%7B%0A%0A%20%20%20%20%7D;%0A%0A%0A%20%20%20%20/**%0A%20%20%20%20%20*%20A%20simple%20object%20pool%0A%20%20%20%20%20*%0A%20%20%20%20%20*%20@class%20Pool%0A%20%20%20%20%20*%0A%20%20%20%20%20*%20@constructor%0A%20%20%20%20%20*%20@param%20%7BNumber%7D%20capacity%20The%20initial%20capacity.%0A%20%20%20%20%20*/%0A%20%20%20%20var%20Pool%20=%20function%20(capacity,%20constructor,%20initializer,%20growth)%20%7B%0A%20%20%20%20%20%20%20%20this.items%20=%20new%20Array(capacity);%0A%20%20%20%20%20%20%20%20this.capacity%20=%20capacity;%0A%20%20%20%20%20%20%20%20this.current%20=%20capacity;%0A%20%20%20%20%20%20%20%20this.initializer%20=%20initializer;%0A%20%20%20%20%20%20%20%20this.constructor%20=%20constructor;%0A%20%20%20%20%20%20%20%20this.growth%20=%20growth%20%7C%7C%20function%20(cap)%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20return%201;%0A%20%20%20%20%20%20%20%20%20%20%20%20%7D;//%0A%20%20%20%20%20%20%20%20this.createItems(capacity);%0A%20%20%20%20%7D;%0A%0A%0A%20%20%20%20/**%0A%20%20%20%20%20*%20CreateItems%0A%20%20%20%20%20*%0A%20%20%20%20%20*%0A%20%20%20%20%20*/%0A%20%20%20%20Pool.prototype.createItems%20=%20function%20(size)%20%7B%0A%20%20%20%20%20%20%20%20this.items.length%20=%20size;%0A%20%20%20%20%20%20%20%20for%20(var%20i%20=%200;%20i%20%3C%20size;%20i++)%0A%20%20%20%20%20%20%20%20%20%20%20%20this.items%5Bi%5D%20=%20new%20this.constructor();%0A%20%20%20%20%7D;%0A%0A%20%20%20%20/**%0A%20%20%20%20%20*/%0A%20%20%20%20Pool.prototype.get%20=%20function%20()%20%7B%0A%20%20%20%20%20%20%20%20if%20(this.current%20===%200)%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20var%20growth%20=%20this.growth(this.capacity);%0A%20%20%20%20%20%20%20%20%20%20%20%20this.capacity%20+=%20growth;%0A%20%20%20%20%20%20%20%20%20%20%20%20this.current%20=%20growth;%0A%20%20%20%20%20%20%20%20%20%20%20%20this.createItems(growth);%0A%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20this.current--;%0A%20%20%20%20%20%20%20%20var%20item%20=%20this.items%5Bthis.current%5D;%0A%20%20%20%20%20%20%20%20this.initializer.apply(item,%20arguments);%0A%20%20%20%20%20%20%20%20return%20item;%0A%20%20%20%20%7D;%0A%0A%20%20%20%20/**%0A%20%20%20%20%20*/%0A%20%20%20%20Pool.prototype.dispose%20=%20function%20(obj)%20%7B%0A%20%20%20%20%20%20%20%20this.current%20=%20this.items.push(obj);%0A%20%20%20%20%20%20%20%20this.capacity%20=%20Math.max(this.capacity,%20this.current);%0A%20%20%20%20%7D;%0A%0A%0A%20%20%20%20/*%0A%20%20%20%20%20*%0A%20%20%20%20%20*%0A%20%20%20%20%20*%20Experimental%20Calculator%20API.%0A%20%20%20%20%20*%20%20*%20Include%20Object%20Pooling%0A%20%20%20%20%20*%0A%20%20%20%20%20*%0A%20%20%20%20%20*%20Usage:%0A%20%20%20%20%20*%20var%20_%20=%20Calculator.create();%0A%20%20%20%20%20*%0A%20%20%20%20%20*%20var%20v%20=%20_(3,4);%20//Creates%20a%20vector%20in%20the%20calculators%20scope%0A%20%20%20%20%20*%0A%20%20%20%20%20*%20_.sub(%20_(3,4)%20,%20_(1,2)%20)%0A%20%20%20%20%20*%0A%20%20%20%20%20*%20_.clear();%0A%20%20%20%20%20*%0A%20%20%20%20%20*%20The%20vectors%20passed%20to%20a%20calculator%20function%20stay%20immutable.%0A%20%20%20%20%20*%20The%20Vect%20function%20can%20be%20applied%20also%20so:%0A%20%20%20%20%20*%0A%20%20%20%20%20*%0A%20%20%20%20%20*%20var%20v%20=%20_(%202,%200%20);%0A%20%20%20%20%20*%20var%20w%20=%20_.n(%20v%20);%0A%20%20%20%20%20*%0A%20%20%20%20%20*%20//%20v%20-%3E%20%20x:%202%20y:%200%0A%20%20%20%20%20*%20//%20w%20-%3E%20%20x:%201%20y:%200;%0A%20%20%20%20%20*%0A%20%20%20%20%20*%20var%20v%20=%20c(%202%20,%200%20);%0A%20%20%20%20%20*%20var%20w%20=%20v.normalize();%0A%20%20%20%20%20*%20//%20v%20-%3E%20%20x:%201%20y:%200%0A%20%20%20%20%20*%20//%20w%20-%3E%20%20x:%201%20y:%200;%0A%20%20%20%20%20*%0A%20%20%20%20%20*%0A%20%20%20%20%20*%0A%20%20%20%20%20*%20All%20references%20to%20vectors%20produced%20in%20equation%20must%20not%20be%20used%20after.%0A%20%20%20%20%20*%0A%20%20%20%20%20*%0A%20%20%20%20%20*%0A%20%20%20%20%20*/%0A%20%20%20%20var%20Calculator%20=%20%7B%7D;%0A%20%20%20%20Calculator.create%20=%20function%20()%20%7B%0A%0A%0A%20%20%20%20%20%20%20%20var%20pool%20=%20new%20Pool(16,%20Vect,%20Vect);%0A%20%20%20%20%20%20%20%20var%20active%20=%20%5B%5D;%0A%0A%20%20%20%20%20%20%20%20var%20maxActive%20=%200;%0A%0A%20%20%20%20%20%20%20%20/*%0A%20%20%20%20%20%20%20%20%20*%20%20Calculator%0A%20%20%20%20%20%20%20%20%20*%20Create%20a%20Vector%20within%20the%20scope%20of%20the%20Calculator.%0A%20%20%20%20%20%20%20%20%20*%0A%20%20%20%20%20%20%20%20%20*%20This%20means%20the%20instance%20is%20take%20from%20the%20internal%20Vect%20pool.%0A%20%20%20%20%20%20%20%20%20*%0A%20%20%20%20%20%20%20%20%20*%20When%20the%20calculation%20is%20clear%20all%20references%20to%20the%20Vect%20object%20become%20invalid.%0A%20%20%20%20%20%20%20%20%20*%0A%20%20%20%20%20%20%20%20%20*%20Usage:%0A%20%20%20%20%20%20%20%20%20*%20%20_(3,4)%20or%20_(%5B3,4%5D)%20or%20_(%7Bx:3,y:4%7D)%0A%20%20%20%20%20%20%20%20%20*%0A%20%20%20%20%20%20%20%20%20*%20When%20working%20with%20the%20normal%20Vect%20methods%20_%20can%20be%20seen%20as%20a%20clone%20with%20a%20clean%20up%20ability;%0A%20%20%20%20%20%20%20%20%20*%0A%20%20%20%20%20%20%20%20%20*/%0A%20%20%20%20%20%20%20%20var%20_%20=%20function%20()%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20var%20x,%20y;%0A%20%20%20%20%20%20%20%20%20%20%20%20if%20(arguments.length%20===%201)%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20if%20(arguments%5B0%5D.constructor%20===%20Array)%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20x%20=%20arguments%5B0%5D%5B0%5D;%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20y%20=%20arguments%5B0%5D%5B1%5D;%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%7D%20else%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20x%20=%20arguments%5B0%5D.x;%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20y%20=%20arguments%5B0%5D.y;%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20%20%20%20%20%7D%20else%20if%20(arguments%20===%202)%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20x%20=%20arguments%5B0%5D;%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20y%20=%20arguments%5B1%5D;%0A%20%20%20%20%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20%20%20%20%20var%20item%20=%20Pool.prototype.get.apply(pool,%20%5Bx,%20y%5D);%0A%20%20%20%20%20%20%20%20%20%20%20%20active.push(item);%0A%20%20%20%20%20%20%20%20%20%20%20%20maxActive%20=%20Math.max(maxActive,%20active.length);%0A%20%20%20%20%20%20%20%20%20%20%20%20return%20item;%0A%20%20%20%20%20%20%20%20%7D;%0A%0A%20%20%20%20%20%20%20%20_.clear%20=%20function%20()%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20for%20(var%20i%20=%200;%20i%20%3C%20items.length;%20i++)%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20pool.dispose(equation.items%5Bi%5D);%0A%20%20%20%20%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20%20%20%20%20used.length%20=%200;%0A%20%20%20%20%20%20%20%20%7D;%0A%0A%20%20%20%20%20%20%20%20_.statistics%20=%20function%20()%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20return%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20currentPoolCapacity:%20pool.items.length,%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20currentActiveItems:%20used.length,%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20maxActive:%20maxActive%0A%20%20%20%20%20%20%20%20%20%20%20%20%7D;%0A%20%20%20%20%20%20%20%20%7D;%0A%0A%0A%20%20%20%20%20%20%20%20//V%20x%20V%20-%3E%20V%0A%20%20%20%20%20%20%20%20_.add%20=%20function%20(u,%20v)%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20return%20_(u).add(v);%0A%20%20%20%20%20%20%20%20%7D;%0A%0A%20%20%20%20%20%20%20%20_.sub%20=%20function%20(u,%20v)%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20return%20_(u).sub(v);%0A%20%20%20%20%20%20%20%20%7D;%0A%0A%0A%20%20%20%20%20%20%20%20//V%20x%20V%20-%3E%20S%0A%20%20%20%20%20%20%20%20_.cross%20=%20function%20(u,%20v)%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20return%20u.cross(v);%0A%20%20%20%20%20%20%20%20%7D;%0A%0A%20%20%20%20%20%20%20%20_.dot%20=%20function%20(u,%20v)%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20return%20u.dot(v);%0A%20%20%20%20%20%20%20%20%7D;%0A%0A%20%20%20%20%20%20%20%20_.distanceSq%20=%20function%20(u,%20v)%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20return%20u.distanceSq(v);%0A%20%20%20%20%20%20%20%20%7D;%0A%0A%20%20%20%20%20%20%20%20_.distance%20=%20function%20(u,%20v)%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20return%20u.distance(u,%20v);%0A%20%20%20%20%20%20%20%20%7D;%0A%0A%20%20%20%20%20%20%20%20_.turnLeft%20=%20function%20(u)%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20return%20_(u).turnLeft();%0A%20%20%20%20%20%20%20%20%7D;%0A%0A%20%20%20%20%20%20%20%20_.turnRight%20=%20function%20(u)%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20return%20_(u).turnRight();%0A%20%20%20%20%20%20%20%20%7D;%0A%0A%20%20%20%20%20%20%20%20_.leftNormal%20=%20function%20(u)%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20return%20_(u).turnLeft().normalize();%0A%20%20%20%20%20%20%20%20%7D;%0A%0A%20%20%20%20%20%20%20%20_.rightNormal%20=%20function%20(u)%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20return%20_(u).turnRight().normalize();%0A%20%20%20%20%20%20%20%20%7D;%0A%0A%20%20%20%20%20%20%20%20//V%20-%3E%20S%0A%20%20%20%20%20%20%20%20_.length%20=%20function%20(u)%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20return%20u.length();%0A%20%20%20%20%20%20%20%20%7D;%0A%0A%20%20%20%20%20%20%20%20_.lengthSq%20=%20function%20(u)%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20return%20u.lengthSq();%0A%20%20%20%20%20%20%20%20%7D;%0A%0A%20%20%20%20%20%20%20%20_.angle%20=%20function%20(u)%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20return%20u.angle();%0A%20%20%20%20%20%20%20%20%7D;%0A%0A%20%20%20%20%20%20%20%20//V%20-%3E%20V%0A%20%20%20%20%20%20%20%20_.normalize%20=%20function%20(u)%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20var%20length%20=%20u.length();%20//TODO:%20u.length();%0A%20%20%20%20%20%20%20%20%20%20%20%20if%20(length%20===%200)%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20return%20_(1,%200);%0A%20%20%20%20%20%20%20%20%20%20%20%20%7D%20else%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20return%20_.div(u,%20length);%0A%20%20%20%20%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20%7D;%0A%20%20%20%20%20%20%20%20_.n%20=%20_.normalize;%0A%0A%20%20%20%20%20%20%20%20//S%20x%20V%20-%3E%20V%0A%20%20%20%20%20%20%20%20_.div%20=%20function%20(s,%20u)%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20return%20_.mul(1%20/%20s,%20u);%0A%20%20%20%20%20%20%20%20%7D;%0A%0A%20%20%20%20%20%20%20%20_.mul%20=%20function%20(s,%20u)%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20return%20_(u).mul(s);%0A%20%20%20%20%20%20%20%20%7D;%0A%0A%0A%20%20%20%20%20%20%20%20_.rotate%20=%20function%20(angle,%20u)%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20return%20_(u).rotate(angle);%0A%20%20%20%20%20%20%20%20%7D;%0A%0A%20%20%20%20%20%20%20%20_.rotateTo%20=%20function%20(angle,%20u)%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20return%20_(u).rotateTo(angle);%0A%20%20%20%20%20%20%20%20%7D;%0A%0A%20%20%20%20%20%20%20%20_.reflectOn%20=%20function%20(u,%20v)%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20var%20n;%0A%20%20%20%20%20%20%20%20%20%20%20%20if%20(u.isRightOf(v))%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20n%20=%20_(v).leftNormal();%0A%20%20%20%20%20%20%20%20%20%20%20%20%7D%20else%20if%20(u.isLeftOf(v))%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20n%20=%20_(v).rightNormal();%0A%20%20%20%20%20%20%20%20%20%20%20%20%7D%20else%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20return%20_(u).invert();%0A%20%20%20%20%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20%20%20%20%20return%20_.sub(u,%20_.mul(n.dot(u)%20*%202,%20n));%0A%20%20%20%20%20%20%20%20%7D;%0A%0A%20%20%20%20%20%20%20%20return%20_;%0A%0A%20%20%20%20%7D;%0A%0A%20%20%20%20Garfunkel.Vect%20=%20Vect;%0A%20%20%20%20Garfunkel.Box%20=%20Box;%0A%20%20%20%20Garfunkel.Segment%20=%20Segment;%0A%20%20%20%20Garfunkel.Line%20=%20Line;%0A%20%20%20%20Garfunkel.Ray%20=%20Ray;%0A%20%20%20%20Garfunkel.Circle%20=%20Circle;%0A%20%20%20%20Garfunkel.Triangle%20=%20Triangle;%0A%20%20%20%20Garfunkel.Pool%20=%20Pool;%0A%20%20%20%20Garfunkel.Calculator%20=%20Calculator;%0A%0A%20%20%20%20//Garfunkel.lineIntersect%20=%20lineIntersect;%0A%0A%20%20%20%20return%20Garfunkel;%0A%0A%7D));%0A%0A%20%20%20%20//%5D%5D%3E%0A%3C/script%3E%0A%3Cscript%3E%0A%20%20%20%20//aliases%0A%20%20%20%20Vect%20=%20Garfunkel.Vect;%0A%20%20%20%20Box%20=%20Garfunkel.Box;%0A%20%20%20%20Segment%20=%20Garfunkel.Segment;%0A%20%20%20%20Equation%20=%20Garfunkel.Equation;%0A%20%20%20%20Calculator%20=%20Garfunkel.Calculator;%0A%20%20%20%20Pool%20=%20Garfunkel.Pool;%0A%20%20%20%20Line%20=%20Garfunkel.Line;%0A%3C/script%3E%0A%3Cscript%3E%0A%20%20%20%20const%20resultArea%20=%20document.getElementById('resultArea');%0A%20%20%20%20const%20resultSvg%20=%20document.getElementById('resultSvg');%0A%0A%20%20%20%20function%20print(...messages)%20%7B%0A%20%20%20%20%20%20%20%20messages.forEach((msg)%20=%3E%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20resultArea.innerText%20=%20resultArea.innerText%20+%20%22%5Cn%22%20+%20msg;%0A%20%20%20%20%20%20%20%20%7D);%0A%20%20%20%20%7D%0A%0A%20%20%20%20const%20nextColor%20=%20function%20()%20%7B%0A%20%20%20%20%20%20%20%20const%20COLORS%20=%20%5B%0A%20%20%20%20%20%20%20%20%20%20%20%20'#ff0000',%0A%20%20%20%20%20%20%20%20%20%20%20%20'#ff00ff',%0A%20%20%20%20%20%20%20%20%20%20%20%20'#00ff00',%0A%20%20%20%20%20%20%20%20%20%20%20%20'#0000ff'%0A%20%20%20%20%20%20%20%20%5D;%0A%20%20%20%20%20%20%20%20let%20currentColor%20=%200;%0A%20%20%20%20%20%20%20%20return%20()%20=%3E%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20currentColor%20=%20(currentColor%20+%201)%20%25%20COLORS.length;%0A%20%20%20%20%20%20%20%20%20%20%20%20return%20COLORS%5BcurrentColor%5D;%0A%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%7D();%0A%0A%20%20%20%20function%20draw(vect,%20color)%20%7B%0A%20%20%20%20%20%20%20%20//TODO:%20draw%20more%20then%20Vects%0A%20%20%20%20%20%20%20%20color%20=%20color%20%7C%7C%20nextColor();%0A%20%20%20%20%20%20%20%20const%20newLine%20=%20document.createElementNS(%22http://www.w3.org/2000/svg%22,%20'line');%0A%20%20%20%20%20%20%20%20newLine.setAttribute('x1',%200);%0A%20%20%20%20%20%20%20%20newLine.setAttribute('y1',%200);%0A%20%20%20%20%20%20%20%20newLine.setAttribute('x2',%20vect.x%20*%2010);%0A%20%20%20%20%20%20%20%20newLine.setAttribute('y2',%20vect.y%20*%2010%20*%20(Garfunkel.getXIsLeftOfY()?1:-1));%0A%20%20%20%20%20%20%20%20newLine.setAttribute('marker-end',%20'url(#Triangle)');%0A%20%20%20%20%20%20%20%20newLine.setAttribute('stroke',%20color);%0A%20%20%20%20%20%20%20%20resultSvg.appendChild(newLine);%0A%20%20%20%20%7D%0A%0A%20%20%20%20window.addEventListener('message',%20(event)%20=%3E%20%7B%0A%20%20%20%20%20%20%20%20if%20(event.data%20===%20'REFRESH')%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20document.location.reload();%0A%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%7D);%0A%3C/script%3E%0A%3Cscript%3E___EXAMPLE_CODE___%3C/script%3E%0A%3Cscript%3E%0A%20%20%20%20draw(%7Bx:0,y:5%7D,%20'#000');%0A%20%20%20%20draw(%7Bx:5,y:0%7D,%20'#000');%0A%0A%3C/script%3E%0A%0A%3C/body%3E%0A%3C/html%3E";
+    </script>
+
+</head>
+<body class='documentation m0'>
+<div class='flex'>
+    <div id='split-left' class='overflow-auto fs0 height-viewport-100'>
+        <div class='py1 px2'>
+            <h3 class='mb0 no-anchor'>garfunkel</h3>
+            <div class='mb1'><code>0.1.1</code></div>
+            <input
+                    placeholder='Filter'
+                    id='filter-input'
+                    class='col12 block input'
+                    type='text'/>
+            <div id='toc'>
+                <ul class='list-reset h5 py1-ul'>
+                    
+                    
+                    <li><a
+                            href='#garfunkel'
+                            class=" toggle-sibling">
+                        Garfunkel
+                        <span class='icon'>▸</span>
+                    </a>
+                        
+                        <div class=''>
+                            
+                            <ul class='list-reset py1-ul pl1'>
+                                <li class='h5'><span>Static members</span></li>
+                                
+                                <li><a
+                                        href='#garfunkelgetxisleftofy'
+                                        class='regular pre-open'>
+                                    .getXIsLeftOfY
+                                </a></li>
+                                
+                                <li><a
+                                        href='#garfunkelsetxisleftofy'
+                                        class='regular pre-open'>
+                                    .setXisLeftOfY
+                                </a></li>
+                                
+                                <li><a
+                                        href='#garfunkelsetgamecoords'
+                                        class='regular pre-open'>
+                                    .setGameCoords
+                                </a></li>
+                                
+                                <li><a
+                                        href='#garfunkelsetschoolcoords'
+                                        class='regular pre-open'>
+                                    .setSchoolCoords
+                                </a></li>
+                                
+                            </ul>
+                            
+                            
+                            
+                            
+                        </div>
+                        
+                    </li>
+                    
+                    
+                    <li><a
+                            href='#vect'
+                            class=" toggle-sibling">
+                        Vect
+                        <span class='icon'>▸</span>
+                    </a>
+                        
+                        <div class=''>
+                            
+                            
+                            <ul class='list-reset py1-ul pl1'>
+                                <li class='h5'><span>Instance members</span></li>
+                                
+                                <li><a
+                                        href='#vecttostring'
+                                        class='regular pre-open'>
+                                    #toString
+                                </a></li>
+                                
+                                <li><a
+                                        href='#vectclone'
+                                        class='regular pre-open'>
+                                    #clone
+                                </a></li>
+                                
+                                <li><a
+                                        href='#vectset'
+                                        class='regular pre-open'>
+                                    #set
+                                </a></li>
+                                
+                                <li><a
+                                        href='#vectmul'
+                                        class='regular pre-open'>
+                                    #mul
+                                </a></li>
+                                
+                                <li><a
+                                        href='#vectdiv'
+                                        class='regular pre-open'>
+                                    #div
+                                </a></li>
+                                
+                                <li><a
+                                        href='#vectadd'
+                                        class='regular pre-open'>
+                                    #add
+                                </a></li>
+                                
+                                <li><a
+                                        href='#vectsub'
+                                        class='regular pre-open'>
+                                    #sub
+                                </a></li>
+                                
+                                <li><a
+                                        href='#vectdot'
+                                        class='regular pre-open'>
+                                    #dot
+                                </a></li>
+                                
+                                <li><a
+                                        href='#vectcross'
+                                        class='regular pre-open'>
+                                    #cross
+                                </a></li>
+                                
+                                <li><a
+                                        href='#vectnormalize'
+                                        class='regular pre-open'>
+                                    #normalize
+                                </a></li>
+                                
+                                <li><a
+                                        href='#vectlengthsq'
+                                        class='regular pre-open'>
+                                    #lengthSq
+                                </a></li>
+                                
+                                <li><a
+                                        href='#vectlength'
+                                        class='regular pre-open'>
+                                    #length
+                                </a></li>
+                                
+                                <li><a
+                                        href='#vectdistancesq'
+                                        class='regular pre-open'>
+                                    #distanceSq
+                                </a></li>
+                                
+                                <li><a
+                                        href='#vectdistance'
+                                        class='regular pre-open'>
+                                    #distance
+                                </a></li>
+                                
+                                <li><a
+                                        href='#vectmanhatten'
+                                        class='regular pre-open'>
+                                    #manhatten
+                                </a></li>
+                                
+                                <li><a
+                                        href='#vectisleftof'
+                                        class='regular pre-open'>
+                                    #isLeftOf
+                                </a></li>
+                                
+                                <li><a
+                                        href='#vectisrightof'
+                                        class='regular pre-open'>
+                                    #isRightOf
+                                </a></li>
+                                
+                                <li><a
+                                        href='#vectturnleft'
+                                        class='regular pre-open'>
+                                    #turnLeft
+                                </a></li>
+                                
+                                <li><a
+                                        href='#vectturnright'
+                                        class='regular pre-open'>
+                                    #turnRight
+                                </a></li>
+                                
+                                <li><a
+                                        href='#vectleftnormal'
+                                        class='regular pre-open'>
+                                    #leftNormal
+                                </a></li>
+                                
+                                <li><a
+                                        href='#vectrightnormal'
+                                        class='regular pre-open'>
+                                    #rightNormal
+                                </a></li>
+                                
+                                <li><a
+                                        href='#vectangle'
+                                        class='regular pre-open'>
+                                    #angle
+                                </a></li>
+                                
+                                <li><a
+                                        href='#vectrotate'
+                                        class='regular pre-open'>
+                                    #rotate
+                                </a></li>
+                                
+                                <li><a
+                                        href='#vectrotateto'
+                                        class='regular pre-open'>
+                                    #rotateTo
+                                </a></li>
+                                
+                                <li><a
+                                        href='#vectrotatetowards'
+                                        class='regular pre-open'>
+                                    #rotateTowards
+                                </a></li>
+                                
+                                <li><a
+                                        href='#vectreflecton'
+                                        class='regular pre-open'>
+                                    #reflectOn
+                                </a></li>
+                                
+                            </ul>
+                            
+                            
+                            
+                        </div>
+                        
+                    </li>
+                    
+                    
+                    <li><a
+                            href='#box'
+                            class=" toggle-sibling">
+                        Box
+                        <span class='icon'>▸</span>
+                    </a>
+                        
+                        <div class=''>
+                            
+                            <ul class='list-reset py1-ul pl1'>
+                                <li class='h5'><span>Static members</span></li>
+                                
+                                <li><a
+                                        href='#boxfromsegment'
+                                        class='regular pre-open'>
+                                    .fromSegment
+                                </a></li>
+                                
+                            </ul>
+                            
+                            
+                            <ul class='list-reset py1-ul pl1'>
+                                <li class='h5'><span>Instance members</span></li>
+                                
+                                <li><a
+                                        href='#boxtostring'
+                                        class='regular pre-open'>
+                                    #toString
+                                </a></li>
+                                
+                            </ul>
+                            
+                            
+                            
+                        </div>
+                        
+                    </li>
+                    
+                    
+                    <li><a
+                            href='#segment'
+                            class=" toggle-sibling">
+                        Segment
+                        <span class='icon'>▸</span>
+                    </a>
+                        
+                        <div class=''>
+                            
+                            
+                            <ul class='list-reset py1-ul pl1'>
+                                <li class='h5'><span>Instance members</span></li>
+                                
+                                <li><a
+                                        href='#segmenttocenter'
+                                        class='regular pre-open'>
+                                    #toCenter
+                                </a></li>
+                                
+                                <li><a
+                                        href='#segmenttranslate'
+                                        class='regular pre-open'>
+                                    #translate
+                                </a></li>
+                                
+                                <li><a
+                                        href='#segmentgetpoint'
+                                        class='regular pre-open'>
+                                    #getPoint
+                                </a></li>
+                                
+                                <li><a
+                                        href='#segmentgetmiddle'
+                                        class='regular pre-open'>
+                                    #getMiddle
+                                </a></li>
+                                
+                                <li><a
+                                        href='#segmentrotate'
+                                        class='regular pre-open'>
+                                    #rotate
+                                </a></li>
+                                
+                                <li><a
+                                        href='#segmentintersect'
+                                        class='regular pre-open'>
+                                    #intersect
+                                </a></li>
+                                
+                            </ul>
+                            
+                            
+                            
+                        </div>
+                        
+                    </li>
+                    
+                    
+                    <li><a
+                            href='#line'
+                            class=" toggle-sibling">
+                        Line
+                        <span class='icon'>▸</span>
+                    </a>
+                        
+                        <div class=''>
+                            
+                            
+                            <ul class='list-reset py1-ul pl1'>
+                                <li class='h5'><span>Instance members</span></li>
+                                
+                                <li><a
+                                        href='#lineintersect'
+                                        class='regular pre-open'>
+                                    #intersect
+                                </a></li>
+                                
+                            </ul>
+                            
+                            
+                            
+                        </div>
+                        
+                    </li>
+                    
+                    
+                    <li><a
+                            href='#ray'
+                            class="">
+                        Ray
+                        
+                    </a>
+                        
+                    </li>
+                    
+                    
+                    <li><a
+                            href='#triangle'
+                            class="">
+                        Triangle
+                        
+                    </a>
+                        
+                    </li>
+                    
+                    
+                    <li><a
+                            href='#circle'
+                            class="">
+                        Circle
+                        
+                    </a>
+                        
+                    </li>
+                    
+                    
+                    <li><a
+                            href='#pool'
+                            class=" toggle-sibling">
+                        Pool
+                        <span class='icon'>▸</span>
+                    </a>
+                        
+                        <div class=''>
+                            
+                            
+                            <ul class='list-reset py1-ul pl1'>
+                                <li class='h5'><span>Instance members</span></li>
+                                
+                                <li><a
+                                        href='#poolcreateitems'
+                                        class='regular pre-open'>
+                                    #createItems
+                                </a></li>
+                                
+                                <li><a
+                                        href='#poolget'
+                                        class='regular pre-open'>
+                                    #get
+                                </a></li>
+                                
+                                <li><a
+                                        href='#pooldispose'
+                                        class='regular pre-open'>
+                                    #dispose
+                                </a></li>
+                                
+                            </ul>
+                            
+                            
+                            
+                        </div>
+                        
+                    </li>
+                    
+                </ul>
+            </div>
+            <div class='mt1 h6 quiet'>
+                <a href='http://documentation.js.org/reading-documentation.html'>Need help reading this?</a>
+            </div>
+        </div>
+    </div>
+    <div id='split-right' class='relative overflow-auto height-viewport-100'>
+        
+        
+        
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+    
+    <div class='clearfix'>
+        
+        <h3 class='fl m0' id='garfunkel'>
+            Garfunkel
+        </h3>
+        
+        
+    </div>
+    
+
+    <p>garfunkel.js - A 2D geometry toolbox</p>
+
+
+    <div class='pre p1 fill-light mt0'>Garfunkel</div>
+    
+    
+
+    
+    
+    
+    
+    
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <div class='py1 quiet mt1 prose-big'>Static Members</div>
+    <div class="clearfix">
+  
+    <div class='border-bottom' id='garfunkelgetxisleftofy'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>getXIsLeftOfY()</span>
+        </div>
+      </div>
+      <div class="clearfix">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+    
+
+    <p>General orientation of the coordinate system. This is a global setting for this module.</p>
+<p>Used for the isLeftOf, isRightOf, getLeftNormal, getRightNormal functions.</p>
+<p>FALSE, means the normal school book coordinates with (0,0) in the lower left corner.
+TRUE, means the canvas or graphic coordinates with (0,0) in the upper left corner;</p>
+
+
+    <div class='pre p1 fill-light mt0'>getXIsLeftOfY(): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></div>
+    
+    
+
+    
+    
+    
+    
+    
+    
+
+    
+
+    
+
+    
+    
+    <div class='py1 quiet mt1 prose-big'>Returns</div>
+    <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code>:
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='garfunkelsetxisleftofy'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>setXisLeftOfY(value)</span>
+        </div>
+      </div>
+      <div class="clearfix">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+    
+
+    
+
+    <div class='pre p1 fill-light mt0'>setXisLeftOfY(value: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>)</div>
+    
+    
+
+    
+    
+    
+    
+    
+    
+
+    
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+        
+        <div class='space-bottom0'>
+            <div>
+                <span class='code bold'>value</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>)</code>
+                
+            </div>
+            
+        </div>
+        
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='garfunkelsetgamecoords'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>setGameCoords()</span>
+        </div>
+      </div>
+      <div class="clearfix">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+    
+
+    
+
+    <div class='pre p1 fill-light mt0'>setGameCoords()</div>
+    
+    
+
+    
+    
+    
+    
+    
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+    
+    
+    <textarea id="code_setGameCoords_0" class='exampleEditor'>Garfunkel.setGameCoords();
+var v = new Vect(2,2);
+var w = v.clone().turnLeft().mul(0.5);
+draw(v, 'red');
+draw(w, 'green');</textarea>
+    <button id="run_setGameCoords_0">RUN</button>
+    <iframe id="result_setGameCoords_0" width="600" height="210" frameBorder="0"></iframe>
+    <script>
+        (function () {
+            const codeArea = document.getElementById("code_setGameCoords_0");
+            const button = document.getElementById("run_setGameCoords_0");
+            const resultFrame = document.getElementById("result_setGameCoords_0");
+            const editor = CodeMirror.fromTextArea(codeArea, {lineNumbers: true, mode: "javascript"});
+            const onChange =  () => {
+                // resultFrame.src = '';
+                resultFrame.src = 'data:text/html;charset=utf-8,' + RESULT_TEMPLATE.replace('___EXAMPLE_CODE___', encodeURI(editor.getValue()));
+                resultFrame.contentWindow.postMessage("REFRESH", "*");
+            };
+            //editor.on('changes',onChange);
+            button.addEventListener('click',onChange);
+        })();
+    </script>
+    
+    
+
+    
+
+    
+
+    
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='garfunkelsetschoolcoords'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>setSchoolCoords()</span>
+        </div>
+      </div>
+      <div class="clearfix">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+    
+
+    
+
+    <div class='pre p1 fill-light mt0'>setSchoolCoords()</div>
+    
+    
+
+    
+    
+    
+    
+    
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+    
+    
+    <textarea id="code_setSchoolCoords_0" class='exampleEditor'>Garfunkel.setSchoolCoords();
+var v = new Vect(2,2);
+var w = v.clone().turnLeft().mul(0.5);
+draw(v, 'red');
+draw(w, 'green');</textarea>
+    <button id="run_setSchoolCoords_0">RUN</button>
+    <iframe id="result_setSchoolCoords_0" width="600" height="210" frameBorder="0"></iframe>
+    <script>
+        (function () {
+            const codeArea = document.getElementById("code_setSchoolCoords_0");
+            const button = document.getElementById("run_setSchoolCoords_0");
+            const resultFrame = document.getElementById("result_setSchoolCoords_0");
+            const editor = CodeMirror.fromTextArea(codeArea, {lineNumbers: true, mode: "javascript"});
+            const onChange =  () => {
+                // resultFrame.src = '';
+                resultFrame.src = 'data:text/html;charset=utf-8,' + RESULT_TEMPLATE.replace('___EXAMPLE_CODE___', encodeURI(editor.getValue()));
+                resultFrame.contentWindow.postMessage("REFRESH", "*");
+            };
+            //editor.on('changes',onChange);
+            button.addEventListener('click',onChange);
+        })();
+    </script>
+    
+    
+
+    
+
+    
+
+    
+</section>
+
+      </div>
+    </div>
+  
+</div>
+
+    
+
+    
+
+    
+</section>
+
+        
+        
+        
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+    
+    <div class='clearfix'>
+        
+        <h3 class='fl m0' id='vect'>
+            Vect
+        </h3>
+        
+        
+    </div>
+    
+
+    <p>Represents a vector as well as a point.
+Methods that transform the mutable vector are chainable.</p>
+
+
+    <div class='pre p1 fill-light mt0'>new Vect(x: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>, y: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>)</div>
+    
+    
+
+    
+    
+    
+    
+    
+    
+
+    
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+        
+        <div class='space-bottom0'>
+            <div>
+                <span class='code bold'>x</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>)</code>
+                
+            </div>
+            
+        </div>
+        
+        <div class='space-bottom0'>
+            <div>
+                <span class='code bold'>y</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>)</code>
+                
+            </div>
+            
+        </div>
+        
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+    
+    
+    <textarea id="code_Vect_0" class='exampleEditor'>print("sadf","fooooo");
+print("foo");
+draw({x:2,y:4});</textarea>
+    <button id="run_Vect_0">RUN</button>
+    <iframe id="result_Vect_0" width="600" height="210" frameBorder="0"></iframe>
+    <script>
+        (function () {
+            const codeArea = document.getElementById("code_Vect_0");
+            const button = document.getElementById("run_Vect_0");
+            const resultFrame = document.getElementById("result_Vect_0");
+            const editor = CodeMirror.fromTextArea(codeArea, {lineNumbers: true, mode: "javascript"});
+            const onChange =  () => {
+                // resultFrame.src = '';
+                resultFrame.src = 'data:text/html;charset=utf-8,' + RESULT_TEMPLATE.replace('___EXAMPLE_CODE___', encodeURI(editor.getValue()));
+                resultFrame.contentWindow.postMessage("REFRESH", "*");
+            };
+            //editor.on('changes',onChange);
+            button.addEventListener('click',onChange);
+        })();
+    </script>
+    
+    
+
+    
+
+    
+    <div class='py1 quiet mt1 prose-big'>Instance Members</div>
+    <div class="clearfix">
+  
+    <div class='border-bottom' id='vecttostring'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>toString()</span>
+        </div>
+      </div>
+      <div class="clearfix">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+    
+
+    
+
+    <div class='pre p1 fill-light mt0'>toString(): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></div>
+    
+    
+
+    
+    
+    
+    
+    
+    
+
+    
+
+    
+
+    
+    
+    <div class='py1 quiet mt1 prose-big'>Returns</div>
+    <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></code>:
+    
+
+    
+    
+    
+
+    
+
+    
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+    
+    
+    <textarea id="code_toString_0" class='exampleEditor'>print(new Vector(2,4).toString());</textarea>
+    <button id="run_toString_0">RUN</button>
+    <iframe id="result_toString_0" width="600" height="210" frameBorder="0"></iframe>
+    <script>
+        (function () {
+            const codeArea = document.getElementById("code_toString_0");
+            const button = document.getElementById("run_toString_0");
+            const resultFrame = document.getElementById("result_toString_0");
+            const editor = CodeMirror.fromTextArea(codeArea, {lineNumbers: true, mode: "javascript"});
+            const onChange =  () => {
+                // resultFrame.src = '';
+                resultFrame.src = 'data:text/html;charset=utf-8,' + RESULT_TEMPLATE.replace('___EXAMPLE_CODE___', encodeURI(editor.getValue()));
+                resultFrame.contentWindow.postMessage("REFRESH", "*");
+            };
+            //editor.on('changes',onChange);
+            button.addEventListener('click',onChange);
+        })();
+    </script>
+    
+    
+
+    
+
+    
+
+    
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='vectclone'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>clone()</span>
+        </div>
+      </div>
+      <div class="clearfix">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+    
+
+    <p>Clone!</p>
+
+
+    <div class='pre p1 fill-light mt0'>clone(): <a href="#vect">Vect</a></div>
+    
+    
+
+    
+    
+    
+    
+    
+    
+
+    
+
+    
+
+    
+    
+    <div class='py1 quiet mt1 prose-big'>Returns</div>
+    <code><a href="#vect">Vect</a></code>:
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='vectset'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>set(x, y)</span>
+        </div>
+      </div>
+      <div class="clearfix">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+    
+
+    <p>Sets the coordinates of this Vect.
+(Without instantiating a new object)</p>
+
+
+    <div class='pre p1 fill-light mt0'>set(x: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>, y: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>)</div>
+    
+    
+
+    
+    
+    
+    
+    
+    
+
+    
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+        
+        <div class='space-bottom0'>
+            <div>
+                <span class='code bold'>x</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>)</code>
+                
+            </div>
+            
+        </div>
+        
+        <div class='space-bottom0'>
+            <div>
+                <span class='code bold'>y</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>)</code>
+                
+            </div>
+            
+        </div>
+        
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='vectmul'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>mul(s, a)</span>
+        </div>
+      </div>
+      <div class="clearfix">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+    
+
+    <p>Scalar multiplication.
+Each coordinate will be multiplied with the given scalar.</p>
+
+
+    <div class='pre p1 fill-light mt0'>mul(s: any, a: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>): <a href="#vect">Vect</a></div>
+    
+    
+
+    
+    
+    
+    
+    
+    
+
+    
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+        
+        <div class='space-bottom0'>
+            <div>
+                <span class='code bold'>s</span> <code class='quiet'>(any)</code>
+                
+            </div>
+            
+        </div>
+        
+        <div class='space-bottom0'>
+            <div>
+                <span class='code bold'>a</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>)</code>
+                scalar to multiply the vector with
+
+            </div>
+            
+        </div>
+        
+    </div>
+    
+
+    
+
+    
+    
+    <div class='py1 quiet mt1 prose-big'>Returns</div>
+    <code><a href="#vect">Vect</a></code>:
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='vectdiv'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>div(s, a)</span>
+        </div>
+      </div>
+      <div class="clearfix">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+    
+
+    <p>Scalar division.
+Each coordinate will be devided by the given scalar.</p>
+
+
+    <div class='pre p1 fill-light mt0'>div(s: any, a: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>): <a href="#vect">Vect</a></div>
+    
+    
+
+    
+    
+    
+    
+    
+    
+
+    
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+        
+        <div class='space-bottom0'>
+            <div>
+                <span class='code bold'>s</span> <code class='quiet'>(any)</code>
+                
+            </div>
+            
+        </div>
+        
+        <div class='space-bottom0'>
+            <div>
+                <span class='code bold'>a</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>)</code>
+                scalar to divide the vector with
+
+            </div>
+            
+        </div>
+        
+    </div>
+    
+
+    
+
+    
+    
+    <div class='py1 quiet mt1 prose-big'>Returns</div>
+    <code><a href="#vect">Vect</a></code>:
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='vectadd'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>add(v)</span>
+        </div>
+      </div>
+      <div class="clearfix">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+    
+
+    <p>Adds a vector.</p>
+
+
+    <div class='pre p1 fill-light mt0'>add(v: <a href="#vect">Vect</a>): <a href="#vect">Vect</a></div>
+    
+    
+
+    
+    
+    
+    
+    
+    
+
+    
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+        
+        <div class='space-bottom0'>
+            <div>
+                <span class='code bold'>v</span> <code class='quiet'>(<a href="#vect">Vect</a>)</code>
+                
+            </div>
+            
+        </div>
+        
+    </div>
+    
+
+    
+
+    
+    
+    <div class='py1 quiet mt1 prose-big'>Returns</div>
+    <code><a href="#vect">Vect</a></code>:
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='vectsub'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>sub(v)</span>
+        </div>
+      </div>
+      <div class="clearfix">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+    
+
+    <p>Substracts a vector.</p>
+
+
+    <div class='pre p1 fill-light mt0'>sub(v: <a href="#vect">Vect</a>): <a href="#vect">Vect</a></div>
+    
+    
+
+    
+    
+    
+    
+    
+    
+
+    
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+        
+        <div class='space-bottom0'>
+            <div>
+                <span class='code bold'>v</span> <code class='quiet'>(<a href="#vect">Vect</a>)</code>
+                
+            </div>
+            
+        </div>
+        
+    </div>
+    
+
+    
+
+    
+    
+    <div class='py1 quiet mt1 prose-big'>Returns</div>
+    <code><a href="#vect">Vect</a></code>:
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='vectdot'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>dot(v)</span>
+        </div>
+      </div>
+      <div class="clearfix">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+    
+
+    <p>Dot product of this and the given vector.</p>
+
+
+    <div class='pre p1 fill-light mt0'>dot(v: any): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></div>
+    
+    
+
+    
+    
+    
+    
+    
+    
+
+    
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+        
+        <div class='space-bottom0'>
+            <div>
+                <span class='code bold'>v</span> <code class='quiet'>(any)</code>
+                
+            </div>
+            
+        </div>
+        
+    </div>
+    
+
+    
+
+    
+    
+    <div class='py1 quiet mt1 prose-big'>Returns</div>
+    <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code>:
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='vectcross'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>cross(v)</span>
+        </div>
+      </div>
+      <div class="clearfix">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+    
+
+    <p>Not exactly the cross product, because seems not to be defined for 2d vectors.</p>
+<p>"Gives the Z-component of 3d cross product, if the two given
+vectors where extended to 3d vectors."
+or
+"Determinant of a 2x2 matrix build by the two vectors."</p>
+<p>Usefull to find the orientation of the two vectors.</p>
+
+
+    <div class='pre p1 fill-light mt0'>cross(v: any): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></div>
+    
+    
+
+    
+    
+    
+    
+    
+    
+
+    
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+        
+        <div class='space-bottom0'>
+            <div>
+                <span class='code bold'>v</span> <code class='quiet'>(any)</code>
+                
+            </div>
+            
+        </div>
+        
+    </div>
+    
+
+    
+
+    
+    
+    <div class='py1 quiet mt1 prose-big'>Returns</div>
+    <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code>:
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='vectnormalize'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>normalize(length)</span>
+        </div>
+      </div>
+      <div class="clearfix">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+    
+
+    <p>Normalize the given vector.</p>
+<p>Optional parameter length can be used ass abbreviation.
+v.normalize.mul(33) -> v.normalize(33);</p>
+
+
+    <div class='pre p1 fill-light mt0'>normalize(length: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>): <a href="#vect">Vect</a></div>
+    
+    
+
+    
+    
+    
+    
+    
+    
+
+    
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+        
+        <div class='space-bottom0'>
+            <div>
+                <span class='code bold'>length</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+                [
+optional
+]
+ length of the target vector. If not set, length is 1.0.
+
+            </div>
+            
+        </div>
+        
+    </div>
+    
+
+    
+
+    
+    
+    <div class='py1 quiet mt1 prose-big'>Returns</div>
+    <code><a href="#vect">Vect</a></code>:
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='vectlengthsq'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>lengthSq()</span>
+        </div>
+      </div>
+      <div class="clearfix">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+    
+
+    <p>Quadratic length of the vector.
+y lengthSq</p>
+
+
+    <div class='pre p1 fill-light mt0'>lengthSq(): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></div>
+    
+    
+
+    
+    
+    
+    
+    
+    
+
+    
+
+    
+
+    
+    
+    <div class='py1 quiet mt1 prose-big'>Returns</div>
+    <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code>:
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='vectlength'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>length()</span>
+        </div>
+      </div>
+      <div class="clearfix">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+    
+
+    <p>Euclidean norm/length/magnitude of the vector.</p>
+
+
+    <div class='pre p1 fill-light mt0'>length(): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></div>
+    
+    
+
+    
+    
+    
+    
+    
+    
+
+    
+
+    
+
+    
+    
+    <div class='py1 quiet mt1 prose-big'>Returns</div>
+    <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code>:
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='vectdistancesq'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>distanceSq(v)</span>
+        </div>
+      </div>
+      <div class="clearfix">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+    
+
+    <p>Quadratic distance of two vectors.</p>
+
+
+    <div class='pre p1 fill-light mt0'>distanceSq(v: any): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></div>
+    
+    
+
+    
+    
+    
+    
+    
+    
+
+    
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+        
+        <div class='space-bottom0'>
+            <div>
+                <span class='code bold'>v</span> <code class='quiet'>(any)</code>
+                
+            </div>
+            
+        </div>
+        
+    </div>
+    
+
+    
+
+    
+    
+    <div class='py1 quiet mt1 prose-big'>Returns</div>
+    <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code>:
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='vectdistance'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>distance(v)</span>
+        </div>
+      </div>
+      <div class="clearfix">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+    
+
+    <p>Euclidean distance of two vectors.</p>
+
+
+    <div class='pre p1 fill-light mt0'>distance(v: any): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></div>
+    
+    
+
+    
+    
+    
+    
+    
+    
+
+    
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+        
+        <div class='space-bottom0'>
+            <div>
+                <span class='code bold'>v</span> <code class='quiet'>(any)</code>
+                
+            </div>
+            
+        </div>
+        
+    </div>
+    
+
+    
+
+    
+    
+    <div class='py1 quiet mt1 prose-big'>Returns</div>
+    <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code>:
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='vectmanhatten'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>manhatten(v)</span>
+        </div>
+      </div>
+      <div class="clearfix">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+    
+
+    <p>Manhatten/city block/Taxicab distance</p>
+
+
+    <div class='pre p1 fill-light mt0'>manhatten(v: any): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></div>
+    
+    
+
+    
+    
+    
+    
+    
+    
+
+    
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+        
+        <div class='space-bottom0'>
+            <div>
+                <span class='code bold'>v</span> <code class='quiet'>(any)</code>
+                
+            </div>
+            
+        </div>
+        
+    </div>
+    
+
+    
+
+    
+    
+    <div class='py1 quiet mt1 prose-big'>Returns</div>
+    <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code>:
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='vectisleftof'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>isLeftOf(v)</span>
+        </div>
+      </div>
+      <div class="clearfix">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+    
+
+    <p>y isLeftOf</p>
+
+
+    <div class='pre p1 fill-light mt0'>isLeftOf(v: any): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></div>
+    
+    
+
+    
+    
+    
+    
+    
+    
+
+    
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+        
+        <div class='space-bottom0'>
+            <div>
+                <span class='code bold'>v</span> <code class='quiet'>(any)</code>
+                
+            </div>
+            
+        </div>
+        
+    </div>
+    
+
+    
+
+    
+    
+    <div class='py1 quiet mt1 prose-big'>Returns</div>
+    <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code>:
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='vectisrightof'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>isRightOf(v)</span>
+        </div>
+      </div>
+      <div class="clearfix">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+    
+
+    
+
+    <div class='pre p1 fill-light mt0'>isRightOf(v: any): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></div>
+    
+    
+
+    
+    
+    
+    
+    
+    
+
+    
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+        
+        <div class='space-bottom0'>
+            <div>
+                <span class='code bold'>v</span> <code class='quiet'>(any)</code>
+                
+            </div>
+            
+        </div>
+        
+    </div>
+    
+
+    
+
+    
+    
+    <div class='py1 quiet mt1 prose-big'>Returns</div>
+    <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code>:
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='vectturnleft'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>turnLeft()</span>
+        </div>
+      </div>
+      <div class="clearfix">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+    
+
+    
+
+    <div class='pre p1 fill-light mt0'>turnLeft(): <a href="#vect">Vect</a></div>
+    
+    
+
+    
+    
+    
+    
+    
+    
+
+    
+
+    
+
+    
+    
+    <div class='py1 quiet mt1 prose-big'>Returns</div>
+    <code><a href="#vect">Vect</a></code>:
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='vectturnright'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>turnRight()</span>
+        </div>
+      </div>
+      <div class="clearfix">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+    
+
+    
+
+    <div class='pre p1 fill-light mt0'>turnRight(): <a href="#vect">Vect</a></div>
+    
+    
+
+    
+    
+    
+    
+    
+    
+
+    
+
+    
+
+    
+    
+    <div class='py1 quiet mt1 prose-big'>Returns</div>
+    <code><a href="#vect">Vect</a></code>:
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='vectleftnormal'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>leftNormal()</span>
+        </div>
+      </div>
+      <div class="clearfix">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+    
+
+    
+
+    <div class='pre p1 fill-light mt0'>leftNormal(): <a href="#vect">Vect</a></div>
+    
+    
+
+    
+    
+    
+    
+    
+    
+
+    
+
+    
+
+    
+    
+    <div class='py1 quiet mt1 prose-big'>Returns</div>
+    <code><a href="#vect">Vect</a></code>:
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='vectrightnormal'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>rightNormal()</span>
+        </div>
+      </div>
+      <div class="clearfix">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+    
+
+    
+
+    <div class='pre p1 fill-light mt0'>rightNormal(): <a href="#vect">Vect</a></div>
+    
+    
+
+    
+    
+    
+    
+    
+    
+
+    
+
+    
+
+    
+    
+    <div class='py1 quiet mt1 prose-big'>Returns</div>
+    <code><a href="#vect">Vect</a></code>:
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='vectangle'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>angle(ref)</span>
+        </div>
+      </div>
+      <div class="clearfix">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+    
+
+    <p>Gives the angle between a reference vector and this.
+The result is between [PI,-PI).
+In school coordinates, the angle is counted <strong>counter clockwise</strong>
+from reference to the vector. In game coordinates, the angle is counted <strong>clockwise</strong>
+from reference to the vector.</p>
+
+
+    <div class='pre p1 fill-light mt0'>angle(ref: Vector): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></div>
+    
+    
+
+    
+    
+    
+    
+    
+    
+
+    
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+        
+        <div class='space-bottom0'>
+            <div>
+                <span class='code bold'>ref</span> <code class='quiet'>(Vector)</code>
+                [
+optional
+]
+ reference vector. default: (1,0).
+
+            </div>
+            
+        </div>
+        
+    </div>
+    
+
+    
+
+    
+    
+    <div class='py1 quiet mt1 prose-big'>Returns</div>
+    <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code>:
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='vectrotate'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>rotate(angle, pivot)</span>
+        </div>
+      </div>
+      <div class="clearfix">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+    
+
+    <p>Rotates the vector by the given angle.
+If you take the vector as a point, the default pivot is {x:0,y:0}</p>
+
+
+    <div class='pre p1 fill-light mt0'>rotate(angle: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, pivot: <a href="#vect">Vect</a>): <a href="#vect">Vect</a></div>
+    
+    
+
+    
+    
+    
+    
+    
+    
+
+    
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+        
+        <div class='space-bottom0'>
+            <div>
+                <span class='code bold'>angle</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+                in radians
+
+            </div>
+            
+        </div>
+        
+        <div class='space-bottom0'>
+            <div>
+                <span class='code bold'>pivot</span> <code class='quiet'>(<a href="#vect">Vect</a>)</code>
+                [
+optional
+]
+ default is {x:0,y:0}
+
+            </div>
+            
+        </div>
+        
+    </div>
+    
+
+    
+
+    
+    
+    <div class='py1 quiet mt1 prose-big'>Returns</div>
+    <code><a href="#vect">Vect</a></code>:
+    the rotated vector
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='vectrotateto'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>rotateTo(angle)</span>
+        </div>
+      </div>
+      <div class="clearfix">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+    
+
+    <p>Rotates the vector to the given angle.</p>
+
+
+    <div class='pre p1 fill-light mt0'>rotateTo(angle: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>): <a href="#vect">Vect</a></div>
+    
+    
+
+    
+    
+    
+    
+    
+    
+
+    
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+        
+        <div class='space-bottom0'>
+            <div>
+                <span class='code bold'>angle</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+                in radians
+
+            </div>
+            
+        </div>
+        
+    </div>
+    
+
+    
+
+    
+    
+    <div class='py1 quiet mt1 prose-big'>Returns</div>
+    <code><a href="#vect">Vect</a></code>:
+    the rotated vector
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='vectrotatetowards'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>rotateTowards(angle, stepSize)</span>
+        </div>
+      </div>
+      <div class="clearfix">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+    
+
+    <p>Rotates the vector towards the given angle.
+The rotation is limited by stepSize, so move a 0° vector towards 90° with limit 50°
+would result in a 50° vector. If the method with the same limit is reapplied again
+the result would be 90°.</p>
+<p>The rotation will take the "shortest way" towards the given angle.</p>
+
+
+    <div class='pre p1 fill-light mt0'>rotateTowards(angle: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, stepSize: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>): <a href="#vect">Vect</a></div>
+    
+    
+
+    
+    
+    
+    
+    
+    
+
+    
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+        
+        <div class='space-bottom0'>
+            <div>
+                <span class='code bold'>angle</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+                angle in radians
+
+            </div>
+            
+        </div>
+        
+        <div class='space-bottom0'>
+            <div>
+                <span class='code bold'>stepSize</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+                maximum angle to move towards angle
+
+            </div>
+            
+        </div>
+        
+    </div>
+    
+
+    
+
+    
+    
+    <div class='py1 quiet mt1 prose-big'>Returns</div>
+    <code><a href="#vect">Vect</a></code>:
+    the rotated vector
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='vectreflecton'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>reflectOn(u)</span>
+        </div>
+      </div>
+      <div class="clearfix">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+    
+
+    <p>"angle of incidence equal to the angle of reflexion"
+Performs a simple reflection of this object on a surface
+that has the direction of the given vector u.</p>
+
+
+    <div class='pre p1 fill-light mt0'>reflectOn(u: <a href="#vect">Vect</a>)</div>
+    
+    
+
+    
+    
+    
+    
+    
+    
+
+    
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+        
+        <div class='space-bottom0'>
+            <div>
+                <span class='code bold'>u</span> <code class='quiet'>(<a href="#vect">Vect</a>)</code>
+                
+            </div>
+            
+        </div>
+        
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</section>
+
+      </div>
+    </div>
+  
+</div>
+
+    
+
+    
+</section>
+
+        
+        
+        
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+    
+    <div class='clearfix'>
+        
+        <h3 class='fl m0' id='box'>
+            Box
+        </h3>
+        
+        
+    </div>
+    
+
+    <p>A rectangular box with edges parallel to the coordinate axes.</p>
+<p>So:
+Box#left ≤ Box#right
+Box#top  ≤ Box#bottom</p>
+
+
+    <div class='pre p1 fill-light mt0'>new Box(x0: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>, x1: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>, y0: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>, y1: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>)</div>
+    
+    
+
+    
+    
+    
+    
+    
+    
+
+    
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+        
+        <div class='space-bottom0'>
+            <div>
+                <span class='code bold'>x0</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>)</code>
+                
+            </div>
+            
+        </div>
+        
+        <div class='space-bottom0'>
+            <div>
+                <span class='code bold'>x1</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>)</code>
+                
+            </div>
+            
+        </div>
+        
+        <div class='space-bottom0'>
+            <div>
+                <span class='code bold'>y0</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>)</code>
+                
+            </div>
+            
+        </div>
+        
+        <div class='space-bottom0'>
+            <div>
+                <span class='code bold'>y1</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>)</code>
+                
+            </div>
+            
+        </div>
+        
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <div class='py1 quiet mt1 prose-big'>Static Members</div>
+    <div class="clearfix">
+  
+    <div class='border-bottom' id='boxfromsegment'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>fromSegment(segment)</span>
+        </div>
+      </div>
+      <div class="clearfix">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+    
+
+    <p>Bounding box of a given Segment</p>
+
+
+    <div class='pre p1 fill-light mt0'>fromSegment(segment: <a href="#segment">Segment</a>)</div>
+    
+    
+
+    
+    
+    
+    
+    
+    
+
+    
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+        
+        <div class='space-bottom0'>
+            <div>
+                <span class='code bold'>segment</span> <code class='quiet'>(<a href="#segment">Segment</a>)</code>
+                
+            </div>
+            
+        </div>
+        
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</section>
+
+      </div>
+    </div>
+  
+</div>
+
+    
+
+    
+    <div class='py1 quiet mt1 prose-big'>Instance Members</div>
+    <div class="clearfix">
+  
+    <div class='border-bottom' id='boxtostring'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>toString()</span>
+        </div>
+      </div>
+      <div class="clearfix">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+    
+
+    
+
+    <div class='pre p1 fill-light mt0'>toString(): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></div>
+    
+    
+
+    
+    
+    
+    
+    
+    
+
+    
+
+    
+
+    
+    
+    <div class='py1 quiet mt1 prose-big'>Returns</div>
+    <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code>:
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</section>
+
+      </div>
+    </div>
+  
+</div>
+
+    
+
+    
+</section>
+
+        
+        
+        
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+    
+    <div class='clearfix'>
+        
+        <h3 class='fl m0' id='segment'>
+            Segment
+        </h3>
+        
+        
+    </div>
+    
+
+    <p>A line segment represented by two points.</p>
+<p>(The line segment has a orinentation given by the order or the two points.)</p>
+
+
+    <div class='pre p1 fill-light mt0'>new Segment(p1: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>, p2: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)</div>
+    
+    
+
+    
+    
+    
+    
+    
+    
+
+    
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+        
+        <div class='space-bottom0'>
+            <div>
+                <span class='code bold'>p1</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)</code>
+                
+            </div>
+            
+        </div>
+        
+        <div class='space-bottom0'>
+            <div>
+                <span class='code bold'>p2</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)</code>
+                
+            </div>
+            
+        </div>
+        
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <div class='py1 quiet mt1 prose-big'>Instance Members</div>
+    <div class="clearfix">
+  
+    <div class='border-bottom' id='segmenttocenter'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>toCenter()</span>
+        </div>
+      </div>
+      <div class="clearfix">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+    
+
+    <p>Move Segment to center. Keeps direction and length</p>
+
+
+    <div class='pre p1 fill-light mt0'>toCenter()</div>
+    
+    
+
+    
+    
+    
+    
+    
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='segmenttranslate'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>translate(v)</span>
+        </div>
+      </div>
+      <div class="clearfix">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+    
+
+    <p>Move every point by v</p>
+
+
+    <div class='pre p1 fill-light mt0'>translate(v: any)</div>
+    
+    
+
+    
+    
+    
+    
+    
+    
+
+    
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+        
+        <div class='space-bottom0'>
+            <div>
+                <span class='code bold'>v</span> <code class='quiet'>(any)</code>
+                
+            </div>
+            
+        </div>
+        
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='segmentgetpoint'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>getPoint(position)</span>
+        </div>
+      </div>
+      <div class="clearfix">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+    
+
+    <p>Gives a point on the segment.
+number:
+0   -> p1
+1   -> p2
+0.5 -> middle between p1,p2
+&#x3C;0  -> a point beyond p1 on the line the segment defines</p>
+<blockquote>
+<p>1  -> a point beyond p2 on the line the segment defines</p>
+</blockquote>
+
+
+    <div class='pre p1 fill-light mt0'>getPoint(position: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</div>
+    
+    
+
+    
+    
+    
+    
+    
+    
+
+    
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+        
+        <div class='space-bottom0'>
+            <div>
+                <span class='code bold'>position</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+                number between 
+[
+0,1
+]
+ to get a point between p1 and p2.
+
+            </div>
+            
+        </div>
+        
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='segmentgetmiddle'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>getMiddle()</span>
+        </div>
+      </div>
+      <div class="clearfix">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+    
+
+    <p>Return the middle between p1 and p2</p>
+
+
+    <div class='pre p1 fill-light mt0'>getMiddle(): <a href="#vect">Vect</a></div>
+    
+    
+
+    
+    
+    
+    
+    
+    
+
+    
+
+    
+
+    
+    
+    <div class='py1 quiet mt1 prose-big'>Returns</div>
+    <code><a href="#vect">Vect</a></code>:
+    middle point of the Segment
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='segmentrotate'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>rotate(angle, pivot)</span>
+        </div>
+      </div>
+      <div class="clearfix">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+    
+
+    <p>Rotate the Segment</p>
+
+
+    <div class='pre p1 fill-light mt0'>rotate(angle: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, pivot: <a href="#vect">Vect</a>): <a href="#segment">Segment</a></div>
+    
+    
+
+    
+    
+    
+    
+    
+    
+
+    
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+        
+        <div class='space-bottom0'>
+            <div>
+                <span class='code bold'>angle</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+                in radians
+
+            </div>
+            
+        </div>
+        
+        <div class='space-bottom0'>
+            <div>
+                <span class='code bold'>pivot</span> <code class='quiet'>(<a href="#vect">Vect</a>)</code>
+                [
+optional
+]
+ default is this.p1, 
+<em>not</em>
+ {x:0,y:0}
+
+            </div>
+            
+        </div>
+        
+    </div>
+    
+
+    
+
+    
+    
+    <div class='py1 quiet mt1 prose-big'>Returns</div>
+    <code><a href="#segment">Segment</a></code>:
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='segmentintersect'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>intersect(s)</span>
+        </div>
+      </div>
+      <div class="clearfix">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+    
+
+    
+
+    <div class='pre p1 fill-light mt0'>intersect(s: any): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></div>
+    
+    
+
+    
+    
+    
+    
+    
+    
+
+    
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+        
+        <div class='space-bottom0'>
+            <div>
+                <span class='code bold'>s</span> <code class='quiet'>(any)</code>
+                
+            </div>
+            
+        </div>
+        
+    </div>
+    
+
+    
+
+    
+    
+    <div class='py1 quiet mt1 prose-big'>Returns</div>
+    <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code>:
+    true, if the both segments intersect
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</section>
+
+      </div>
+    </div>
+  
+</div>
+
+    
+
+    
+</section>
+
+        
+        
+        
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+    
+    <div class='clearfix'>
+        
+        <h3 class='fl m0' id='line'>
+            Line
+        </h3>
+        
+        
+    </div>
+    
+
+    
+
+    <div class='pre p1 fill-light mt0'>new Line(segment: any)</div>
+    
+    
+
+    
+    
+    
+    
+    
+    
+
+    
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+        
+        <div class='space-bottom0'>
+            <div>
+                <span class='code bold'>segment</span> <code class='quiet'>(any)</code>
+                
+            </div>
+            
+        </div>
+        
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <div class='py1 quiet mt1 prose-big'>Instance Members</div>
+    <div class="clearfix">
+  
+    <div class='border-bottom' id='lineintersect'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>intersect(line)</span>
+        </div>
+      </div>
+      <div class="clearfix">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+    
+
+    
+
+    <div class='pre p1 fill-light mt0'>intersect(line: any): (<a href="#vect">Vect</a> | Line.PARALLEL | Line.EQUIVALENT)</div>
+    
+    
+
+    
+    
+    
+    
+    
+    
+
+    
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+        
+        <div class='space-bottom0'>
+            <div>
+                <span class='code bold'>line</span> <code class='quiet'>(any)</code>
+                
+            </div>
+            
+        </div>
+        
+    </div>
+    
+
+    
+
+    
+    
+    <div class='py1 quiet mt1 prose-big'>Returns</div>
+    <code>(<a href="#vect">Vect</a> | Line.PARALLEL | Line.EQUIVALENT)</code>:
+    Intersection is
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</section>
+
+      </div>
+    </div>
+  
+</div>
+
+    
+
+    
+</section>
+
+        
+        
+        
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+    
+    <div class='clearfix'>
+        
+        <h3 class='fl m0' id='ray'>
+            Ray
+        </h3>
+        
+        
+    </div>
+    
+
+    
+
+    <div class='pre p1 fill-light mt0'>new Ray(segment: any)</div>
+    
+    
+
+    
+    
+    
+    
+    
+    
+
+    
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+        
+        <div class='space-bottom0'>
+            <div>
+                <span class='code bold'>segment</span> <code class='quiet'>(any)</code>
+                
+            </div>
+            
+        </div>
+        
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</section>
+
+        
+        
+        
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+    
+    <div class='clearfix'>
+        
+        <h3 class='fl m0' id='triangle'>
+            Triangle
+        </h3>
+        
+        
+    </div>
+    
+
+    
+
+    <div class='pre p1 fill-light mt0'>new Triangle(a: any, b: any, c: any)</div>
+    
+    
+
+    
+    
+    
+    
+    
+    
+
+    
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+        
+        <div class='space-bottom0'>
+            <div>
+                <span class='code bold'>a</span> <code class='quiet'>(any)</code>
+                
+            </div>
+            
+        </div>
+        
+        <div class='space-bottom0'>
+            <div>
+                <span class='code bold'>b</span> <code class='quiet'>(any)</code>
+                
+            </div>
+            
+        </div>
+        
+        <div class='space-bottom0'>
+            <div>
+                <span class='code bold'>c</span> <code class='quiet'>(any)</code>
+                
+            </div>
+            
+        </div>
+        
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</section>
+
+        
+        
+        
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+    
+    <div class='clearfix'>
+        
+        <h3 class='fl m0' id='circle'>
+            Circle
+        </h3>
+        
+        
+    </div>
+    
+
+    
+
+    <div class='pre p1 fill-light mt0'>new Circle(p: any, radius: any)</div>
+    
+    
+
+    
+    
+    
+    
+    
+    
+
+    
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+        
+        <div class='space-bottom0'>
+            <div>
+                <span class='code bold'>p</span> <code class='quiet'>(any)</code>
+                
+            </div>
+            
+        </div>
+        
+        <div class='space-bottom0'>
+            <div>
+                <span class='code bold'>radius</span> <code class='quiet'>(any)</code>
+                
+            </div>
+            
+        </div>
+        
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</section>
+
+        
+        
+        
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+    
+    <div class='clearfix'>
+        
+        <h3 class='fl m0' id='pool'>
+            Pool
+        </h3>
+        
+        
+    </div>
+    
+
+    <p>A simple object pool</p>
+
+
+    <div class='pre p1 fill-light mt0'>new Pool(capacity: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>)</div>
+    
+    
+
+    
+    
+    
+    
+    
+    
+
+    
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+        
+        <div class='space-bottom0'>
+            <div>
+                <span class='code bold'>capacity</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>)</code>
+                The initial capacity.
+
+            </div>
+            
+        </div>
+        
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <div class='py1 quiet mt1 prose-big'>Instance Members</div>
+    <div class="clearfix">
+  
+    <div class='border-bottom' id='poolcreateitems'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>createItems(size)</span>
+        </div>
+      </div>
+      <div class="clearfix">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+    
+
+    <p>CreateItems</p>
+
+
+    <div class='pre p1 fill-light mt0'>createItems(size: any)</div>
+    
+    
+
+    
+    
+    
+    
+    
+    
+
+    
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+        
+        <div class='space-bottom0'>
+            <div>
+                <span class='code bold'>size</span> <code class='quiet'>(any)</code>
+                
+            </div>
+            
+        </div>
+        
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='poolget'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>get()</span>
+        </div>
+      </div>
+      <div class="clearfix">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+    
+
+    
+
+    <div class='pre p1 fill-light mt0'>get()</div>
+    
+    
+
+    
+    
+    
+    
+    
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='pooldispose'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>dispose(obj)</span>
+        </div>
+      </div>
+      <div class="clearfix">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+    
+
+    
+
+    <div class='pre p1 fill-light mt0'>dispose(obj: any)</div>
+    
+    
+
+    
+    
+    
+    
+    
+    
+
+    
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+        
+        <div class='space-bottom0'>
+            <div>
+                <span class='code bold'>obj</span> <code class='quiet'>(any)</code>
+                
+            </div>
+            
+        </div>
+        
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</section>
+
+      </div>
+    </div>
+  
+</div>
+
+    
+
+    
+</section>
+
+        
+        
+    </div>
+</div>
+<script src='assets/anchor.js'></script>
+<script src='assets/split.js'></script>
+<script src='assets/site.js'></script>
+
+</body>
+</html>
