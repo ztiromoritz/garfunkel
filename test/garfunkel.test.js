@@ -5,7 +5,7 @@ if (typeof window === 'undefined') {
     assert = require("assert");
     sinon = require("sinon");
     expect = require("chai").expect;
-    Garfunkel = require("../garfunkel");
+    Garfunkel = require("../src/garfunkel");
 
 } else {
     //browser
@@ -29,8 +29,6 @@ var SQRT_OF_2 = Math.sqrt(2);
 Vect = Garfunkel.Vect;
 Box = Garfunkel.Box;
 Segment = Garfunkel.Segment;
-Equation = Garfunkel.Equation;
-Calculator = Garfunkel.Calculator;
 Pool = Garfunkel.Pool;
 Line = Garfunkel.Line;
 
@@ -132,55 +130,6 @@ describe('Pool#get', function () {
     });
 
 });
-
-
-describe('Calculator#reflectOn', function () {
-
-    var _ = Calculator.create();
-
-    it('should do boing', function () {
-        var ref = new Vect(1, 0);
-        var u = new Vect(1, 2);
-
-        var u_r = _.reflectOn(u, ref);
-
-        assert.equal(1, u_r.x);
-        assert.equal(-2, u_r.y);
-    });
-
-    it('should do buff', function () {
-        var ref = new Vect(0, 1);
-        var u = new Vect(1, -3);
-
-        var u_r = _.reflectOn(u, ref);
-
-        assert.equal(-1, u_r.x);
-        assert.equal(-3, u_r.y);
-    });
-
-    it('should do whiuuuuuuuu', function () {
-        var EPSILON = 0.0001;
-        var ref = new Vect(1, 1);
-        var u = new Vect(1, 0);
-
-        var u_r = _.reflectOn(u, ref);
-
-        assert(Math.abs(u_r.x) < EPSILON);
-        assert(Math.abs(u_r.y - 1) < EPSILON);
-    });
-
-
-    it('should do hää', function () {
-        var ref = new Vect(2, 3);
-        var u = new Vect(2, 3);
-
-        var u_r = _.reflectOn(u, ref);
-        assert.equal(-2, u_r.x);
-        assert.equal(-3, u_r.y);
-    });
-
-});
-
 
 describe('Vect#constructor', function () {
     it('should keep values', function () {
@@ -299,9 +248,9 @@ describe('Vect#normalize', function () {
     it('should scale normalized vector', function () {
         var v = new Vect(3, 3);
         var v_0 = v.normalize(42);
-        assert(Math.abs(v_0.x - 42/SQRT_OF_2) < EPSILON);
-        assert(Math.abs(v_0.y - 42/SQRT_OF_2) < EPSILON);
-        assert(Math.abs(v_0.length()- 42)<EPSILON);
+        assert(Math.abs(v_0.x - 42 / SQRT_OF_2) < EPSILON);
+        assert(Math.abs(v_0.y - 42 / SQRT_OF_2) < EPSILON);
+        assert(Math.abs(v_0.length() - 42) < EPSILON);
     });
 
 });
@@ -1072,13 +1021,13 @@ describe('Segment#intersect', function () {
     });
 
     describe('touch', function () {
-        it('is also intersect ', function(){
+        it('is also intersect ', function () {
             var seg1 = Segment.fromArray([0, 0, 2, 2]);
             var seg2 = Segment.fromArray([1, 1, 1, 3]);
             assert(seg2.intersect(seg1));
         });
 
-        it('even if the tips touches', function(){
+        it('even if the tips touches', function () {
             var seg1 = Segment.fromArray([0, 0, 1, 1]);
             var seg2 = Segment.fromArray([1, 1, 1, 3]);
             assert(seg2.intersect(seg1));
@@ -1162,6 +1111,82 @@ describe('Line#intersect', function () {
         assert.equal(p.y, 4.5);
     });
 
+});
+
+
+describe('Polygon#getPoints', function () {
+
+});
+
+describe('Polygon#getEdges', function () {
+
+    /**
+     * +------------>
+     * |
+     * |    +---> (3,0)----+
+     * |    |              |
+     * |    |              V
+     * |  (0,3) <--------(6,3)
+     * |
+     * V
+     */
+    it('should give all edges from the corresponding points', function () {
+        const polygon = Polygon.create().addPoint(3, 0).addPoint(6, 3).addPoint(0, 3);
+        const edges = polygon.getEdges();
+
+        assert.equal(edges.length, 3);
+
+        assert.equal(edges[0].x, 3);
+        assert.equal(edges[0].y, 3);
+
+        assert.equal(edges[1].x, -6);
+        assert.equal(edges[1].y, 0);
+
+        assert.equal(edges[2].x, 3);
+        assert.equal(edges[2].y, -3);
+    });
+
+
+    it('should add up to (0,0)', function () {
+        const polygon = Polygon.create().addPoint(3, 0).addPoint(6, 3).addPoint(0, 3);
+        const edges = polygon.getEdges();
+        const sum = edges.reduce((acc, val) => acc.add(val), Vect.ZERO.clone());
+
+        assert.equal(sum.x, 0);
+        assert.equal(sum.y, 0);
+    });
+});
+
+
+describe('Polygon#isClockwise', function () {
+
+    /**
+     * +------------>
+     * |
+     * |    +---> (3,0)----+
+     * |    |              |
+     * |    |              V
+     * |  (0,3) <--------(6,3)
+     * |
+     * V
+     */
+    it('should find clockwise polygon', function () {
+        const polygon = Polygon.create().addPoint(3, 0).addPoint(6, 3).addPoint(0, 3);
+        expect(polygon.isClockwise()).to.equal(true);
+    });
+
+    it('should find clockwise polygon in game coords', function () {
+
+    });
+
+    it('should find counter clockwise polygon', function () {
+        const polygon = Polygon.create().addPoint(0, 3).addPoint(6, 3).addPoint(3, 0);
+        expect(polygon.isClockwise()).to.equal(true);
+    });
+
+    it('should find counter clockwise polygon in game coords', function () {
+
+    });
 });
 
 

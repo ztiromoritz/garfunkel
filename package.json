@@ -6,8 +6,8 @@
 	"scripts": {
 		"test": "mocha",
 		"test-cov": "mocha -R html-cov test/coverage/blanket-wrapper.js > test/coverage/coverage.html",
-		"lint": "jshint **.js;true",
-		"build": "(echo '/*!' ; cat ./LICENSE ; echo '*/' ; browserify garfunkel.js) > build/garfunkel.js",
+		"lint": "jshint src/**.js;",
+		"build": "(echo '/*!' ; cat ./LICENSE ; echo '*/' ; browserify src/garfunkel.js) > build/garfunkel.js",
 		"_doc_old": "yuidoc --no-sort --no-code",
 		"doc": "documentation build garfunkel.js -f html -o docs -t ./themes/documentation_default_theme/"
 	},

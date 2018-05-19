@@ -12,3 +12,4 @@ TODO:
  ** Completion in Docu examples
  ** Firefox and Edge Check
  ** Build Docu with travis
+ * createRandom()

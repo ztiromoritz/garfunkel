@@ -147,7 +147,7 @@
      * @param {Number} x
      * @param {Number} y
      */
-    Vect.prototype.set = function(x,y){
+    Vect.prototype.set = function (x, y) {
         this.x = x || 0;
         this.y = y || 0;
         return this;
@@ -232,7 +232,7 @@
      * @return {number}
      */
     Vect.prototype.cross = function (v) {
-        return (this.x * v.y ) - (this.y * v.x );
+        return (this.x * v.y) - (this.y * v.x);
     };
 
     /**
@@ -253,11 +253,10 @@
         } else {
             this.div(currenLength);
         }
-        if(length)
+        if (length)
             this.mul(length);
         return this;
     };
-
 
 
     /**
@@ -337,8 +336,8 @@
      * @return {Vect}
      */
     Vect.prototype.turnLeft = function () {
-        var x = this.y * ( X_IS_LEFT_TO_Y ? 1 : -1 );
-        var y = this.x * ( X_IS_LEFT_TO_Y ? -1 : 1 );
+        var x = this.y * (X_IS_LEFT_TO_Y ? 1 : -1);
+        var y = this.x * (X_IS_LEFT_TO_Y ? -1 : 1);
         this.x = x;
         this.y = y;
         return this;
@@ -349,8 +348,8 @@
      * @return {Vect}
      */
     Vect.prototype.turnRight = function () {
-        var x = this.y * ( X_IS_LEFT_TO_Y ? -1 : 1 );
-        var y = this.x * ( X_IS_LEFT_TO_Y ? 1 : -1 );
+        var x = this.y * (X_IS_LEFT_TO_Y ? -1 : 1);
+        var y = this.x * (X_IS_LEFT_TO_Y ? 1 : -1);
         this.x = x;
         this.y = y;
         return this;
@@ -856,12 +855,12 @@
                 }
                 if (isSegment(g)) { //h is ray
                     //TODO
-                    if(g.containsPoint(h.p1)){
+                    if (g.containsPoint(h.p1)) {
 
                     }
                 } else { //h is segment, g is ray
                     //TODO
-                    if(h.containsPoint(g.p2)){
+                    if (h.containsPoint(g.p2)) {
 
                     }
                 }
@@ -935,28 +934,46 @@
 
     };
 
-    /**
 
-    var Polygon = function(...points) {
+    var Polygon = function (...points) {
+        this.vects = [];
+        const len = Math.floor(points.length / 2);
+        for (let n = 0; n < len; n++) {
+            this.vects.push(new Vect(points[n * 2], points[n * 2 + 1]));
+        }
+    };
+
+    Polygon.create = function () {
+        return new Polygon();
+    }
+
+    Polygon.prototype.addPoint = function (x, y) {
+        this.vect.push(new Vect(x, y));
+        return this;
+    };
+
+
+    Polygon.prototype.getEdges = function () {
 
     };
 
-    Polygon.prototype.isClockWise = function(){
+
+    Polygon.prototype.isClockWise = function () {
 
     };
 
-    Polygon.prototype.getConvexPoints= function(){
+    Polygon.prototype.getConvexPoints = function () {
 
     };
 
-    Polygon.prototype.getConcavePoints= function(){
+    Polygon.prototype.getConcavePoints = function () {
 
     };
 
-    var Graph =function(...points,...edges){
+    /**/
+    var Graph = function (...points) {
 
     };
-     **/
 
 
     /**
@@ -974,8 +991,8 @@
         this.initializer = initializer;
         this.constructor = constructor;
         this.growth = growth || function (cap) {
-                return 1;
-            };//
+            return 1;
+        };//
         this.createItems(capacity);
     };
 
@@ -987,8 +1004,9 @@
      */
     Pool.prototype.createItems = function (size) {
         this.items.length = size;
-        for (var i = 0; i < size; i++)
+        for (var i = 0; i < size; i++) {
             this.items[i] = new this.constructor();
+        }
     };
 
     /**
@@ -1014,204 +1032,6 @@
     };
 
 
-    /*
-     *
-     *
-     * Experimental Calculator API.
-     *  * Include Object Pooling
-     *
-     *
-     * Usage:
-     * var _ = Calculator.create();
-     *
-     * var v = _(3,4); //Creates a vector in the calculators scope
-     *
-     * _.sub( _(3,4) , _(1,2) )
-     *
-     * _.clear();
-     *
-     * The vectors passed to a calculator function stay immutable.
-     * The Vect function can be applied also so:
-     *
-     *
-     * var v = _( 2, 0 );
-     * var w = _.n( v );
-     *
-     * // v ->  x: 2 y: 0
-     * // w ->  x: 1 y: 0;
-     *
-     * var v = c( 2 , 0 );
-     * var w = v.normalize();
-     * // v ->  x: 1 y: 0
-     * // w ->  x: 1 y: 0;
-     *
-     *
-     *
-     * All references to vectors produced in equation must not be used after.
-     *
-     *
-     *
-     */
-    var Calculator = {};
-    Calculator.create = function () {
-
-
-        var pool = new Pool(16, Vect, Vect);
-        var active = [];
-
-        var maxActive = 0;
-
-        /*
-         *  Calculator
-         * Create a Vector within the scope of the Calculator.
-         *
-         * This means the instance is take from the internal Vect pool.
-         *
-         * When the calculation is clear all references to the Vect object become invalid.
-         *
-         * Usage:
-         *  _(3,4) or _([3,4]) or _({x:3,y:4})
-         *
-         * When working with the normal Vect methods _ can be seen as a clone with a clean up ability;
-         *
-         */
-        var _ = function () {
-            var x, y;
-            if (arguments.length === 1) {
-                if (arguments[0].constructor === Array) {
-                    x = arguments[0][0];
-                    y = arguments[0][1];
-                } else {
-                    x = arguments[0].x;
-                    y = arguments[0].y;
-                }
-            } else if (arguments === 2) {
-                x = arguments[0];
-                y = arguments[1];
-            }
-            var item = Pool.prototype.get.apply(pool, [x, y]);
-            active.push(item);
-            maxActive = Math.max(maxActive, active.length);
-            return item;
-        };
-
-        _.clear = function () {
-            for (var i = 0; i < items.length; i++) {
-                pool.dispose(equation.items[i]);
-            }
-            used.length = 0;
-        };
-
-        _.statistics = function () {
-            return {
-                currentPoolCapacity: pool.items.length,
-                currentActiveItems: used.length,
-                maxActive: maxActive
-            };
-        };
-
-
-        //V x V -> V
-        _.add = function (u, v) {
-            return _(u).add(v);
-        };
-
-        _.sub = function (u, v) {
-            return _(u).sub(v);
-        };
-
-
-        //V x V -> S
-        _.cross = function (u, v) {
-            return u.cross(v);
-        };
-
-        _.dot = function (u, v) {
-            return u.dot(v);
-        };
-
-        _.distanceSq = function (u, v) {
-            return u.distanceSq(v);
-        };
-
-        _.distance = function (u, v) {
-            return u.distance(u, v);
-        };
-
-        _.turnLeft = function (u) {
-            return _(u).turnLeft();
-        };
-
-        _.turnRight = function (u) {
-            return _(u).turnRight();
-        };
-
-        _.leftNormal = function (u) {
-            return _(u).turnLeft().normalize();
-        };
-
-        _.rightNormal = function (u) {
-            return _(u).turnRight().normalize();
-        };
-
-        //V -> S
-        _.length = function (u) {
-            return u.length();
-        };
-
-        _.lengthSq = function (u) {
-            return u.lengthSq();
-        };
-
-        _.angle = function (u) {
-            return u.angle();
-        };
-
-        //V -> V
-        _.normalize = function (u) {
-            var length = u.length(); //TODO: u.length();
-            if (length === 0) {
-                return _(1, 0);
-            } else {
-                return _.div(u, length);
-            }
-        };
-        _.n = _.normalize;
-
-        //S x V -> V
-        _.div = function (s, u) {
-            return _.mul(1 / s, u);
-        };
-
-        _.mul = function (s, u) {
-            return _(u).mul(s);
-        };
-
-
-        _.rotate = function (angle, u) {
-            return _(u).rotate(angle);
-        };
-
-        _.rotateTo = function (angle, u) {
-            return _(u).rotateTo(angle);
-        };
-
-        _.reflectOn = function (u, v) {
-            var n;
-            if (u.isRightOf(v)) {
-                n = _(v).leftNormal();
-            } else if (u.isLeftOf(v)) {
-                n = _(v).rightNormal();
-            } else {
-                return _(u).invert();
-            }
-            return _.sub(u, _.mul(n.dot(u) * 2, n));
-        };
-
-        return _;
-
-    };
-
     Garfunkel.Vect = Vect;
     Garfunkel.Box = Box;
     Garfunkel.Segment = Segment;
@@ -1220,7 +1040,6 @@
     Garfunkel.Circle = Circle;
     Garfunkel.Triangle = Triangle;
     Garfunkel.Pool = Pool;
-    Garfunkel.Calculator = Calculator;
 
     //Garfunkel.lineIntersect = lineIntersect;
 

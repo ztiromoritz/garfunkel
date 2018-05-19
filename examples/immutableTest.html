@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Examples</title>
+    <script type="text/javascript" src="../src/garfunkel.js"></script>
+    <script type="text/javascript" src="../src/garfunkel.immutable.js"></script>
+    <script>
+        /*
+        (function ({Vect}) {
+
+            const v = Vect.createImmutable(3, 4);
+            console.log("+++", v);
+            const w = v.normalize();
+
+            console.log("v", v.toString());
+            console.log("w", w.toString());
+
+
+            const a = new Vect(3, 4);
+            const b = a.normalize();
+            console.log("a", a.toString());
+            console.log("b", b.toString());
+
+        })(Garfunkel);
+        */
+
+
+        (function ({Vect}) {
+            const boo = {};
+            for (let i = 0; i < 1000; i++) {
+                let v = Vect.createImmutable(30, 40);
+                for (let j = 0; j < 10000; j++) {
+                    v = v.mul(3).normalize().mul(10).normalize().turnLeft();
+                }
+                window['v_' + i] = v;
+            }
+            console.log('DONE');
+        })(Garfunkel)
+
+
+        /*
+        (function ({Vect}) {
+            for (let i = 0; i < 1000; i++) {
+                let v = Vect.createImmutablePooled(30, 40);
+                for (let j = 0; j < 1000; j++) {
+                    v = v.mul(3).normalize().mul(10).normalize().turnLeft();
+                }
+                v.dispose();
+            }
+            console.log('DONE');
+        })(Garfunkel)
+
+        */
+
+    </script>
+</head>
+<body>
+
+</body>
+</html>
