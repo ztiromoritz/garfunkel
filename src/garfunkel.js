@@ -1040,6 +1040,7 @@
     Garfunkel.Circle = Circle;
     Garfunkel.Triangle = Triangle;
     Garfunkel.Pool = Pool;
+    Garfunkel.Polygon = Polygon;
 
     //Garfunkel.lineIntersect = lineIntersect;
 
