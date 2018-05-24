@@ -10,9 +10,17 @@
 
     </div>
     <script type="text/javascript" src="../src/garfunkel.js"></script>
+    <link rel="stylesheet" href="../src/garfunkel.svg.css">
     <script type="text/javascript" src="../src/garfunkel.svg.js"></script>
     <script>
-       const svgImage = SvgImage.create().draw(new Garfunkel.Vect(3,5)).build();
+        const {Vect, Segment} = Garfunkel;
+       const svgImage = SvgImage.create()
+           .draw({element: new Vect(2,4)})
+           .draw({element: new Vect(4,2)})
+           .draw({element: new Vect(3,-4)})
+           .draw({element: Segment.fromArray([4,4,-2,4]), settings: {directed: true}})
+           .draw({element: Segment.fromArray([-4,-4,2,-4]) })
+           .build();
        const target = document.getElementById('target');
        target.appendChild(svgImage);
     </script>

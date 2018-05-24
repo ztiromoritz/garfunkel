@@ -25,12 +25,13 @@ Math.degrees = function (radians) {
 
 var SQRT_OF_2 = Math.sqrt(2);
 
-
-Vect = Garfunkel.Vect;
-Box = Garfunkel.Box;
-Segment = Garfunkel.Segment;
-Pool = Garfunkel.Pool;
-Line = Garfunkel.Line;
+const Vect = Garfunkel.Vect;
+const Box = Garfunkel.Box;
+const Segment = Garfunkel.Segment;
+const Pool = Garfunkel.Pool;
+const Line = Garfunkel.Line;
+const Polygon = Garfunkel.Polygon;
+const Ray = Garfunkel.Ray;
 
 
 describe("Pool", function () {

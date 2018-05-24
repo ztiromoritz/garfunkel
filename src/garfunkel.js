@@ -559,6 +559,14 @@
         this.p2 = (p2 || new Vect(1, 0)).clone();
     };
 
+    /**
+     * Create segment from support and connection vector
+     */
+    Segment.fromSupport = function (support, connection) {
+        return new Segment(support, support.clone().add(connection));
+    }
+
+
     Segment.prototype.getBoundingBox = function () {
         return new Box.fromSegment(this);
     };
