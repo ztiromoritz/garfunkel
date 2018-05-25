@@ -1,0 +1,27 @@
+.gridLine {
+    stroke: lightgrey;
+    stroke-width: 0.05
+}
+
+.axis {
+    stroke: black;
+    stroke-width: 0.1;
+}
+
+.vect {
+    stroke: red;
+    stroke-width: 0.1;
+}
+
+.segment {
+    stroke: red;
+    stroke-width: 0.1;
+}
+
+.lineStyleA { stroke: #ff0000 }
+.lineStyleB { stroke: #ff00ff }
+.lineStyleC { stroke: #33aa33 }
+.lineStyleD { stroke: #0000ff }
+.lineStyleE { stroke: #ffaa00 }
+.lineStyleF { stroke: #00bbdd }
+.lineStyleG { stroke: #ff0000 }

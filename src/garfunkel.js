@@ -159,6 +159,32 @@
         return this;
     };
 
+    Vect.prototype.mirrorOnX = function () {
+        this.y = -this.y;
+        return this;
+    };
+
+    Vect.prototype.mirrorOnY = function () {
+        this.x = -this.x
+        return this;
+    }
+
+    /**
+     *
+     */
+    Vect.prototype.xComponent = function () {
+        this.y = 0;
+        return this;
+    };
+
+    /**
+     *
+     */
+    Vect.prototype.yComponent = function () {
+        this.x = 0;
+        return this;
+    };
+
     /**
      * Scalar multiplication.
      * Each coordinate will be multiplied with the given scalar.
@@ -174,7 +200,7 @@
 
     /**
      * Scalar division.
-     * Each coordinate will be devided by the given scalar.
+     * Each coordinate will be divided by the given scalar.
      * @chainable
      * @param {Number} a scalar to divide the vector with
      * @return {Vect}
@@ -234,6 +260,31 @@
     Vect.prototype.cross = function (v) {
         return (this.x * v.y) - (this.y * v.x);
     };
+
+    /**
+     * Product of two vectors needed for the Gauss's area formula.
+     *
+     * Describes the doubled area of the shape that is enclosed by
+     * (this.x,0), (v.x,0), (v.x,v.y),(this.x,this.y).
+     * So its an area based on the x-axis. If you reflect it on the x-axis,
+     * you get the trapeze of which the area value is calculated.
+     *
+     * Needed for orientation and area of a polygon.
+     * @see Polygon.prototype.getArea() //TODO
+     * @example
+     * const u = new Vect(3,5);
+     * const v = new Vect(5,7);
+     * const polygon = new Polygon(u, u.clone().mirrorOnX(), v.clone().mirrorOnY(), v);
+     * const result = u.trapeze(v);
+     *
+     * print(result);
+     * draw(u,v,polygon);
+     *
+     * @param v
+     */
+    Vect.prototype.trapeze = function (v) {
+        return (v.x - this.x) * (v.y + this.y);
+    }
 
     /**
      * Normalize the given vector.
@@ -942,31 +993,71 @@
 
     };
 
-
+    /**
+     * @class Polygon
+     * @param points
+     * @constructor
+     */
     var Polygon = function (...points) {
-        this.vects = [];
-        const len = Math.floor(points.length / 2);
-        for (let n = 0; n < len; n++) {
-            this.vects.push(new Vect(points[n * 2], points[n * 2 + 1]));
-        }
+        this.points = points.map(_ => _.clone());
+        this.edges = null;
     };
 
-    Polygon.create = function () {
-        return new Polygon();
+
+    Polygon.fromArray = function (arr) {
+        const points = [];
+        const len = Math.floor(arr.length / 2);
+        for (let n = 0; n < len; n++) {
+            points.push(new Vect(arr[n * 2], arr[n * 2 + 1]));
+        }
+        return new Polygon(...points);
+    };
+
+
+    Polygon.prototype.getPoints = function () {
+        return this.points;
     }
 
-    Polygon.prototype.addPoint = function (x, y) {
-        this.vect.push(new Vect(x, y));
-        return this;
-    };
-
-
     Polygon.prototype.getEdges = function () {
-
+        if (!this.edges) {
+            this.edges = [];
+            const len = this.points.length;
+            for (let i = 0; i < len; i++) {
+                this.edges.push(this.points[(i + 1) % len].clone().sub(this.points[i]));
+            }
+        }
+        return this.edges;
     };
 
 
-    Polygon.prototype.isClockWise = function () {
+    /**
+     * might be negative
+     */
+    Polygon.prototype.getArea = function () {
+        const edges = this.getEdges();
+        const len = edges.length;
+        const A2 = edges
+            .map((current, index) => {
+                return [current, edges[(index + 1) % len]];
+            })
+            .reduce((acc, [u, v]) => {
+                return acc + u.trapeze(v);
+            }, 0);
+        return A2 / 2;
+    }
+
+    Polygon.prototype.getAbsArea = function () {
+        return Math.abs(this.getArea());
+    }
+
+    Polygon.prototype.isClockwise = function () {
+        // Shoelace formula
+        // https://en.wikipedia.org/wiki/Shoelace_formula
+        if (X_IS_LEFT_TO_Y) {
+            return this.getArea() < 0;
+        } else {
+            return this.getArea() > 0;
+        }
 
     };
 

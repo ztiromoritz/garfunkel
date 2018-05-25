@@ -206,6 +206,76 @@ describe("Vect", function () {
         });
     });
 
+
+    describe('#mirrorOnX, #mirrorOnY', function () {
+        it('inverts the corresponding value', function () {
+            const u = new Vect(3, 7);
+            const v = new Vect(11, 9);
+
+            u.mirrorOnX();
+            v.mirrorOnY();
+
+            assert.equal(u.y, -7);
+            assert.equal(v.x, -11);
+
+        });
+
+        it('keeps the correct value', function () {
+            const u = new Vect(3, 7);
+            const v = new Vect(11, 9);
+
+            u.mirrorOnX();
+            v.mirrorOnY();
+
+            assert.equal(u.x, 3);
+            assert.equal(v.y, 9);
+        });
+    });
+
+    describe('#xComponent, #yComponent', function () {
+
+        it('both should add up the to the original vect', function () {
+            const u = new Vect(7, 5);
+            const u_x = u.clone().xComponent();
+            const u_y = u.clone().yComponent();
+
+
+            const v = u_x.add(u_y);
+
+            assert.equal(v.x, u.x);
+            assert.equal(v.y, u.y);
+        });
+
+        it('self value is equal, corespondent value is zero', function () {
+            const u = new Vect(7, 5);
+            const u_x = u.clone().xComponent();
+            const u_y = u.clone().yComponent();
+
+            assert.equal(u_x.x, u.x);
+            assert.equal(u_x.y, 0);
+            assert.equal(u_y.x, 0);
+            assert.equal(u_y.y, u.y);
+        });
+
+
+    });
+
+    describe('#trapeze', function () {
+
+        const u = new Vect(0, 1);
+        const v = new Vect(1, 2);
+
+        it('gives a trapeze-ish area', function () {
+            assert.equal(u.trapeze(v), 3);
+
+        });
+
+        it('turns the sign if turned around', function () {
+            assert.equal(v.trapeze(u), -3);
+        });
+    });
+
+
     describe('#dot', function () {
         it('should calc product of length for parrallels', function () {
             var v = new Vect(3, 0);
@@ -589,7 +659,7 @@ describe("Vect", function () {
     });
 
 
-    describe('Vector#turnLeft', function () {
+    describe('#turnLeft', function () {
         var u = new Vect(0, 1);
         var v = new Vect(1, 0);
         var w = new Vect(2, 3);
@@ -619,7 +689,7 @@ describe("Vect", function () {
     });
 
 
-    describe('Vector#turnRight', function () {
+    describe('#turnRight', function () {
         var u = new Vect(0, 1);
         var v = new Vect(1, 0);
         var w = new Vect(2, 3);
@@ -1136,7 +1206,82 @@ describe("Line", function () {
 
 describe("Polygon", function () {
 
+    describe('#constructor', function () {
+        it('creates empty polygon', function () {
+            const polygon = new Polygon();
+
+            expect(polygon).to.be.not.null;
+            expect(polygon.getPoints()).has.lengthOf(0);
+        });
+
+        it('Takes a list of points as argument', function () {
+            const a = new Vect(2, 3);
+            const b = new Vect(5, 1);
+            const c = new Vect(7, 0);
+            const polygon = new Polygon(a, b, c);
+
+            expect(polygon.getPoints()).to.have.lengthOf(3);
+
+        });
+
+        it('Clones the vects it received', function () {
+            const a = new Vect(2, 3);
+            const b = new Vect(5, 1);
+            const c = new Vect(7, 0);
+            const polygon = new Polygon(a, b, c);
+
+            a.mul(2);
+
+            const points = polygon.getPoints();
+            assert.equal(points[0].x, 2);
+            assert.equal(points[0].y, 3);
+        });
+    });
+
+    describe('corner cases', function () {
+        it('empty', function () {
+            const polygon = new Polygon();
+
+            const edges = polygon.getEdges();
+
+            expect(edges).to.have.lengthOf(0);
+            assert.equal(polygon.getArea(), 0);
+        });
+
+        it('one point', function () {
+            const a = new Vect(2, 3);
+            const polygon = new Polygon(a);
+
+            const edges = polygon.getEdges();
+
+            expect(edges).to.have.lengthOf(1);
+            assert.equal(edges[0].length(), 0);
+            assert.equal(polygon.getArea(), 0);
+        });
+
+        it('two points', function () {
+            const a = new Vect(2, 3);
+            const b = new Vect(5, 1);
+            const polygon = new Polygon(a, b);
+
+            expect(polygon.getEdges()).to.have.lengthOf(2);
+            assert.equal(polygon.getArea(), 0);
+        });
+    })
+
     describe('#getPoints', function () {
+        it('Should return the points in the given order', function () {
+            const polygon = Polygon.fromArray([3, 0, 6, 3, 0, 3]);
+            const points = polygon.getPoints();
+
+            expect(points).to.have.lengthOf(3);
+            assert.equal(points[0].x, 3);
+            assert.equal(points[0].y, 0);
+            assert.equal(points[1].x, 6);
+            assert.equal(points[1].y, 3);
+            assert.equal(points[2].x, 0);
+            assert.equal(points[2].y, 3);
+        });
 
     });
 
@@ -1153,7 +1298,7 @@ describe("Polygon", function () {
          * V
          */
         it('should give all edges from the corresponding points', function () {
-            const polygon = Polygon.create().addPoint(3, 0).addPoint(6, 3).addPoint(0, 3);
+            const polygon = Polygon.fromArray([3, 0, 6, 3, 0, 3]);
             const edges = polygon.getEdges();
 
             assert.equal(edges.length, 3);
@@ -1170,9 +1315,9 @@ describe("Polygon", function () {
 
 
         it('should add up to (0,0)', function () {
-            const polygon = Polygon.create().addPoint(3, 0).addPoint(6, 3).addPoint(0, 3);
+            const polygon = Polygon.fromArray([3, 0, 6, 3, 0, 3]);
             const edges = polygon.getEdges();
-            const sum = edges.reduce((acc, val) => acc.add(val), Vect.ZERO.clone());
+            const sum = edges.reduce((acc, val) => acc.add(val), new Vect(0, 0));
 
             assert.equal(sum.x, 0);
             assert.equal(sum.y, 0);
@@ -1193,23 +1338,31 @@ describe("Polygon", function () {
          * V
          */
         it('should find clockwise polygon', function () {
-            const polygon = Polygon.create().addPoint(3, 0).addPoint(6, 3).addPoint(0, 3);
+            const polygon = Polygon.fromArray([3, 0, 6, 3, 0, 3]);
             expect(polygon.isClockwise()).to.equal(true);
         });
 
-        it('should find clockwise polygon in game coords', function () {
-
+        it('should find clockwise polygon in school coords', function () {
+            Garfunkel.setSchoolCoords()
+            const polygon = Polygon.fromArray([0, 3, 6, 3, 3, 0]);
+            expect(polygon.isClockwise()).to.equal(true);
+            Garfunkel.setGameCoords()
         });
 
         it('should find counter clockwise polygon', function () {
-            const polygon = Polygon.create().addPoint(0, 3).addPoint(6, 3).addPoint(3, 0);
-            expect(polygon.isClockwise()).to.equal(true);
+            const polygon = Polygon.fromArray([0, 3, 6, 3, 3, 0]);
+            expect(polygon.isClockwise()).to.equal(false);
         });
 
-        it('should find counter clockwise polygon in game coords', function () {
-
+        it('should find counter clockwise polygon in school coords', function () {
+            Garfunkel.setSchoolCoords()
+            const polygon = Polygon.fromArray([3, 0, 6, 3, 0, 3]);
+            expect(polygon.isClockwise()).to.equal(false);
+            Garfunkel.setGameCoords()
         });
     });
+
+    //TODO concave/convex
 
 });
 
