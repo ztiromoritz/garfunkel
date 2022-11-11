@@ -1,52 +1,25 @@
 {
-	"name": "garfunkel",
-	"main": "./index.js",
-	"version": "0.1.1",
-	"description": "2D geometry toolbox",
-	"scripts": {
-		"test": "mocha",
-		"test-cov": "mocha -R html-cov test/coverage/blanket-wrapper.js > test/coverage/coverage.html",
-		"lint": "jshint src/**.js;",
-		"build": "(echo '/*!' ; cat ./LICENSE ; echo '*/' ; browserify src/garfunkel.js) > build/garfunkel.js",
-		"_doc_old": "yuidoc --no-sort --no-code",
-		"doc": "documentation build garfunkel.js -f html -o docs -t ./themes/documentation_default_theme/"
-	},
-	"repository": {
-		"type": "git",
-		"url": "git://github.com/ztiromoritz/garfunkel.git"
-	},
-	"devDependencies": {
-		"@types/jest": "^23.0.1",
-		"blanket": "latest",
-		"browserify": "latest",
-		"chai": "^4.1.2",
-		"documentation": "^6.3.2",
-		"jest": "^23.1.0",
-		"jsdoc": "^3.5.5",
-		"jshint": "latest",
-		"mocha": "^5.1.1",
-		"sinon": "^5.0.7",
-		"watch": "^1.0.2",
-		"yuidocjs": "^0.10.2"
-	},
-	"licenses": [
-		{
-			"type": "MIT",
-			"url": "https://raw.githubusercontent.com/ztiromoritz/garfunkel/master/LICENSE"
-		}
-	],
-	"config": {
-		"blanket": {
-			"pattern": [
-				"src"
-			],
-			"data-cover-never": [
-				"node_modules"
-			]
-		}
-	},
-	"dependencies": {
-		"esdoc": "^1.1.0",
-		"esdoc-standard-plugin": "^1.0.0"
-	}
+  "name": "garfunkel",
+  "private": true,
+  "version": "0.2.0",
+  "type": "module",
+  "files":["dist"],
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
+  },
+  "main":"./dist/garfunkel.umd.js",
+  "module":"./dist/garfunkel.es.js",
+  "exports": {
+    ".": {
+      "import": "./dist/garfunkel.es.js",
+      "require": "./dist/garfunkel.umd.js"
+    }
+  },
+  "devDependencies": {
+    "@types/node": "^18.11.9",
+    "typescript": "^4.6.4",
+    "vite": "^3.2.3"
+  }
 }
