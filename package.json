@@ -1,6 +1,6 @@
 {
 	"name": "garfunkel",
-	"main": "./garfunkel.js",
+	"main": "./index.js",
 	"version": "0.1.1",
 	"description": "2D geometry toolbox",
 	"scripts": {
@@ -16,10 +16,12 @@
 		"url": "git://github.com/ztiromoritz/garfunkel.git"
 	},
 	"devDependencies": {
+		"@types/jest": "^23.0.1",
 		"blanket": "latest",
 		"browserify": "latest",
 		"chai": "^4.1.2",
 		"documentation": "^6.3.2",
+		"jest": "^23.1.0",
 		"jsdoc": "^3.5.5",
 		"jshint": "latest",
 		"mocha": "^5.1.1",

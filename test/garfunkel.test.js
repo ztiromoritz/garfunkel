@@ -1,14 +1,17 @@
-if (typeof window === 'undefined') {
+import Garfunkel from "../src/index.js";
+console.log("userAgent", navigator.userAgent);
+if (navigator.userAgent.includes("jsdom")) {
     //node
     //console.log(_mocha);
 
-    assert = require("assert");
-    sinon = require("sinon");
-    expect = require("chai").expect;
-    Garfunkel = require("../src/garfunkel");
+    const assert = require("assert");
+    const sinon = require("sinon");
+    const expect = require("chai").expect;
+    //const Garfunkel = require("../src/index.js");
 
 } else {
     //browser
+
     expect = chai.expect;
     assert = chai.assert;
 }

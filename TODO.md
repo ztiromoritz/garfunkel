@@ -5,14 +5,17 @@ TODO:
  ** See: https://www.groebelsloot.com/2015/12/24/pathfinding-part-1/
  ** See: http://www.groebelsloot.com/2016/03/13/pathfinding-part-2/
  * Small SVG visualization lib
+ ** Make svg lib avialable in node, (with jsdom or another dom implementation)
  * Docu Template:
  ** yui template remove
  ** cleanup documentationjs template: 
- *** remove arroow
+ ** remove arrow
  ** documenationjs watch
  ** More Examples in Docu
  ** Completion in Docu examples
  ** Firefox and Edge Check
  ** Build Docu with travis
+ ** Use laufvogel.js for examples
  * createRandom()
  * Ray + 2d Ray-cast algorithm
+ 
