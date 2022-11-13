@@ -1,8 +1,3 @@
-import { Vect } from "./vect";
-import { Pool, create_pool } from "./pool";
+export * from "./vect";
 
-class Garfunkel {}
-
-const defaultInstance = new Garfunkel();
-
-export default defaultInstance;
+// const defaultInstance = new Garfunkel();

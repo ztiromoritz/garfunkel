@@ -1,156 +1,39 @@
-import { Coord } from "./coord";
-import { create_pool, Pool, Pools } from "./pool";
-
-const vect_pool: Pool<Vect> = create_pool<Vect>({
-  create: () => new Vect(),
-});
-Pools.register(vect_pool);
-
-const _v = (x?: number, y?: number) => {
-  const v = vect_pool.get();
-  v.x = x || 0;
-  v.y = y || 0;
-  return v;
-};
-
-// TODO: public overloaded v() that creates Vect from the pool
-// v(4,3)
-// v([4,3])
-// v(u:VectLike)
-
-export interface VectLike {
-  x: number;
-  y: number;
-}
-
-/**
- * Just the bare formulas, without creating any object inside.
- * Even a Vector object that receive the result will given as first argument.
- *
- * This will be used to create:
- *  1. the VectFunction - that return a new Vector result without changing the input Vectors
- *  2. the Vect class - that give a chainable Api that mutates the object, the methods are called on.
- */
-const _VectFunctions = {
-  // TODO: all like this... ??
-  // Return type this ???
-  invert<R extends VectLike>(r: R, a: VectLike) {
-    r.x = -a.x;
-    r.y = -a.y;
-    return r;
-  },
-
-  xComponent(r: VectLike, a: VectLike) {
-    r.x = a.x;
-    r.y = 0;
-    return r;
-  },
-
-  yComponent(r: VectLike, a: VectLike) {
-    r.x = 0;
-    r.y = a.y;
-    return r;
-  },
-
-  mirrorOnX(r: VectLike, a: VectLike) {
-    r.x = a.x;
-    r.y = -a.y;
-    return r;
-  },
-
-  mirrorOnY(r: VectLike, a: VectLike) {
-    r.x = -a.x;
-    r.y = a.y;
-    return r;
-  },
-
-  /**
-   * Scalar multiplication.
-   * Each coordinate will be multiplied with the given scalar.
-   * @param {Number} a scalar to multiply the vector with
-   * @return {Vect}
-   */
-  mul(r: VectLike, a: VectLike, s: number) {
-    r.x = a.x * s;
-    r.y = a.y * s;
-    return r;
-  },
-
-  /**
-   * Scalar division.
-   * Each coordinate will be divided by the given scalar.
-   * @param {Number} a scalar to divide the vector with
-   * @return {Vect}
-   */
-  div(r: VectLike, a: VectLike, s: number) {
-    r.x = a.x / s;
-    r.y = a.y / s;
-    return r;
-  },
-
-  /**
-   * Adds a vector.
-   * @param {Vect} v
-   * @return {Vect}
-   */
-  add(r: VectLike, a: VectLike, b: VectLike) {
-    r.x = a.x + b.x;
-    r.y = a.y + b.y;
-    return r;
-  },
-
-  /**
-   * Substracts a vector.
-   * @param {Vect} v
-   * @return {Vect}
-   */
-  sub(r: VectLike, a: VectLike, b: VectLike) {
-    r.x = a.x - b.x;
-    r.y = a.y - b.y;
-    return r;
-  },
-};
-
-const ScalarFunctions = {
-  /**
-   * Dot product of this and the given vector.
-   * @return {number}
-   */
-  dot(a: VectLike, b: VectLike) {
-    return a.x * b.x + a.y * b.y;
-  },
-
-  /**
-   * Not exactly the cross product, because seems not to be defined for 2d vectors.
-   *
-   * "Gives the Z-component of 3d cross product, if the two given
-   * vectors where extended to 3d vectors."
-   * or
-   * "Determinant of a 2x2 matrix build by the two vectors."
-   *
-   * Usefull to find the orientation of the two vectors.
-   *
-   * @return {number}
-   */
-  cross(a: VectLike, b: VectLike) {
-    return a.x * b.y - a.y * b.x;
-  },
-};
-
-function curry(fn: Function, ...args: unknown[]) {
-  return (..._arg: unknown[]) => {
-    return fn(...args, ..._arg);
-  };
-}
-
-export const VectFunctions = Object.fromEntries(
-  Object.entries(_VectFunctions).map(([key, fn]) => [key, curry(fn, _v())])
-);
+import {
+  add,
+  angle,
+  cross,
+  distance,
+  distanceSq,
+  div,
+  dot,
+  invert,
+  isLeftOf,
+  isRightOf,
+  leftNormal,
+  length,
+  lengthSq,
+  manhatten,
+  mirrorOnX,
+  mirrorOnY,
+  mul,
+  normalize,
+  reflectOn,
+  rightNormal,
+  rotate,
+  rotateTo,
+  sub,
+  trapeze,
+  turnLeft,
+  turnRight,
+  xComponent,
+  yComponent,
+  _v,
+} from "./vect-functions";
 
 // TODO:
 //  Vect.fromArray([0,4])
 //  Vect.from(v:VectLike)
-export class Vect implements VectLike {
+export class Vect {
   x: number;
   y: number;
 
@@ -159,19 +42,26 @@ export class Vect implements VectLike {
     this.y = y || 0;
   }
 
+  static fromArray([x, y]: number[]) {
+    return _v(x, y);
+  }
+
+  static from(other: Vect) {
+    return _v(other.x, other.y);
+  }
+
+  /**
+   * @return {Vect}
+   */
+  clone() {
+    return _v(this.x, this.y);
+  }
+
   /**
    * @return {String}
    */
   toString() {
     return "x: " + this.x + " y: " + this.y;
-  }
-
-  /**
-   * Clone!
-   * @return {Vect}
-   */
-  clone() {
-    return _v(this.x, this.y);
   }
 
   /**
@@ -186,24 +76,30 @@ export class Vect implements VectLike {
     return this;
   }
 
+  _chain(result: Vect) {
+    this.set(result.x, result.y);
+    _v.pool.free(result);
+    return this;
+  }
+
   xComponent() {
-    return _VectFunctions.xComponent(this, this);
+    return this._chain(xComponent(this));
   }
 
   yComponent() {
-    return _VectFunctions.xComponent(this, this);
+    return this._chain(yComponent(this));
   }
 
   invert() {
-    return _VectFunctions.invert(this, this);
+    return this._chain(invert(this));
   }
 
   mirrorOnX() {
-    return _VectFunctions.mirrorOnX(this, this);
+    return this._chain(mirrorOnX(this));
   }
 
   mirrorOnY() {
-    return _VectFunctions.mirrorOnY(this, this);
+    return this._chain(mirrorOnY(this));
   }
 
   /**
@@ -214,9 +110,7 @@ export class Vect implements VectLike {
    * @return {Vect}
    */
   mul(s: number) {
-    this.x *= s;
-    this.y *= s;
-    return this;
+    return this._chain(mul(this, s));
   }
 
   /**
@@ -227,9 +121,7 @@ export class Vect implements VectLike {
    * @return {Vect}
    */
   div(s: number) {
-    this.x /= s;
-    this.y /= s;
-    return this;
+    return this._chain(div(this, s));
   }
 
   /**
@@ -239,7 +131,7 @@ export class Vect implements VectLike {
    * @return {Vect}
    */
   add(v: Vect) {
-    return _VectFunctions.add(this, v, this);
+    return this._chain(add(this, v));
   }
 
   /**
@@ -249,9 +141,7 @@ export class Vect implements VectLike {
    * @return {Vect}
    */
   sub(v: Vect) {
-    this.x -= v.x;
-    this.y -= v.y;
-    return this;
+    return this._chain(sub(this, v));
   }
 
   /**
@@ -260,7 +150,7 @@ export class Vect implements VectLike {
    * @return {number}
    */
   dot(v: Vect) {
-    return this.x * v.x + this.y * v.y;
+    return dot(this, v);
   }
 
   /**
@@ -277,7 +167,7 @@ export class Vect implements VectLike {
    * @return {number}
    */
   cross(v: Vect) {
-    return this.x * v.y - this.y * v.x;
+    return cross(this, v);
   }
 
   /**
@@ -302,7 +192,7 @@ export class Vect implements VectLike {
    * @param v
    */
   trapeze(v: Vect) {
-    return (v.x - this.x) * (v.y + this.y);
+    return trapeze(this, v);
   }
 
   /**
@@ -316,15 +206,7 @@ export class Vect implements VectLike {
    * @return {Vect}
    */
   normalize(length?: number) {
-    var currenLength = this.length();
-    if (currenLength === 0) {
-      this.x = 1;
-      this.y = 0;
-    } else {
-      this.div(currenLength);
-    }
-    if (length) this.mul(length);
-    return this;
+    return this._chain(normalize(this, length));
   }
 
   /**
@@ -333,7 +215,7 @@ export class Vect implements VectLike {
    * @return {number}
    */
   lengthSq() {
-    return this.x * this.x + this.y * this.y;
+    return length(this);
   }
 
   /**
@@ -341,7 +223,7 @@ export class Vect implements VectLike {
    * @return {number}
    */
   length() {
-    return Math.sqrt(this.lengthSq());
+    return lengthSq(this);
   }
 
   /**
@@ -350,9 +232,7 @@ export class Vect implements VectLike {
    * @return {number}
    */
   distanceSq(v: Vect) {
-    var dx = this.x - v.x;
-    var dy = this.y - v.y;
-    return dx * dx + dy * dy;
+    return distanceSq(this, v);
   }
 
   /**
@@ -361,7 +241,7 @@ export class Vect implements VectLike {
    * @return {number}
    */
   distance(v: Vect) {
-    return Math.sqrt(this.distanceSq(v));
+    return distance(this, v);
   }
 
   /**
@@ -370,9 +250,7 @@ export class Vect implements VectLike {
    * @return {number}
    */
   manhatten(v: Vect) {
-    var dx = this.x - v.x;
-    var dy = this.y - v.y;
-    return Math.abs(dx) + Math.abs(dy);
+    return manhatten(this, v);
   }
 
   /**
@@ -381,8 +259,7 @@ export class Vect implements VectLike {
    * @return {boolean}
    */
   isLeftOf(v: Vect) {
-    if (Coord.getXIsLeftOfY()) return this.cross(v) > 0;
-    else return this.cross(v) < 0;
+    return isLeftOf(this, v);
   }
 
   /**
@@ -390,8 +267,7 @@ export class Vect implements VectLike {
    * @return {boolean}
    */
   isRightOf(v: Vect) {
-    if (Coord.getXIsLeftOfY()) return this.cross(v) < 0;
-    else return this.cross(v) > 0;
+    return isRightOf(this, v);
   }
 
   /**
@@ -399,11 +275,7 @@ export class Vect implements VectLike {
    * @return {Vect}
    */
   turnLeft() {
-    var x = this.y * (Coord.getXIsLeftOfY() ? 1 : -1);
-    var y = this.x * (Coord.getXIsLeftOfY() ? -1 : 1);
-    this.x = x;
-    this.y = y;
-    return this;
+    return this._chain(turnLeft(this));
   }
 
   /**
@@ -411,11 +283,7 @@ export class Vect implements VectLike {
    * @return {Vect}
    */
   turnRight() {
-    var x = this.y * (Coord.getXIsLeftOfY() ? -1 : 1);
-    var y = this.x * (Coord.getXIsLeftOfY() ? 1 : -1);
-    this.x = x;
-    this.y = y;
-    return this;
+    return this._chain(turnRight(this));
   }
 
   /**
@@ -423,8 +291,7 @@ export class Vect implements VectLike {
    * @return {Vect}
    */
   leftNormal() {
-    this.turnLeft().normalize();
-    return this;
+    return this._chain(leftNormal(this));
   }
 
   /**
@@ -432,8 +299,7 @@ export class Vect implements VectLike {
    * @return {Vect}
    */
   rightNormal() {
-    this.turnRight().normalize();
-    return this;
+    return this._chain(rightNormal(this));
   }
 
   /**
@@ -448,18 +314,7 @@ export class Vect implements VectLike {
    * @return {number}
    */
   angle(ref?: Vect) {
-    var result;
-    if (!(ref instanceof Vect)) {
-      return Math.atan2(this.y, this.x); // (- Math.atan2(0,1))
-    } else {
-      result = Math.atan2(this.y, this.x) - Math.atan2(ref.y, ref.x);
-      if (result > Math.PI) {
-        result = result - Math.PI * 2;
-      } else if (result < -Math.PI) {
-        result = Math.PI * 2 + result;
-      }
-    }
-    return result;
+    return angle(this, ref);
   }
 
   /**
@@ -474,18 +329,7 @@ export class Vect implements VectLike {
    * @return {Vect} the rotated vector
    */
   rotate(angle: number, pivot?: Vect) {
-    pivot = pivot || ZERO;
-    var _x =
-      pivot.x +
-      (this.x - pivot.x) * Math.cos(angle) -
-      (this.y - pivot.y) * Math.sin(angle);
-    var _y =
-      pivot.y +
-      (this.x - pivot.x) * Math.sin(angle) +
-      (this.y - pivot.y) * Math.cos(angle);
-    this.x = _x;
-    this.y = _y;
-    return this;
+    return this._chain(rotate(this, angle, pivot));
   }
 
   /**
@@ -495,27 +339,7 @@ export class Vect implements VectLike {
    * @return {Vect} the rotated vector
    */
   rotateTo(angle: number) {
-    this.rotate(angle - this.angle());
-    return this;
-  }
-
-  /**
-   * Rotates the vector towards the given angle.
-   * The rotation is limited by stepSize, so move a 0° vector towards 90° with limit 50°
-   * would result in a 50° vector. If the method with the same limit is reapplied again
-   * the result would be 90°.
-   *
-   * The rotation will take the "shortest way" towards the given angle.
-   *
-   * @chainable
-   * @param {number} angle - angle in radians
-   * @param {number} stepSize - maximum angle to move towards angle
-   * @return {Vect} the rotated vector
-   */
-  rotateTowards(angle: number, stepSize: number) {
-    this.rotate(angle - this.angle());
-    //TODO
-    return this;
+    return this._chain(rotateTo(this, angle));
   }
 
   /**
@@ -525,26 +349,10 @@ export class Vect implements VectLike {
    *  @param {Vect} u
    */
   reflectOn(u: Vect) {
-    var l, n, r;
-    if (this.isRightOf(u)) {
-      l = this.clone();
-      n = u.clone().leftNormal();
-      r = l.sub(n.clone().mul(n.dot(l) * 2));
-    } else if (this.isLeftOf(u)) {
-      l = this.clone();
-      n = u.clone().rightNormal();
-      r = l.sub(n.clone().mul(n.dot(l) * 2));
-    } else {
-      r = this.clone().invert();
-    }
-    this.x = r.x;
-    this.y = r.y;
-    return this;
+    return this._chain(reflectOn(this, u));
   }
 }
 
-const ZERO = new Vect(0, 0);
-const ABSCISSA = new Vect(1, 0);
-const ORDINATE = new Vect(0, 1);
-
-Object.assign(Vect, { ZERO, ABSCISSA, ORDINATE });
+export const ZERO = new Vect(0, 0);
+export const ABSCISSA = new Vect(1, 0);
+export const ORDINATE = new Vect(0, 1);

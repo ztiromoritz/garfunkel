@@ -24,5 +24,9 @@
     "prettier": "^2.7.1",
     "typescript": "^4.6.4",
     "vite": "^3.2.3"
+  },
+  "dependencies": {
+    "@codemirror/lang-javascript": "^6.1.1",
+    "codemirror": "^6.0.1"
   }
 }
