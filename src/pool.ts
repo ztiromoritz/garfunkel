@@ -10,7 +10,6 @@ export function create_pool<T>(options: PoolOptions<T>) {
   const free_objects: T[] = [];
   const in_use = new Set<T>();
   const context_stack: Set<T>[] = [];
-
   // Can an object be in 2 contexts on the stack???
 
   const { create } = options;
@@ -80,7 +79,6 @@ export function create_pool<T>(options: PoolOptions<T>) {
 }
 
 type PoolObject = Vect; // | Segment | ...
-
 const all_pools: Pool<PoolObject>[] = [];
 
 export const Pools = {

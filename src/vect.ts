@@ -4,6 +4,7 @@ import { create_pool, Pool, Pools } from "./pool";
 const vect_pool: Pool<Vect> = create_pool<Vect>({
   create: () => new Vect(),
 });
+Pools.register(vect_pool);
 
 const _v = (x?: number, y?: number) => {
   const v = vect_pool.get();
@@ -12,19 +13,127 @@ const _v = (x?: number, y?: number) => {
   return v;
 };
 
-Pools.register(vect_pool);
+// TODO: public overloaded v() that creates Vect from the pool
+// v(4,3)
+// v([4,3])
+// v(u:VectLike)
 
-const _VectFunction = {
-  add(result: Vect, a: Vect, b: Vect) {
-    const x = a.x + b.x;
-    const y = a.y + b.y;
-    return result.set(x, y);
+export interface VectLike {
+  x: number;
+  y: number;
+}
+
+/**
+ * Just the bare formulas, without creating any object inside.
+ * Even a Vector object that receive the result will given as first argument.
+ *
+ * This will be used to create:
+ *  1. the VectFunction - that return a new Vector result without changing the input Vectors
+ *  2. the Vect class - that give a chainable Api that mutates the object, the methods are called on.
+ */
+const _VectFunctions = {
+  // TODO: all like this... ??
+  // Return type this ???
+  invert<R extends VectLike>(r: R, a: VectLike) {
+    r.x = -a.x;
+    r.y = -a.y;
+    return r;
   },
 
-  mul(result: Vect, a: Vect, s: number) {
-    const x = a.x * s;
-    const y = a.y * s;
-    return result.set(x, y);
+  xComponent(r: VectLike, a: VectLike) {
+    r.x = a.x;
+    r.y = 0;
+    return r;
+  },
+
+  yComponent(r: VectLike, a: VectLike) {
+    r.x = 0;
+    r.y = a.y;
+    return r;
+  },
+
+  mirrorOnX(r: VectLike, a: VectLike) {
+    r.x = a.x;
+    r.y = -a.y;
+    return r;
+  },
+
+  mirrorOnY(r: VectLike, a: VectLike) {
+    r.x = -a.x;
+    r.y = a.y;
+    return r;
+  },
+
+  /**
+   * Scalar multiplication.
+   * Each coordinate will be multiplied with the given scalar.
+   * @param {Number} a scalar to multiply the vector with
+   * @return {Vect}
+   */
+  mul(r: VectLike, a: VectLike, s: number) {
+    r.x = a.x * s;
+    r.y = a.y * s;
+    return r;
+  },
+
+  /**
+   * Scalar division.
+   * Each coordinate will be divided by the given scalar.
+   * @param {Number} a scalar to divide the vector with
+   * @return {Vect}
+   */
+  div(r: VectLike, a: VectLike, s: number) {
+    r.x = a.x / s;
+    r.y = a.y / s;
+    return r;
+  },
+
+  /**
+   * Adds a vector.
+   * @param {Vect} v
+   * @return {Vect}
+   */
+  add(r: VectLike, a: VectLike, b: VectLike) {
+    r.x = a.x + b.x;
+    r.y = a.y + b.y;
+    return r;
+  },
+
+  /**
+   * Substracts a vector.
+   * @param {Vect} v
+   * @return {Vect}
+   */
+  sub(r: VectLike, a: VectLike, b: VectLike) {
+    r.x = a.x - b.x;
+    r.y = a.y - b.y;
+    return r;
+  },
+};
+
+const ScalarFunctions = {
+  /**
+   * Dot product of this and the given vector.
+   * @return {number}
+   */
+  dot(a: VectLike, b: VectLike) {
+    return a.x * b.x + a.y * b.y;
+  },
+
+  /**
+   * Not exactly the cross product, because seems not to be defined for 2d vectors.
+   *
+   * "Gives the Z-component of 3d cross product, if the two given
+   * vectors where extended to 3d vectors."
+   * or
+   * "Determinant of a 2x2 matrix build by the two vectors."
+   *
+   * Usefull to find the orientation of the two vectors.
+   *
+   * @return {number}
+   */
+  cross(a: VectLike, b: VectLike) {
+    return a.x * b.y - a.y * b.x;
   },
 };
 
@@ -34,12 +143,14 @@ function curry(fn: Function, ...args: unknown[]) {
   };
 }
 
-// TODO export all
-export const VectFunction = Object.fromEntries(
-  Object.entries(_VectFunction).map(([key, fn]) => [key, curry(fn, _v())])
+export const VectFunctions = Object.fromEntries(
+  Object.entries(_VectFunctions).map(([key, fn]) => [key, curry(fn, _v())])
 );
 
-export class Vect {
+// TODO:
+//  Vect.fromArray([0,4])
+//  Vect.from(v:VectLike)
+export class Vect implements VectLike {
   x: number;
   y: number;
 
@@ -75,36 +186,24 @@ export class Vect {
     return this;
   }
 
+  xComponent() {
+    return _VectFunctions.xComponent(this, this);
+  }
+
+  yComponent() {
+    return _VectFunctions.xComponent(this, this);
+  }
+
   invert() {
-    this.x = -this.x;
-    this.y = -this.y;
-    return this;
+    return _VectFunctions.invert(this, this);
   }
 
   mirrorOnX() {
-    this.y = -this.y;
-    return this;
+    return _VectFunctions.mirrorOnX(this, this);
   }
 
   mirrorOnY() {
-    this.x = -this.x;
-    return this;
-  }
-
-  /**
-   *
-   */
-  xComponent() {
-    this.y = 0;
-    return this;
-  }
-
-  /**
-   *
-   */
-  yComponent() {
-    this.x = 0;
-    return this;
+    return _VectFunctions.mirrorOnY(this, this);
   }
 
   /**
@@ -140,7 +239,7 @@ export class Vect {
    * @return {Vect}
    */
   add(v: Vect) {
-    return _VectFunction.add(this, v, this);
+    return _VectFunctions.add(this, v, this);
   }
 
   /**
