@@ -1,6 +1,8 @@
 export default {};
 
 //Just an Idea of how a small engine based on this could look like
+//
+// TODO: would this work the same way in phaser ?
 
 function init() {
   const game = {};
