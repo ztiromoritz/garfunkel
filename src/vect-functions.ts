@@ -141,7 +141,7 @@ export function normalize(a: Vect, targetLength?: number) {
     if (currenLength === 0) {
       return _v(1, 0);
     } else {
-      return div(a, currenLength / targetLength);
+      return div(a, currenLength/ targetLength )
     }
   });
 }

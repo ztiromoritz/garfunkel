@@ -30,9 +30,6 @@ import {
   _v,
 } from "./vect-functions";
 
-// TODO:
-//  Vect.fromArray([0,4])
-//  Vect.from(v:VectLike)
 export class Vect {
   x: number;
   y: number;
@@ -215,7 +212,7 @@ export class Vect {
    * @return {number}
    */
   lengthSq() {
-    return length(this);
+    return lengthSq(this);
   }
 
   /**
@@ -223,7 +220,7 @@ export class Vect {
    * @return {number}
    */
   length() {
-    return lengthSq(this);
+    return length(this);
   }
 
   /**

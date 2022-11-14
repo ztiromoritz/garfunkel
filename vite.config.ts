@@ -8,5 +8,8 @@ export default defineConfig({
       name: 'garfunkel',
       fileName: (format) => `garfunkel.${format}.js`
     }
-  }
+  },
+  test: {
+    exclude: ['ideas/**/*'],
+  },
 });
