@@ -1,21 +1,21 @@
+import { AssertionError } from 'assert';
 import { describe, it, assert, beforeAll, afterAll } from 'vitest'
 import { Coord } from '../coord';
+import { degrees, SQRT_OF_2, TAU } from '../utils';
 import { ABSCISSA, ORDINATE, Vect, ZERO } from '../vect';
-import { isLeftOf } from '../vect-functions';
+
+
+function almostEqual(x:number,y:number,epsilon:number){
+    assert.isTrue(Math.abs(x-y)<=epsilon, `Difference between ${x} and ${y} larger then epsilon`);
+}
+
+function almostEqualVect(a:{x:number,y:number},b:Vect, epsilon:number=0.0001){
+    assert.isTrue(Math.abs(a.x-b.x)<=epsilon, `Difference between x values ${a.x} and ${b.x} larger then epsilon`);
+    assert.isTrue(Math.abs(a.y-b.y)<=epsilon, `Difference between y values ${a.y} and ${b.y} larger then epsilon`);
+}
 
 
 
-// Converts from degrees to radians.
-function radians(degrees:number) {
-    return degrees * Math.PI / 180;
-};
-
-// Converts from radians to degrees.
-function degrees(radians:number) {
-    return radians * 180 / Math.PI;
-};
-
-const SQRT_OF_2 = Math.sqrt(2);
 
 describe("Vect", function () {
 
@@ -28,9 +28,43 @@ describe("Vect", function () {
         });
         it('should have defaults', function () {
             var v = new Vect();
+
+      
             assert.equal(0, v.x);
             assert.equal(0, v.y);
         });
+    });
+
+
+    describe('#fromAngle', function(){
+
+        const EPSILON = 0.0001;
+
+        it('should start with x:1,y:0', function(){
+            const v = Vect.fromAngle(0);
+            assert.equal(1,v.x);
+            assert.equal(0,v.y);
+        })
+
+        it('should go upwards on 90°', function(){
+            const v = Vect.fromAngle(TAU/4);
+            almostEqualVect({x:0,y:1}, v);
+        })
+
+        it('should go left on 180°', function(){
+            const v = Vect.fromAngle(TAU/2);
+            almostEqualVect({x:-1,y:0}, v);
+        })
+
+        it('should go left on 270°', function(){
+            const v = Vect.fromAngle(TAU*3/4);
+            almostEqualVect({x:0,y:-1}, v);
+        })
+
+        it('should go wild on 45°', function(){
+            const v = Vect.fromAngle(TAU/8);
+            almostEqualVect({x:SQRT_OF_2/2,y:SQRT_OF_2/2}, v);
+        })
     });
 
     describe('#invert', function () {
