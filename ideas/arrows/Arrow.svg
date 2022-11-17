@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="210mm"
+   height="297mm"
+   viewBox="0 0 210 297"
+   version="1.1"
+   id="svg1855"
+   inkscape:version="1.1.2 (0a00cf5339, 2022-02-04)"
+   sodipodi:docname="Arrow.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1857"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:document-units="mm"
+     showgrid="false"
+     inkscape:zoom="0.64052329"
+     inkscape:cx="396.55076"
+     inkscape:cy="414.50484"
+     inkscape:window-width="1856"
+     inkscape:window-height="1136"
+     inkscape:window-x="1430"
+     inkscape:window-y="27"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs1852" />
+  <g
+     inkscape:label="Ebene 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <path
+       id="path1828"
+       style="fill:none;stroke:#000000;stroke-width:1;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stop-color:#000000"
+       d="m 33.225873,98.76384 h -1.235032 c 9.661521,0.34607 19.322766,-0.30257 28.985293,0 8.848471,0.16179 17.692432,-0.27401 26.538614,0 5.321199,0.16482 6.706086,-0.0844 11.989189,0 8.673043,0.16538 17.346433,0.2218 26.018373,0 3.78455,-0.1145 7.56903,0.0488 11.35455,0 2.15665,0.0465 4.31027,0.0891 6.46491,0 0.32441,-0.01 0.64883,0.01 0.97324,0 h 1.19957 -0.97827 c -2.17414,0.076 -4.34629,0.0116 -6.52213,0 -3.841,0.0586 -7.68009,-0.20647 -11.51779,0 -8.77166,0.37595 -17.54772,0.1178 -26.32444,0 -4.445762,-0.0567 -7.585368,0.11835 -12.0447,0 -8.85607,-0.23499 -17.709157,0.16741 -26.56658,0 -9.449801,-0.33527 -18.907514,0.91046 -28.334797,0 z"
+       sodipodi:nodetypes="cccsccccccccccccc" />
+    <path
+       id="path1830"
+       style="fill:none;stroke:#000000;stroke-width:0.999996;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stop-color:#000000"
+       d="m 136.51375,103.90473 -0.11918,0.0681 c 1.06513,-0.34178 1.74861,-1.23182 2.79715,-1.59764 0.91597,-0.39855 1.60224,-1.12621 2.56103,-1.46278 0.57675,-0.20243 0.61478,-0.41614 1.157,-0.66083 0.90041,-0.3869 1.75906,-0.83386 2.51083,-1.4341 0.32129,-0.27169 0.74915,-0.39029 1.09574,-0.62584 0.22596,-0.0932 0.45013,-0.18849 0.62388,-0.35635 0.0274,-0.0235 0.0665,-0.0302 0.0939,-0.0537 l 0.11577,-0.0661 -0.0944,0.054 c -0.18065,0.16172 -0.41498,0.24596 -0.6294,0.35949 -0.34818,0.24401 -0.82036,0.30952 -1.11149,0.63486 -0.70226,0.69068 -1.64821,1.03212 -2.54038,1.45096 -0.45077,0.21379 -0.6866,0.48332 -1.16233,0.66389 -0.94479,0.35862 -1.64475,1.06837 -2.56374,1.46431 -1.04055,0.3361 -1.47533,1.54396 -2.73437,1.56179 z"
+       sodipodi:nodetypes="cccsccccccccccccc" />
+    <path
+       id="path1832"
+       style="fill:none;stroke:#000000;stroke-width:1;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stop-color:#000000"
+       d="m 136.66983,94.35264 -0.12586,-0.0501 c 0.89795,0.61896 2.04493,0.58508 2.95389,1.17552 0.86124,0.46503 1.87163,0.5377 2.70455,1.07628 0.50101,0.32399 0.70455,0.21659 1.22182,0.48623 0.84247,0.46027 1.71225,0.84905 2.65153,1.05519 0.41434,0.0783 0.75914,0.33899 1.15715,0.46049 0.20813,0.11799 0.41696,0.23326 0.65883,0.26218 0.0356,0.006 0.0636,0.0329 0.0992,0.0394 l 0.12223,0.0487 -0.0997,-0.0396 c -0.2406,-0.0383 -0.44585,-0.16865 -0.66468,-0.2645 -0.4061,-0.11732 -0.73099,-0.44698 -1.17378,-0.46711 -0.98803,-0.10901 -1.81778,-0.63435 -2.68272,-1.0676 -0.43887,-0.21751 -0.80265,-0.22996 -1.22748,-0.48848 -0.84369,-0.51339 -1.84665,-0.60834 -2.7074,-1.07743 -0.8791,-0.60325 -2.15479,-0.16929 -2.88759,-1.14912 z"
+       sodipodi:nodetypes="cccsccccccccccccc"
+       inkscape:transform-center-x="-17.120569"
+       inkscape:transform-center-y="11.274445" />
+  </g>
+</svg>
