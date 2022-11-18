@@ -14,7 +14,7 @@ export const plot = reactive({
     "#9d02d7",
     "#0000ff",
   ],
-  segments: [{ x1: 0, y1: 0, x2: 40, y2: 40 }],
+  segments: [],
   clear() {
     this.segments = [];
   },
