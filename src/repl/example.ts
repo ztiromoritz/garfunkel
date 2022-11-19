@@ -11,40 +11,80 @@ import { Coord } from "../coord";
 
 const editor = new EditorView({
   doc: `
-
-
 let a,b,c;
 function _init(){
   a = _v(0,30);
 }
 
 function _update(){
- a.rotate(Math.PI/32);
+ // a.rotate(Math.PI/32);
+  if(btn("w")){ a.add(_v(0,1)) }	
+  if(btn("a")){ a.add(_v(-1,0)) }	
+  if(btn("s")){ a.add(_v(0,-1)) }	
+  if(btn("d")){ a.add(_v(1,0)) }	
 }
 
 function _draw(){
   clear();
   print(a);
 }
-
   `,
   extensions: [basicSetup, javascript()],
   parent: document.getElementById("editor")!,
 });
-
+editor.dom.addEventListener("change", () => console.log("dd"));
+/*
+editor.on("change", (editor) => {
+  console.log("");
+  localStorage.setItem("garfunkel_editor", editor.getValue());
+});
+*/
 editor.focus();
 
-function print(v: Vect) {
-  // TODO: render SVG
-  plot.addVect(v);
+function createKeyboardHandler() {
+  window.addEventListener("blur", (e) => {
+    console.log("window blur");
+    keys.clear();
+  });
+
+  window.addEventListener("keydown", (e) => {
+    console.log("down", e.key);
+    keys.add(e.key);
+  });
+
+  window.addEventListener("keyup", (e) => {
+    console.log("up", e.key);
+    keys.delete(e.key);
+  });
+
+  const keys = new Set<string>();
+
+  return {
+    is_key_down(key) {
+      return keys.has(key);
+    },
+  };
 }
 
-function clear() {
-  plot.clear();
-}
+const keyboardHandler = createKeyboardHandler();
+
+const helper = {
+  print(v: Vect) {
+    // TODO: render SVG
+    plot.addVect(v);
+  },
+
+  btn(key: string) {
+    return keyboardHandler.is_key_down(key);
+  },
+
+  clear() {
+    plot.clear();
+  },
+};
 
 Coord.setSchoolCoords();
-Object.assign(window, { _v, print, clear });
+Object.assign(window, { _v, ...helper });
 
 let game = {};
 let running = false;
@@ -76,6 +116,7 @@ function stop() {
   running = false;
 }
 
+const poolsize = document.getElementById("poolsize");
 let start_timestamp;
 const fps = 30;
 const interval = 1000 / fps;
@@ -87,9 +128,9 @@ function gameLoop(timestamp) {
   if (delta > interval) {
     start_timestamp = timestamp - (delta % interval);
 
-    game._update?.();
+    _v(()=>game._update?.());
     game._draw?.();
-    console.log("tick");
+    poolsize.innerText = `free: ${_v.pool.free_count()} in_use: ${_v.pool.in_use_count()}`;
   }
 
   if (running) {

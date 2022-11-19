@@ -37,7 +37,7 @@ export function create_pool<T>(options: PoolOptions<T>) {
   // without freeing it
   function lift(o: T) {
     const context = context_stack[context_stack.length - 1];
-    if (context) {
+    if (context && o) {
       context.delete(o);
     }
   }
