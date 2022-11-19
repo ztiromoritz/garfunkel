@@ -43,6 +43,7 @@ export function create_pool<T>(options: PoolOptions<T>) {
   }
 
   function push_context() {
+    // should we pool this Set as well :D	  
     context_stack.push(new Set());
   }
 

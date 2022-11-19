@@ -19,10 +19,11 @@ export function _v(
   arg0?: number | number[] | (() => Vect),
   arg1?: number
 ): Vect {
-  const v = vect_pool.get();
   if (Array.isArray(arg0)) {
+    const v = vect_pool.get();
     v.x = arg0[0] ?? 0;
     v.y = arg0[1] ?? 0;
+  return v;
   } else if (typeof arg0 === "function") {
     Pools.push_context();
     const v = arg0();
@@ -30,10 +31,11 @@ export function _v(
     Pools.pop_context();
     return v;
   } else {
+    const v = vect_pool.get();
     v.x = arg0 ?? 0;
     v.y = arg1 ?? 0;
-  }
   return v;
+  }
 }
 _v.pool = vect_pool;
 
@@ -141,7 +143,7 @@ export function normalize(a: Vect, targetLength?: number) {
     if (currenLength === 0) {
       return _v(1, 0);
     } else {
-      return div(a, currenLength/ targetLength )
+      return div(a, currenLength / targetLength);
     }
   });
 }
