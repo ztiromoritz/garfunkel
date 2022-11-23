@@ -12,29 +12,30 @@ interface _v {
   (x?: number, y?: number): Vect;
   ([x, y]: number[]): Vect;
   (fn: () => Vect): Vect;
+  (fn: () => void): void;
   pool: number;
 }
 
 export function _v(
-  arg0?: number | number[] | (() => Vect),
+  arg0?: number | number[] | (() => Vect | void),
   arg1?: number
 ): Vect {
   if (Array.isArray(arg0)) {
     const v = vect_pool.get();
     v.x = arg0[0] ?? 0;
     v.y = arg0[1] ?? 0;
-  return v;
+    return v;
   } else if (typeof arg0 === "function") {
     Pools.push_context();
     const v = arg0();
-    vect_pool.lift(v);
+    if (v) vect_pool.lift(v);
     Pools.pop_context();
-    return v;
+    return v ?? ZERO;
   } else {
     const v = vect_pool.get();
     v.x = arg0 ?? 0;
     v.y = arg1 ?? 0;
-  return v;
+    return v;
   }
 }
 _v.pool = vect_pool;

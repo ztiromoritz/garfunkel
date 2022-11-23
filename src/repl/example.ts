@@ -32,35 +32,31 @@ function _draw(){
   extensions: [basicSetup, javascript()],
   parent: document.getElementById("editor")!,
 });
-editor.dom.addEventListener("change", () => console.log("dd"));
+
 /*
 editor.on("change", (editor) => {
-  console.log("");
   localStorage.setItem("garfunkel_editor", editor.getValue());
 });
 */
 editor.focus();
 
 function createKeyboardHandler() {
-  window.addEventListener("blur", (e) => {
-    console.log("window blur");
+  window.addEventListener("blur", () => {
     keys.clear();
   });
 
   window.addEventListener("keydown", (e) => {
-    console.log("down", e.key);
     keys.add(e.key);
   });
 
   window.addEventListener("keyup", (e) => {
-    console.log("up", e.key);
     keys.delete(e.key);
   });
 
   const keys = new Set<string>();
 
   return {
-    is_key_down(key) {
+    is_key_down(key: string) {
       return keys.has(key);
     },
   };
@@ -86,7 +82,11 @@ const helper = {
 Coord.setSchoolCoords();
 Object.assign(window, { _v, ...helper });
 
-let game = {};
+let game: {
+  _init?: () => void;
+  _update?: () => void;
+  _draw?: () => void;
+} = {};
 let running = false;
 
 function parse() {
@@ -102,7 +102,6 @@ function parse() {
   `;
   const fn = new Function(fnStr);
   game = fn();
-  console.log("parsed", game);
 }
 
 function start() {
@@ -117,20 +116,19 @@ function stop() {
 }
 
 const poolsize = document.getElementById("poolsize");
-let start_timestamp;
+let start_timestamp: DOMHighResTimeStamp;
 const fps = 30;
 const interval = 1000 / fps;
-function gameLoop(timestamp) {
-  console.log("gameLoop", timestamp);
+function gameLoop(timestamp: DOMHighResTimeStamp) {
   start_timestamp = start_timestamp ?? timestamp;
 
   const delta = timestamp - start_timestamp;
   if (delta > interval) {
     start_timestamp = timestamp - (delta % interval);
 
-    _v(()=>game._update?.());
+    _v(() => game._update?.());
     game._draw?.();
-    poolsize.innerText = `free: ${_v.pool.free_count()} in_use: ${_v.pool.in_use_count()}`;
+    poolsize!.innerText = `free: ${_v.pool.free_count()} in_use: ${_v.pool.in_use_count()}`;
   }
 
   if (running) {
@@ -141,3 +139,15 @@ function gameLoop(timestamp) {
 document.getElementById("start")?.addEventListener("click", () => start());
 document.getElementById("stop")?.addEventListener("click", () => stop());
 document.getElementById("parse")?.addEventListener("click", () => parse());
+
+// canvas crisp render experiment
+const canvas = document.getElementById("canvas") as HTMLCanvasElement;
+const ctx = canvas.getContext("2d");
+if (ctx) {
+  ctx.imageSmoothingEnabled = false;
+  ctx.scale(1, 1);
+  ctx.beginPath(); // Start a new path
+  ctx.moveTo(30, 50); // Move the pen to (30, 50)
+  ctx.lineTo(150, 100); // Draw a line to (150, 100)
+  ctx.stroke(); // Render the path
+}

@@ -43,10 +43,10 @@ export class Vect {
     return _v(x, y);
   }
 
-  static fromAngle(angle: number){
+  static fromAngle(angle: number) {
     const x = Math.cos(angle);
     const y = Math.sin(angle);
-    return _v(x,y);
+    return _v(x, y);
   }
 
   static from(other: Vect) {
@@ -81,7 +81,6 @@ export class Vect {
 
   _chain(result: Vect) {
     this.set(result.x, result.y);
-    _v.pool.free(result);
     return this;
   }
 
@@ -356,6 +355,6 @@ export class Vect {
   }
 }
 
-export const ZERO = new Vect(0, 0);
-export const ABSCISSA = new Vect(1, 0);
-export const ORDINATE = new Vect(0, 1);
+export const ZERO = Object.freeze(new Vect(0, 0));
+export const ABSCISSA = Object.freeze(new Vect(1, 0));
+export const ORDINATE = Object.freeze(new Vect(0, 1));
