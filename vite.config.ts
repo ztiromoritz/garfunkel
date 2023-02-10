@@ -12,6 +12,6 @@ export default defineConfig({
     },
   },
   test: {
-    exclude: ['ideas/**/*'],
+    exclude: ['ideas/**/*', '**/node_modules/**', '**/dist/**'],
   },
 });
