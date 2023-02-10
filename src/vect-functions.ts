@@ -13,7 +13,11 @@ interface _v {
   ([x, y]: number[]): Vect;
   (fn: () => Vect): Vect;
   (fn: () => void): void;
-  pool: number;
+  // TODO: maybe handle the void case in a separate function
+  pool: Pool<Vect>;
+  fromArray: ([x, y]: number[]) => Vect;
+  fromAngle: (angle: number) => Vect;
+  from: (other: Vect) => Vect;
 }
 
 export function _v(
@@ -39,6 +43,20 @@ export function _v(
   }
 }
 _v.pool = vect_pool;
+
+_v.fromArray = ([x, y]: number[]) => {
+  return _v(x, y);
+};
+
+_v.fromAngle = (angle: number) => {
+  const x = Math.cos(angle);
+  const y = Math.sin(angle);
+  return _v(x, y);
+};
+
+_v.from = (other: Vect) => {
+  return _v(other.x, other.y);
+};
 
 /**
  * Just the bare formulas, without creating any object inside.
@@ -183,6 +201,10 @@ export function rotate(a: Vect, angle: number, pivot?: Vect) {
 export function rotateTo(a: Vect, to: number) {
   return rotate(a, to - angle(a));
 }
+
+//TODO:
+//  * point reflection
+//  * axis reflection
 
 /**
      * Rotates the vector towards the given angle.
@@ -371,7 +393,7 @@ export function manhatten(a: Vect, b: Vect) {
  *  [optional] reference vector. default: (1,0).
  * @return {number}
  */
-export function angle(a: Vect, ref?: Vect) {
+export function angle(a: Vect, ref?: Vect): number {
   ref = ref || ABSCISSA;
   let result = Math.atan2(a.y, a.x) - Math.atan2(ref.y, ref.x);
   if (result > Math.PI) {
@@ -405,4 +427,8 @@ export function isRightOf(a: Vect, v: Vect) {
   } else {
     return cross(a, v) > 0;
   }
+}
+
+export function toString(a: Vect) {
+  return "x: " + a.x + " y: " + a.y;
 }

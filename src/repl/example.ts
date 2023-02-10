@@ -22,6 +22,9 @@ function _update(){
   if(btn("a")){ a.add(_v(-1,0)) }	
   if(btn("s")){ a.add(_v(0,-1)) }	
   if(btn("d")){ a.add(_v(1,0)) }	
+
+  //_v(3,4).rotate(90).normalize()
+  _v(3,4).normalize()
 }
 
 function _draw(){

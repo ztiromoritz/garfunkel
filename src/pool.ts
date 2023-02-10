@@ -1,3 +1,4 @@
+import { Segment } from "./segment";
 import { Vect } from "./vect";
 
 export type PoolOptions<T> = {
@@ -37,8 +38,12 @@ export function create_pool<T>(options: PoolOptions<T>) {
   // without freeing it
   function lift(o: T) {
     const context = context_stack[context_stack.length - 1];
+    const parent_context = context_stack[context_stack.length - 2];
     if (context && o) {
       context.delete(o);
+      if (parent_context) {
+        parent_context.add(o);
+      }
     }
   }
 
@@ -79,11 +84,11 @@ export function create_pool<T>(options: PoolOptions<T>) {
   };
 }
 
-type PoolObject = Vect; // | Segment | ...
-const all_pools: Pool<PoolObject>[] = [];
+type AllPools = Pool<Vect> | Pool<Segment>;
+const all_pools: AllPools[] = [];
 
 export const Pools = {
-  register(pool: Pool<PoolObject>) {
+  register(pool: AllPools): void {
     all_pools.push(pool);
   },
 
@@ -95,3 +100,10 @@ export const Pools = {
     all_pools.forEach((pool) => pool.pop_context());
   },
 };
+
+export function wrap<T>(fn: () => T): T {
+  Pools.push_context();
+  const result = fn();
+  Pools.pop_context();
+  return result;
+}

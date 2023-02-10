@@ -22,6 +22,7 @@ import {
   rotate,
   rotateTo,
   sub,
+  toString,
   trapeze,
   turnLeft,
   turnRight,
@@ -39,32 +40,18 @@ export class Vect {
     this.y = y || 0;
   }
 
-  static fromArray([x, y]: number[]) {
-    return _v(x, y);
-  }
-
-  static fromAngle(angle: number) {
-    const x = Math.cos(angle);
-    const y = Math.sin(angle);
-    return _v(x, y);
-  }
-
-  static from(other: Vect) {
-    return _v(other.x, other.y);
-  }
-
   /**
    * @return {Vect}
    */
   clone() {
-    return _v(this.x, this.y);
+    return _v.from(this);
   }
 
   /**
    * @return {String}
    */
   toString() {
-    return "x: " + this.x + " y: " + this.y;
+    return toString(this);
   }
 
   /**
