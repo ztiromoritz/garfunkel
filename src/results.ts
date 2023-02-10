@@ -1,4 +1,4 @@
-import { Vect } from "./vect";
+import { Vect } from './vect';
 
 type ValueOf<T> = T[keyof T];
 
@@ -9,10 +9,9 @@ const INTERSECT_RESULT_KIND = {
 
 type IntersectResultKind = ValueOf<typeof INTERSECT_RESULT_KIND>; //| ...
 
-export function _intersect_result(
-  type: IntersectResultKind,
-  point: Vect
-): IntersectResult {
+export function _intersect_result(): IntersectResult {
+//type: IntersectResultKind,
+//point: Vect
   // TODO: use pool
   return new IntersectResult();
 }

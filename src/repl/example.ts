@@ -1,13 +1,14 @@
 // The entry point for usage examples and experiments
 
-import { Vect, _v } from "../main";
+import { _v } from '../main';
 
-import { EditorView, basicSetup } from "codemirror";
-import { javascript } from "@codemirror/lang-javascript";
+import { EditorView, basicSetup } from 'codemirror';
+import { javascript } from '@codemirror/lang-javascript';
 
-import "./plot";
-import { plot } from "./plot";
-import { Coord } from "../coord";
+import './plot';
+import { plot } from './plot';
+import { Coord } from '../coord';
+import { Vect } from '../vect';
 
 const editor = new EditorView({
   doc: `
@@ -33,7 +34,7 @@ function _draw(){
 }
   `,
   extensions: [basicSetup, javascript()],
-  parent: document.getElementById("editor")!,
+  parent: document.getElementById('editor')!,
 });
 
 /*
@@ -44,15 +45,15 @@ editor.on("change", (editor) => {
 editor.focus();
 
 function createKeyboardHandler() {
-  window.addEventListener("blur", () => {
+  window.addEventListener('blur', () => {
     keys.clear();
   });
 
-  window.addEventListener("keydown", (e) => {
+  window.addEventListener('keydown', (e) => {
     keys.add(e.key);
   });
 
-  window.addEventListener("keyup", (e) => {
+  window.addEventListener('keyup', (e) => {
     keys.delete(e.key);
   });
 
@@ -118,7 +119,7 @@ function stop() {
   running = false;
 }
 
-const poolsize = document.getElementById("poolsize");
+const poolsize = document.getElementById('poolsize');
 let start_timestamp: DOMHighResTimeStamp;
 const fps = 30;
 const interval = 1000 / fps;
@@ -139,13 +140,13 @@ function gameLoop(timestamp: DOMHighResTimeStamp) {
   }
 }
 
-document.getElementById("start")?.addEventListener("click", () => start());
-document.getElementById("stop")?.addEventListener("click", () => stop());
-document.getElementById("parse")?.addEventListener("click", () => parse());
+document.getElementById('start')?.addEventListener('click', () => start());
+document.getElementById('stop')?.addEventListener('click', () => stop());
+document.getElementById('parse')?.addEventListener('click', () => parse());
 
 // canvas crisp render experiment
-const canvas = document.getElementById("canvas") as HTMLCanvasElement;
-const ctx = canvas.getContext("2d");
+const canvas = document.getElementById('canvas') as HTMLCanvasElement;
+const ctx = canvas.getContext('2d');
 if (ctx) {
   ctx.imageSmoothingEnabled = false;
   ctx.scale(1, 1);

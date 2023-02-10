@@ -1,25 +1,32 @@
-import { AssertionError } from 'assert';
-import { describe, it, assert, beforeAll, afterAll } from 'vitest'
+import { describe, it, assert, beforeAll, afterAll } from 'vitest';
 import { Coord } from '../coord';
 import { degrees, SQRT_OF_2, TAU } from '../utils';
 import { ABSCISSA, ORDINATE, Vect, ZERO } from '../vect';
 
-
-function almostEqual(x:number,y:number,epsilon:number){
-    assert.isTrue(Math.abs(x-y)<=epsilon, `Difference between ${x} and ${y} larger then epsilon`);
+// @ts-ignore
+function almostEqual(x: number, y: number, epsilon: number) {
+    assert.isTrue(
+        Math.abs(x - y) <= epsilon,
+        `Difference between ${x} and ${y} larger then epsilon`
+    );
 }
 
-function almostEqualVect(a:{x:number,y:number},b:Vect, epsilon:number=0.0001){
-    assert.isTrue(Math.abs(a.x-b.x)<=epsilon, `Difference between x values ${a.x} and ${b.x} larger then epsilon`);
-    assert.isTrue(Math.abs(a.y-b.y)<=epsilon, `Difference between y values ${a.y} and ${b.y} larger then epsilon`);
+function almostEqualVect(
+    a: { x: number; y: number },
+    b: Vect,
+    epsilon: number = 0.0001
+) {
+    assert.isTrue(
+        Math.abs(a.x - b.x) <= epsilon,
+        `Difference between x values ${a.x} and ${b.x} larger then epsilon`
+    );
+    assert.isTrue(
+        Math.abs(a.y - b.y) <= epsilon,
+        `Difference between y values ${a.y} and ${b.y} larger then epsilon`
+    );
 }
 
-
-
-
-describe("Vect", function () {
-
-
+describe('Vect', function () {
     describe('#constructor', function () {
         it('should keep values', function () {
             var v = new Vect(0, 0);
@@ -29,42 +36,39 @@ describe("Vect", function () {
         it('should have defaults', function () {
             var v = new Vect();
 
-      
             assert.equal(0, v.x);
             assert.equal(0, v.y);
         });
     });
 
+    describe('#fromAngle', function () {
+        //const EPSILON = 0.0001;
 
-    describe('#fromAngle', function(){
-
-        const EPSILON = 0.0001;
-
-        it('should start with x:1,y:0', function(){
+        it('should start with x:1,y:0', function () {
             const v = Vect.fromAngle(0);
-            assert.equal(1,v.x);
-            assert.equal(0,v.y);
-        })
+            assert.equal(1, v.x);
+            assert.equal(0, v.y);
+        });
 
-        it('should go upwards on 90°', function(){
-            const v = Vect.fromAngle(TAU/4);
-            almostEqualVect({x:0,y:1}, v);
-        })
+        it('should go upwards on 90°', function () {
+            const v = Vect.fromAngle(TAU / 4);
+            almostEqualVect({ x: 0, y: 1 }, v);
+        });
 
-        it('should go left on 180°', function(){
-            const v = Vect.fromAngle(TAU/2);
-            almostEqualVect({x:-1,y:0}, v);
-        })
+        it('should go left on 180°', function () {
+            const v = Vect.fromAngle(TAU / 2);
+            almostEqualVect({ x: -1, y: 0 }, v);
+        });
 
-        it('should go left on 270°', function(){
-            const v = Vect.fromAngle(TAU*3/4);
-            almostEqualVect({x:0,y:-1}, v);
-        })
+        it('should go left on 270°', function () {
+            const v = Vect.fromAngle((TAU * 3) / 4);
+            almostEqualVect({ x: 0, y: -1 }, v);
+        });
 
-        it('should go wild on 45°', function(){
-            const v = Vect.fromAngle(TAU/8);
-            almostEqualVect({x:SQRT_OF_2/2,y:SQRT_OF_2/2}, v);
-        })
+        it('should go wild on 45°', function () {
+            const v = Vect.fromAngle(TAU / 8);
+            almostEqualVect({ x: SQRT_OF_2 / 2, y: SQRT_OF_2 / 2 }, v);
+        });
     });
 
     describe('#invert', function () {
@@ -76,17 +80,16 @@ describe("Vect", function () {
         });
     });
 
-    describe("#length", function(){
-        it("should measure correct", function(){
+    describe('#length', function () {
+        it('should measure correct', function () {
             const v = new Vect(3, 4);
-        
+
             assert.equal(ABSCISSA.length(), 1);
             assert.equal(ORDINATE.length(), 1);
             assert.equal(ZERO.length(), 0);
             assert.equal(v.length(), 5);
-        })
-   
-    })
+        });
+    });
 
     describe('#mul', function () {
         it('should multiply by scalar', function () {
@@ -133,7 +136,6 @@ describe("Vect", function () {
         });
     });
 
-
     describe('#mirrorOnX, #mirrorOnY', function () {
         it('inverts the corresponding value', function () {
             const u = new Vect(3, 7);
@@ -144,7 +146,6 @@ describe("Vect", function () {
 
             assert.equal(u.y, -7);
             assert.equal(v.x, -11);
-
         });
 
         it('keeps the correct value', function () {
@@ -160,12 +161,10 @@ describe("Vect", function () {
     });
 
     describe('#xComponent, #yComponent', function () {
-
         it('both should add up the to the original vect', function () {
             const u = new Vect(7, 5);
             const u_x = u.clone().xComponent();
             const u_y = u.clone().yComponent();
-
 
             const v = u_x.add(u_y);
 
@@ -183,25 +182,20 @@ describe("Vect", function () {
             assert.equal(u_y.x, 0);
             assert.equal(u_y.y, u.y);
         });
-
-
     });
 
     describe('#trapeze', function () {
-
         const u = new Vect(0, 1);
         const v = new Vect(1, 2);
 
         it('gives a trapeze-ish area', function () {
             assert.equal(u.trapeze(v), 3);
-
         });
 
         it('turns the sign if turned around', function () {
             assert.equal(v.trapeze(u), -3);
         });
     });
-
 
     describe('#dot', function () {
         it('should calc product of length for parrallels', function () {
@@ -255,12 +249,13 @@ describe("Vect", function () {
             var v_0 = v.normalize(42);
             assert.isTrue(Math.abs(v_0.x - 42 / SQRT_OF_2) < EPSILON);
             assert.isTrue(Math.abs(v_0.y - 42 / SQRT_OF_2) < EPSILON);
-            
-            assert.isTrue(Math.abs(v_0.length() - 42) < EPSILON, ""+ v_0.length());
+
+            assert.isTrue(
+                Math.abs(v_0.length() - 42) < EPSILON,
+                '' + v_0.length()
+            );
         });
-
     });
-
 
     describe('#distance', function () {
         it('should give euclidian distance', function () {
@@ -276,7 +271,6 @@ describe("Vect", function () {
             var dist = v.distance(w);
             assert.equal(dist, 5);
         });
-
     });
 
     describe('#distanceSq', function () {
@@ -323,70 +317,95 @@ describe("Vect", function () {
         it('should give a 0° angle', function () {
             var v = new Vect(1, 0);
             var angle = v.angle();
-            assert.isTrue(angle < EPSILON, degrees(angle) + "°");
+            assert.isTrue(angle < EPSILON, degrees(angle) + '°');
         });
 
         it('should give a 90° angle', function () {
             var v = new Vect(0, 1);
             var angle = v.angle();
-            assert.isTrue(Math.abs(angle - Math.PI / 2) < EPSILON, degrees(angle) + "°");
+            assert.isTrue(
+                Math.abs(angle - Math.PI / 2) < EPSILON,
+                degrees(angle) + '°'
+            );
         });
 
         it('should give a 180° angle', function () {
             var v = new Vect(-1, 0);
             var angle = v.angle();
-            assert.isTrue(Math.abs(angle - Math.PI) < EPSILON, degrees(angle) + "°");
+            assert.isTrue(
+                Math.abs(angle - Math.PI) < EPSILON,
+                degrees(angle) + '°'
+            );
         });
 
         it('should give a -90° angle', function () {
             var v = new Vect(0, -1);
             var angle = v.angle();
-            assert.isTrue(Math.abs(angle + Math.PI / 2) < EPSILON, degrees(angle) + "°");
+            assert.isTrue(
+                Math.abs(angle + Math.PI / 2) < EPSILON,
+                degrees(angle) + '°'
+            );
         });
-
 
         it('should give a 90° angle between (-1,0) and a reference of (0,1)', function () {
             var ref = new Vect(0, 1);
             var w = new Vect(-1, 0);
             var angle = w.angle(ref);
-            assert.isTrue(Math.abs(angle - Math.PI / 2) < EPSILON, degrees(angle) + "°");
+            assert.isTrue(
+                Math.abs(angle - Math.PI / 2) < EPSILON,
+                degrees(angle) + '°'
+            );
         });
 
         it('should give a 90° angle between (-1,1) and a reference of (1,1)', function () {
             var ref = new Vect(1, 1);
             var w = new Vect(-1, 1);
             var angle = w.angle(ref);
-            assert.isTrue(Math.abs(angle - Math.PI / 2) < EPSILON, degrees(angle) + "°");
+            assert.isTrue(
+                Math.abs(angle - Math.PI / 2) < EPSILON,
+                degrees(angle) + '°'
+            );
         });
 
         it('should give a 90° angle between (-1,-1) and a reference of (-1,1)', function () {
             var ref = new Vect(-1, 1);
             var w = new Vect(-1, -1);
             var angle = w.angle(ref);
-            assert.isTrue(Math.abs(angle - Math.PI / 2) < EPSILON, degrees(angle) + "°");
+            assert.isTrue(
+                Math.abs(angle - Math.PI / 2) < EPSILON,
+                degrees(angle) + '°'
+            );
         });
 
         it('should give a -90° angle between (-1,1) and a reference of (-1,-1)', function () {
             var ref = new Vect(-1, -1);
             var w = new Vect(-1, 1);
             var angle = w.angle(ref);
-            assert.isTrue(Math.abs(angle + Math.PI / 2) < EPSILON, degrees(angle) + "°");
+            assert.isTrue(
+                Math.abs(angle + Math.PI / 2) < EPSILON,
+                degrees(angle) + '°'
+            );
         });
 
         it('should give a 90° angle between (1,-1)  and a reference of (-1,-1)', function () {
             var ref = new Vect(-1, -1);
             var w = new Vect(1, -1);
             var angle = w.angle(ref);
-            assert.isTrue(Math.abs(angle - Math.PI / 2) < EPSILON, degrees(angle) + "°");
+            assert.isTrue(
+                Math.abs(angle - Math.PI / 2) < EPSILON,
+                degrees(angle) + '°'
+            );
         });
 
         it('should give a 180° angle between (1,1)  and a reference of (-1,-1)', function () {
             var ref = new Vect(-1, -1);
             var w = new Vect(1, 1);
             var angle = w.angle(ref);
-            assert.isTrue(Math.abs(angle - Math.PI) < EPSILON, degrees(angle) + "°");
+            assert.isTrue(
+                Math.abs(angle - Math.PI) < EPSILON,
+                degrees(angle) + '°'
+            );
         });
-
     });
 
     describe('#rotate', function () {
@@ -406,9 +425,7 @@ describe("Vect", function () {
             var after = v.length();
             assert.isTrue(Math.abs(before - after) < EPSILON);
         });
-
     });
-
 
     describe('#rotate with pivot', function () {
         var EPSILON = 0.0001;
@@ -423,7 +440,6 @@ describe("Vect", function () {
         });
     });
 
-
     describe('#rotateTo', function () {
         var EPSILON = 0.0001;
         it('should preserve length', function () {
@@ -435,18 +451,15 @@ describe("Vect", function () {
         });
 
         /*
-         it('should set angle from (1,0)', function () {
-         var v = new Vect(3, 7);
-         var w = new Vect(0, 1);
-         v.rotateTo(Math.PI / 7);
-         var angle = v.angle(w);
-         assert.isTrue(Math.abs(angle - Math.PI / 7) < EPSILON);
-         });
-         */
-
-
+             it('should set angle from (1,0)', function () {
+             var v = new Vect(3, 7);
+             var w = new Vect(0, 1);
+             v.rotateTo(Math.PI / 7);
+             var angle = v.angle(w);
+             assert.isTrue(Math.abs(angle - Math.PI / 7) < EPSILON);
+             });
+             */
     });
-
 
     describe('#isLeftOf/isRightOf', function () {
         var a = new Vect(1, 0);
@@ -463,54 +476,50 @@ describe("Vect", function () {
 
         Coord.setXisLeftOfY(true);
 
-        it('should find the correct right values',
-            function () {
-                assert.isTrue(b.isRightOf(a));
-                assert.isTrue(c.isRightOf(a));
-                assert.isTrue(d.isRightOf(a));
-                assert.isTrue(e.isRightOf(a));
-                assert.isTrue(f.isRightOf(a));
-            }
-        );
+        it('should find the correct right values', function () {
+            assert.isTrue(b.isRightOf(a));
+            assert.isTrue(c.isRightOf(a));
+            assert.isTrue(d.isRightOf(a));
+            assert.isTrue(e.isRightOf(a));
+            assert.isTrue(f.isRightOf(a));
+        });
 
-        it('should find the correct left values',
-            function () {
-                assert.isTrue(h.isLeftOf(a));
-                assert.isTrue(i.isLeftOf(a));
-                assert.isTrue(j.isLeftOf(a));
-            }
-        );
+        it('should find the correct left values', function () {
+            assert.isTrue(h.isLeftOf(a));
+            assert.isTrue(i.isLeftOf(a));
+            assert.isTrue(j.isLeftOf(a));
+        });
 
-        it('should be "anti-reflexive" on true',
-            function () {
-                var l = all.length;
-                for (let n = 0; n < l; n++) {
-                    for (let m = 0; m < l; m++) {
-                        var v1 = all[n];
-                        var v2 = all[m];
-                        if (v1.isRightOf(v2)) {
-                            assert.isTrue(v2.isLeftOf(v1), "Althoug v1: " + v1 + " isRightOf v2:" + v2 + " v2.isLeftOf(v1) is false");
-                        }
+        it('should be "anti-reflexive" on true', function () {
+            var l = all.length;
+            for (let n = 0; n < l; n++) {
+                for (let m = 0; m < l; m++) {
+                    var v1 = all[n];
+                    var v2 = all[m];
+                    if (v1.isRightOf(v2)) {
+                        assert.isTrue(
+                            v2.isLeftOf(v1),
+                            'Althoug v1: ' +
+                                v1 +
+                                ' isRightOf v2:' +
+                                v2 +
+                                ' v2.isLeftOf(v1) is false'
+                        );
                     }
                 }
             }
-        );
+        });
 
-        it('should fail on paralles',
-            function () {
-                assert.isTrue(!g.isLeftOf(a));
-                assert.isTrue(!g.isRightOf(a));
-
-
-            }
-        );
+        it('should fail on paralles', function () {
+            assert.isTrue(!g.isLeftOf(a));
+            assert.isTrue(!g.isRightOf(a));
+        });
 
         it('especcially on itself', function () {
             assert.isTrue(!a.isLeftOf(a));
             assert.isTrue(!a.isRightOf(a));
         });
     });
-
 
     describe('#isLeftOf/isRightOf the other way around', function () {
         var a = new Vect(1, 0);
@@ -533,59 +542,51 @@ describe("Vect", function () {
             Coord.setXisLeftOfY(true);
         });
 
-        it('should find the correct right values',
-            function () {
+        it('should find the correct right values', function () {
+            assert.isTrue(b.isLeftOf(a));
+            assert.isTrue(c.isLeftOf(a));
+            assert.isTrue(d.isLeftOf(a));
+            assert.isTrue(e.isLeftOf(a));
+            assert.isTrue(f.isLeftOf(a));
+        });
 
-                assert.isTrue(b.isLeftOf(a));
-                assert.isTrue(c.isLeftOf(a));
-                assert.isTrue(d.isLeftOf(a));
-                assert.isTrue(e.isLeftOf(a));
-                assert.isTrue(f.isLeftOf(a));
+        it('should find the correct left values', function () {
+            Coord.setXisLeftOfY(false);
+            assert.isTrue(h.isRightOf(a));
+            assert.isTrue(i.isRightOf(a));
+            assert.isTrue(j.isRightOf(a));
+        });
 
-            }
-        );
-
-        it('should find the correct left values',
-            function () {
-                Coord.setXisLeftOfY(false);
-                assert.isTrue(h.isRightOf(a));
-                assert.isTrue(i.isRightOf(a));
-                assert.isTrue(j.isRightOf(a));
-            }
-        );
-
-        it('should be "anti-reflexive" on true',
-            function () {
-                var l = all.length;
-                for (let n = 0; n < l; n++) {
-                    for (let m = 0; m < l; m++) {
-                        var v1 = all[n];
-                        var v2 = all[m];
-                        if (v1.isLeftOf(v2)) {
-                            assert.isTrue(v2.isRightOf(v1), "Althoug v1: " + v1 + " isLeftOf v2:" + v2 + " v2.isRightOf(v1) is false");
-                        }
+        it('should be "anti-reflexive" on true', function () {
+            var l = all.length;
+            for (let n = 0; n < l; n++) {
+                for (let m = 0; m < l; m++) {
+                    var v1 = all[n];
+                    var v2 = all[m];
+                    if (v1.isLeftOf(v2)) {
+                        assert.isTrue(
+                            v2.isRightOf(v1),
+                            'Althoug v1: ' +
+                                v1 +
+                                ' isLeftOf v2:' +
+                                v2 +
+                                ' v2.isRightOf(v1) is false'
+                        );
                     }
                 }
             }
-        );
+        });
 
-        it('should fail on paralles',
-            function () {
-                assert.isTrue(!g.isLeftOf(a));
-                assert.isTrue(!g.isRightOf(a));
-
-
-            }
-        );
+        it('should fail on paralles', function () {
+            assert.isTrue(!g.isLeftOf(a));
+            assert.isTrue(!g.isRightOf(a));
+        });
 
         it('especcially on itself', function () {
             assert.isTrue(!a.isLeftOf(a));
             assert.isTrue(!a.isRightOf(a));
         });
-
-
     });
-
 
     describe('#turnLeft', function () {
         var u = new Vect(0, 1);
@@ -613,9 +614,7 @@ describe("Vect", function () {
             assert.equal(0, v.dot(v_l));
             assert.equal(0, w.dot(w_l));
         });
-
     });
-
 
     describe('#turnRight', function () {
         var u = new Vect(0, 1);
@@ -643,12 +642,9 @@ describe("Vect", function () {
             assert.equal(0, v.dot(v_l));
             assert.equal(0, w.dot(w_l));
         });
-
     });
 
-
     describe('#reflectOn', function () {
-
         it('should do boing', function () {
             var ref = new Vect(1, 0);
             var u = new Vect(1, 2);
@@ -680,7 +676,6 @@ describe("Vect", function () {
             assert.isTrue(Math.abs(u_r.y - 1) < EPSILON);
         });
 
-
         it('should do hää', function () {
             var ref = new Vect(2, 3);
             var u = new Vect(2, 3);
@@ -688,6 +683,5 @@ describe("Vect", function () {
             assert.equal(-2, u_r.x);
             assert.equal(-3, u_r.y);
         });
-
     });
 });
