@@ -1,6 +1,6 @@
-import { Coord } from "./coord";
-import { create_pool, Pool, Pools } from "./pool";
-import { ABSCISSA, Vect, ZERO } from "./vect";
+import { Coord } from './coord';
+import { create_pool, Pool, Pools } from './pool';
+import { ABSCISSA, Vect, ZERO } from './vect';
 
 const vect_pool: Pool<Vect> = create_pool<Vect>({
   create: () => new Vect(),
@@ -29,7 +29,7 @@ export function _v(
     v.x = arg0[0] ?? 0;
     v.y = arg0[1] ?? 0;
     return v;
-  } else if (typeof arg0 === "function") {
+  } else if (typeof arg0 === 'function') {
     Pools.push_context();
     const v = arg0();
     if (v) vect_pool.lift(v);
@@ -148,7 +148,7 @@ export function sub(a: Vect, b: Vect) {
 /**
  * Normalize the given vector.
  *
- * Optional parameter length can be used ass abbreviation.
+ * Optional parameter length can be used as abbreviation.
  * v.normalize.mul(33) -> v.normalize(33);
  * @param {number} length
  *  [optional] length of the target vector. If not set, length is 1.0.
@@ -430,5 +430,5 @@ export function isRightOf(a: Vect, v: Vect) {
 }
 
 export function toString(a: Vect) {
-  return "x: " + a.x + " y: " + a.y;
+  return 'x: ' + a.x + ' y: ' + a.y;
 }

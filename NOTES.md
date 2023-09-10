@@ -11,3 +11,9 @@ Rules:
       be a newly used object from one of the pools or a primitive result like a number (scalar) or boolean
 
 - class methods in files like vect.ts and segment.ts can mutate the object and are chainable.
+
+Ideas:
+
+- Create a special Pool<Vect> which stores the data in a Float32Array. But how to avoid an Vect object allocation at all.
+- Is there a problem with circular dependencies between vect.ts <-> vect-functions.ts?
+- Benchmarks :D
