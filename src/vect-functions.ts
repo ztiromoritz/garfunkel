@@ -297,7 +297,10 @@ export function dot(a: Vect, b: Vect) {
  * Not exactly the cross product, because seems not to be defined for 2d vectors.
  *
  * "Gives the Z-component of 3d cross product, if the two given
- * vectors where extended to 3d vectors."
+ * vectors where extended to 3d vectors with a Z-component of 0.
+ * So a and b are 3d vectors in the x-y plane.
+ * The resulting vector is orthogonal to both of them.
+ * And therefor only the Z-component has a non-zero value."
  * or
  * "Determinant of a 2x2 matrix build by the two vectors."
  *
