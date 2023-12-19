@@ -283,7 +283,7 @@ export class Vect {
    * @chainable
    * @return {Vect}
    */
-  leftNormal() {
+  toLeftNormal() {
     return this._chain(leftNormal(this));
   }
 
@@ -291,7 +291,7 @@ export class Vect {
    * @chainable
    * @return {Vect}
    */
-  rightNormal() {
+  toRightNormal() {
     return this._chain(rightNormal(this));
   }
 

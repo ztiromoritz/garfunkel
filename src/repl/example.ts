@@ -1,6 +1,6 @@
 // The entry point for usage examples and experiments
 
-import { _v, _s, _c } from '../main';
+import { _v, _s, _c,  } from '../main';
 
 import { EditorView, basicSetup } from 'codemirror';
 import { javascript } from '@codemirror/lang-javascript';
@@ -9,6 +9,8 @@ import './plot';
 import { plot } from './plot';
 import { Coord } from '../coord';
 import { Vect } from '../vect';
+import { Segment } from '../segment';
+import { Circle } from '../circle';
 
 const editor = new EditorView({
 	doc: `
@@ -71,7 +73,7 @@ function createKeyboardHandler() {
 const keyboardHandler = createKeyboardHandler();
 
 const helper = {
-	print(o: Vect | Segment) {
+	print(o: Vect | Segment| Circle) {
 		const type = o?.constructor?.name as String;
 		if (!type) return;
 		switch (type) {
