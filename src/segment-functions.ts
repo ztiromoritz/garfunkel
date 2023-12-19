@@ -1,6 +1,7 @@
-import { create_pool, Pool, Pools, wrap } from "./pool";
-import { Segment } from "./segment";
-import { ABSCISSA, Vect, ZERO } from "./vect";
+import { create_pool, Pool, Pools, wrap } from './pool';
+import { Segment } from './segment';
+import { ABSCISSA, Vect, ZERO } from './vect';
+import { EPSILON } from './utils';
 import {
   normalize,
   rotate as vect_rotate,
@@ -9,7 +10,7 @@ import {
   lengthSq as vect_lengthSq,
   sub,
   _v,
-} from "./vect-functions";
+} from './vect-functions';
 
 const segment_pool: Pool<Segment> = create_pool<Segment>({
   create: () => new Segment(),
@@ -29,9 +30,9 @@ export function _s(
   arg0?: Vect | (() => Segment) | number,
   arg1?: Vect | number,
   arg2?: number,
-  arg3?: number
+  arg3?: number,
 ): Segment {
-  if (typeof arg0 === "function") {
+  if (typeof arg0 === 'function') {
     Pools.push_context();
     const s = arg0();
     if (s) segment_pool.lift(s);
@@ -39,10 +40,10 @@ export function _s(
     return s;
   } else if (
     arguments.length === 4 &&
-    typeof arg0 === "number" &&
-    typeof arg1 === "number" &&
-    typeof arg2 === "number" &&
-    typeof arg3 === "number"
+    typeof arg0 === 'number' &&
+    typeof arg1 === 'number' &&
+    typeof arg2 === 'number' &&
+    typeof arg3 === 'number'
   ) {
     const s = segment_pool.get();
     s.x1 = arg0;
@@ -52,8 +53,8 @@ export function _s(
     return s;
   } else {
     const s = segment_pool.get();
-    const p1 = arg0?.constructor?.name === "Vect" ? (arg0 as Vect) : ZERO;
-    const p2 = arg1?.constructor?.name === "Vect" ? (arg1 as Vect) : ABSCISSA;
+    const p1 = arg0?.constructor?.name === 'Vect' ? (arg0 as Vect) : ZERO;
+    const p2 = arg1?.constructor?.name === 'Vect' ? (arg1 as Vect) : ABSCISSA;
     s.set(p1, p2);
     return s;
   }
@@ -76,6 +77,10 @@ _s.fromSupport = (support: Vect, connection: Vect) => {
 // functions
 export function toString(s: Segment): string {
   return `[Segment p1: (${s.x1}, ${s.y1}) p2: (${s.x2}, ${s.y2}) ]`;
+}
+
+export function support(s: Segment): Vect {
+  return _v(s.x1, s.y1);
 }
 
 export function connection(s: Segment): Vect {
@@ -164,6 +169,95 @@ export function lengthSq(s: Segment): number {
   return wrap(() => vect_lengthSq(connection(s)));
 }
 
+export type IntersectResultEquivalent = { type: 'EQUIVALENT' };
+export type IntersectResultParallel = { type: 'PARALLEL' };
+export type IntersectResultIntersect = {
+  type: 'INTERSECT';
+  t1: number;
+  t2: number;
+};
+
+export type IntersectResult =
+  | IntersectResultIntersect
+  | IntersectResultParallel
+  | IntersectResultEquivalent;
+/**
+ *
+ *
+ **/
+export function intersectLines(s1: Segment, s2: Segment): IntersectResult {
+  return wrap<IntersectResult>(() => {
+    const a = support(s1);
+    const c = support(s2);
+
+    const b = direction(s1);
+    const d = direction(s2);
+
+    // distance between support vectors
+    const z1 = c.clone().sub(a);
+    const z2 = z1.clone().invert();
+
+    const cross1 = b.cross(d);
+    const cross2 = d.cross(b);
+
+    const numerator1 = z1.cross(d);
+    const numerator2 = z2.cross(d);
+
+    if (Math.abs(cross1) < EPSILON) {
+      //directions are parallel
+      if (Math.abs(numerator1) < EPSILON) {
+        //connection of support is parallel to direction
+        return { type: 'EQUIVALENT' };
+      } else {
+        return { type: 'PARALLEL' };
+      }
+    }
+
+    return {
+      type: 'INTERSECT',
+      t1: numerator1 / cross1,
+      t2: numerator2 / cross2,
+    };
+  });
+}
+
+/**
+ *
+ * @param line
+ * @returns {Vect|Line.PARALLEL|Line.EQUIVALENT} - Intersection is
+ */
+/*******
+Line.prototype.intersect = function (line) {
+
+
+		// this: x = a + b*t
+		// line: x = c + d*s
+
+		//direction vectors
+		var b = this.direction();
+		var d = line.direction();
+
+		//support vectors
+		var a = this.p1;
+		var c = line.p1;
+
+		//difference between support vector
+		var z = c.clone().sub(a);
+
+		var cross = b.cross(d);
+		var numerator = z.cross(d); //(this.p1.y-line.p1.y)*d.x - (this.p1.x-line.p1.x)* d.y;
+
+		if (Math.abs(cross) < Garfunkel.EPSILON) { //directions are parallel
+				if (Math.abs(numerator) < Garfunkel.EPSILON) { //connection of support is parallel to direction
+						return Line.EQUAL;
+				} else {
+						return Line.PARALLEL;
+				}
+		}
+		var t = numerator / cross;
+		return this.p1.clone().add(b.mul(t));
+};
+*/
 // Segment.prototype.getBoundingBox = function () {
 //   return new Box.fromSegment(this);
 // };
