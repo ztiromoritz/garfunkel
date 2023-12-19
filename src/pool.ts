@@ -1,5 +1,6 @@
 import { Segment } from "./segment";
 import { Vect } from "./vect";
+import { Circle } from "./circle";
 
 export type PoolOptions<T> = {
   create: () => T;
@@ -84,7 +85,7 @@ export function create_pool<T>(options: PoolOptions<T>) {
   };
 }
 
-type AllPools = Pool<Vect> | Pool<Segment>;
+type AllPools = Pool<Vect> | Pool<Segment> | Pool<Circle>;
 const all_pools: AllPools[] = [];
 
 export const Pools = {

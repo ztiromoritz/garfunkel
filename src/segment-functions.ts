@@ -3,61 +3,68 @@ import { Segment } from './segment';
 import { ABSCISSA, Vect, ZERO } from './vect';
 import { EPSILON } from './utils';
 import {
-  normalize,
-  rotate as vect_rotate,
-  angle as vect_angle,
-  length as vect_length,
-  lengthSq as vect_lengthSq,
-  sub,
-  _v,
+	normalize,
+	rotate as vect_rotate,
+	angle as vect_angle,
+	length as vect_length,
+	lengthSq as vect_lengthSq,
+	sub,
+	_v,
 } from './vect-functions';
 
+/**
+ * This is the doc comment for file1.ts
+ *
+ * Specify this is a module comment and rename it to my-module:
+ * @module Segment
+ */
+
 const segment_pool: Pool<Segment> = create_pool<Segment>({
-  create: () => new Segment(),
+	create: () => new Segment(),
 });
 
 Pools.register(segment_pool);
 
 interface _s {
-  (p1?: Vect, p2?: Vect): Segment;
-  (x1: number, y1: number, x2: number, y2: number): Segment;
-  (fn: () => Segment): Segment;
-  pool: Pool<Segment>;
-  fromSupport: (support: Vect, direction: Vect) => Segment;
+	(p1?: Vect, p2?: Vect): Segment;
+	(x1: number, y1: number, x2: number, y2: number): Segment;
+	(fn: () => Segment): Segment;
+	pool: Pool<Segment>;
+	fromSupport: (support: Vect, direction: Vect) => Segment;
 }
 
 export function _s(
-  arg0?: Vect | (() => Segment) | number,
-  arg1?: Vect | number,
-  arg2?: number,
-  arg3?: number,
+	arg0?: Vect | (() => Segment) | number,
+	arg1?: Vect | number,
+	arg2?: number,
+	arg3?: number,
 ): Segment {
-  if (typeof arg0 === 'function') {
-    Pools.push_context();
-    const s = arg0();
-    if (s) segment_pool.lift(s);
-    Pools.pop_context();
-    return s;
-  } else if (
-    arguments.length === 4 &&
-    typeof arg0 === 'number' &&
-    typeof arg1 === 'number' &&
-    typeof arg2 === 'number' &&
-    typeof arg3 === 'number'
-  ) {
-    const s = segment_pool.get();
-    s.x1 = arg0;
-    s.y1 = arg1;
-    s.x2 = arg2;
-    s.y2 = arg3;
-    return s;
-  } else {
-    const s = segment_pool.get();
-    const p1 = arg0?.constructor?.name === 'Vect' ? (arg0 as Vect) : ZERO;
-    const p2 = arg1?.constructor?.name === 'Vect' ? (arg1 as Vect) : ABSCISSA;
-    s.set(p1, p2);
-    return s;
-  }
+	if (typeof arg0 === 'function') {
+		Pools.push_context();
+		const s = arg0();
+		if (s) segment_pool.lift(s);
+		Pools.pop_context();
+		return s;
+	} else if (
+		arguments.length === 4 &&
+		typeof arg0 === 'number' &&
+		typeof arg1 === 'number' &&
+		typeof arg2 === 'number' &&
+		typeof arg3 === 'number'
+	) {
+		const s = segment_pool.get();
+		s.x1 = arg0;
+		s.y1 = arg1;
+		s.x2 = arg2;
+		s.y2 = arg3;
+		return s;
+	} else {
+		const s = segment_pool.get();
+		const p1 = arg0?.constructor?.name === 'Vect' ? (arg0 as Vect) : ZERO;
+		const p2 = arg1?.constructor?.name === 'Vect' ? (arg1 as Vect) : ABSCISSA;
+		s.set(p1, p2);
+		return s;
+	}
 }
 
 _s.pool = segment_pool;
@@ -66,42 +73,42 @@ _s.pool = segment_pool;
  * Create segment from support and connection vector
  */
 _s.fromSupport = (support: Vect, connection: Vect) => {
-  const s = _s();
-  s.x1 = support.x;
-  s.y1 = support.y;
-  s.x2 = support.x + connection.x;
-  s.y2 = support.y + connection.y;
-  return s;
+	const s = _s();
+	s.x1 = support.x;
+	s.y1 = support.y;
+	s.x2 = support.x + connection.x;
+	s.y2 = support.y + connection.y;
+	return s;
 };
 
 // functions
 export function toString(s: Segment): string {
-  return `[Segment p1: (${s.x1}, ${s.y1}) p2: (${s.x2}, ${s.y2}) ]`;
+	return `[Segment p1: (${s.x1}, ${s.y1}) p2: (${s.x2}, ${s.y2}) ]`;
 }
 
 export function support(s: Segment): Vect {
-  return _v(s.x1, s.y1);
+	return _v(s.x1, s.y1);
 }
 
 export function connection(s: Segment): Vect {
-  const x = s.x2 - s.x1;
-  const y = s.y2 - s.y1;
-  return _v(x, y);
+	const x = s.x2 - s.x1;
+	const y = s.y2 - s.y1;
+	return _v(x, y);
 }
 
 export function direction(s: Segment): Vect {
-  return _v(() => {
-    const c = connection(s);
-    return normalize(c);
-  });
+	return _v(() => {
+		const c = connection(s);
+		return normalize(c);
+	});
 }
 
 export function translate(s: Segment, v: Vect): Segment {
-  const x1 = s.x1 + v.x;
-  const y1 = s.y1 + v.y;
-  const x2 = s.x2 + v.x;
-  const y2 = s.y2 + v.y;
-  return _s(x1, y1, x2, y2);
+	const x1 = s.x1 + v.x;
+	const y1 = s.y1 + v.y;
+	const x2 = s.x2 + v.x;
+	const y2 = s.y2 + v.y;
+	return _s(x1, y1, x2, y2);
 }
 
 /**
@@ -115,19 +122,19 @@ export function translate(s: Segment, v: Vect): Segment {
  * @returns {Segment}
  */
 export function rotate(s: Segment, angle: number, pivot?: Vect) {
-  const p1 = _v(s.x1, s.y1);
-  const p2 = _v(s.x2, s.y2);
-  return _s(vect_rotate(p1, angle, pivot), vect_rotate(p2, angle, pivot));
+	const p1 = _v(s.x1, s.y1);
+	const p2 = _v(s.x2, s.y2);
+	return _s(vect_rotate(p1, angle, pivot), vect_rotate(p2, angle, pivot));
 }
 
 /**
  * Move Segments support vector (x1,y1) to center (0,0). Keeps direction and length
  */
 export function toCenter(s: Segment): Segment {
-  return _s(() => {
-    const move = sub(ZERO, _v(s.x1, s.y1));
-    return translate(s, move);
-  });
+	return _s(() => {
+		const move = sub(ZERO, _v(s.x1, s.y1));
+		return translate(s, move);
+	});
 }
 
 /**
@@ -145,80 +152,110 @@ export function toCenter(s: Segment): Segment {
  *
  */
 export function getPoint(s: Segment, position: number): Vect {
-  const x = s.x2 * position + s.x1 * (1 - position);
-  const y = s.y2 * position + s.y1 * (1 - position);
-  return _v(x, y);
+	const x = s.x2 * position + s.x1 * (1 - position);
+	const y = s.y2 * position + s.y1 * (1 - position);
+	return _v(x, y);
 }
 
 export function getMiddle(s: Segment): Vect {
-  return getPoint(s, 0.5);
+	return getPoint(s, 0.5);
 }
 
 export function angle(s: Segment, ref?: Vect): number {
-  // TODO: wrap with scalar wrapper
-  return wrap(() => vect_angle(connection(s), ref));
+	// TODO: wrap with scalar wrapper
+	return wrap(() => vect_angle(connection(s), ref));
 }
 
 export function length(s: Segment): number {
-  // TODO: wrap with scalar wrapper
-  return wrap(() => vect_length(connection(s)));
+	// TODO: wrap with scalar wrapper
+	return wrap(() => vect_length(connection(s)));
 }
 
 export function lengthSq(s: Segment): number {
-  // TODO: wrap with scalar wrapper
-  return wrap(() => vect_lengthSq(connection(s)));
+	// TODO: wrap with scalar wrapper
+	return wrap(() => vect_lengthSq(connection(s)));
 }
 
-export type IntersectResultEquivalent = { type: 'EQUIVALENT' };
-export type IntersectResultParallel = { type: 'PARALLEL' };
-export type IntersectResultIntersect = {
-  type: 'INTERSECT';
-  t1: number;
-  t2: number;
-};
+// What does t1 and t2 mean in this case
+export type Equivalent = { type: 'EQUIVALENT' };
+export type Parallel = { type: 'PARALLEL' };
 
-export type IntersectResult =
-  | IntersectResultIntersect
-  | IntersectResultParallel
-  | IntersectResultEquivalent;
 /**
+	*<p>
+ * The two lines intersect in a point p that can be calculated like this:
+ * <ul>
+ *  <li> a&#8407; is the support vector of s1
+ *  <li> b&#8407; is the connection of s1
+ *  <li> c&#8407; is the support vector of s2
+ *  <li> b&#8407; is the connection of s1
+ * </ul>
+ * 
+ * Then: p = a&#8407; + t1 * c&#8407; =  c&#8407; + t1 * b&#8407;
+ *</p>
  *
+ * ```ts
+ * p = add(support(s1), mul(connection(s1), t1)
+ * ```
+ *
+ * If 0<= t1 <=1 and 0<= t2 <=1 then also the both segments intersect.
+ * As t1 and t2 gives the position on the segment.
+ * (TODO)
  *
  **/
-export function intersectLines(s1: Segment, s2: Segment): IntersectResult {
-  return wrap<IntersectResult>(() => {
-    const a = support(s1);
-    const c = support(s2);
+export type Intersect = {
+	type: 'INTERSECT';
+	t1: number;
+	t2: number;
+};
 
-    const b = direction(s1);
-    const d = direction(s2);
+export type IntersectLinesResult = Intersect | Parallel | Equivalent;
 
-    // distance between support vectors
-    const z1 = c.clone().sub(a);
-    const z2 = z1.clone().invert();
+/**
+ *
+ * Check the intersection of two lines represented by Segments.
+ * <img src="media://lineIntersect.jpeg" alt="two intersecting vectors with small directions vectors d and b and support points a and c.">
+ *
+ * How to interpret the result:
+ * If the result type is {@link Intersect}
+ *
+ **/
+export function intersectLines(s1: Segment, s2: Segment): IntersectLinesResult {
+	return wrap<IntersectLinesResult>(() => {
+		const a = support(s1);
+		const c = support(s2);
 
-    const cross1 = b.cross(d);
-    const cross2 = d.cross(b);
+		const b = connection(s1);
+		const d = connection(s2);
 
-    const numerator1 = z1.cross(d);
-    const numerator2 = z2.cross(d);
+		// distance between support vectors
+		const z1 = c.clone().sub(a);
+		const z2 = z1.clone().invert();
 
-    if (Math.abs(cross1) < EPSILON) {
-      //directions are parallel
-      if (Math.abs(numerator1) < EPSILON) {
-        //connection of support is parallel to direction
-        return { type: 'EQUIVALENT' };
-      } else {
-        return { type: 'PARALLEL' };
-      }
-    }
+		// check, if directions b and d are parallel
+		const cross1 = b.cross(d);
+		const cross2 = d.cross(b);
 
-    return {
-      type: 'INTERSECT',
-      t1: numerator1 / cross1,
-      t2: numerator2 / cross2,
-    };
-  });
+		// check, if connection between both supports
+		// is parallel to the direction of the
+		const numerator1 = z1.cross(d);
+		const numerator2 = z2.cross(b);
+
+		if (Math.abs(cross1) < EPSILON) {
+			//directions are parallel
+			if (Math.abs(numerator1) < EPSILON) {
+				//connection of support is parallel to direction
+				return { type: 'EQUIVALENT' };
+			} else {
+				return { type: 'PARALLEL' };
+			}
+		}
+
+		return {
+			type: 'INTERSECT',
+			t1: numerator1 / cross1,
+			t2: numerator2 / cross2,
+		};
+	});
 }
 
 /**

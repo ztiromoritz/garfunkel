@@ -2,6 +2,7 @@ export { wrap, Pools } from './pool';
 
 export { _v } from './vect-functions';
 export { _s } from './segment-functions';
+export { _c } from './circle-functions';
 
 export { Coord } from './coord';
 

@@ -8,7 +8,7 @@
   ],
   "types": "dist/main.d.ts",
   "scripts": {
-		"start":"npm run dev",
+    "start": "npm run dev",
     "dev": "npx concurrently --kill-others \"npm run dev:vite\" \"npm run dev:doc\" \"npm run dev:test\"",
     "build": "tsc && vite build",
     "preview": "vite preview",
@@ -16,7 +16,7 @@
     "doc": "npx typedoc src/main.ts",
     "upgrade": "npx npm-check-updates -u --format group",
     "dev:vite": "vite",
-    "dev:doc": "npx typedoc --watch src/main.ts",
+    "dev:doc": "npx typedoc --watch src/**",
     "dev:test": "vitest --ui --open false"
   },
   "main": "./dist/garfunkel.umd.js",
@@ -39,7 +39,10 @@
   },
   "dependencies": {
     "@codemirror/lang-javascript": "^6.2.1",
+    "@fontsource/do-hyeon": "^5.0.17",
+    "@fontsource/rubik-mono-one": "^5.0.18",
     "codemirror": "^6.0.1",
+    "open-props": "^1.6.16",
     "petite-vue": "^0.4.1"
   }
 }

@@ -45,14 +45,14 @@ export class Vect {
   }
 
   /**
-   * @return {Vect}
+   * @return  
    */
   clone() {
     return _v.from(this);
   }
 
   /**
-   * @return {String}
+   * @return 
    */
   toString() {
     return toString(this);
@@ -70,7 +70,7 @@ export class Vect {
     return this;
   }
 
-  _chain(result: Vect) {
+  _chain(result: Vect): this {
     this.set(result.x, result.y);
     return this;
   }
@@ -102,7 +102,7 @@ export class Vect {
    * @param {Number} a scalar to multiply the vector with
    * @return {Vect}
    */
-  mul(s: number) {
+  mul(s: number): this {
     return this._chain(mul(this, s));
   }
 
@@ -191,9 +191,9 @@ export class Vect {
   /**
    * Normalize the given vector.
    *
-   * Optional parameter length can be used ass abbreviation.
-   * v.normalize.mul(33) -> v.normalize(33);
-   * @param {number} length
+   * Optional parameter length can be used as abbreviation.
+   * v.normalize().mul(33) -> v.normalize(33);
+   * @param length
    *  [optional] length of the target vector. If not set, length is 1.0.
    *
    * @return {Vect}
