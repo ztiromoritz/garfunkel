@@ -45,14 +45,14 @@ export class Vect {
   }
 
   /**
-   * @return  
+   * @return
    */
   clone() {
     return _v.from(this);
   }
 
   /**
-   * @return 
+   * @return
    */
   toString() {
     return toString(this);
@@ -123,7 +123,7 @@ export class Vect {
    * @param {Vect} v
    * @return {Vect}
    */
-  add(v: Vect) {
+  add(v: Vect): this {
     return this._chain(add(this, v));
   }
 
@@ -133,8 +133,22 @@ export class Vect {
    * @param {Vect} v
    * @return {Vect}
    */
-  sub(v: Vect) {
+  sub(v: Vect): this {
     return this._chain(sub(this, v));
+  }
+
+  /**
+   * Normalize the given vector.
+   *
+   * Optional parameter length can be used as abbreviation.
+   * v.normalize().mul(33) -> v.normalize(33);
+   * @param length
+   *  [optional] length of the target vector. If not set, length is 1.0.
+   * @chainable
+   * @return {Vect}
+   */
+  normalize(length?: number): this {
+    return this._chain(normalize(this, length));
   }
 
   /**
@@ -186,20 +200,6 @@ export class Vect {
    */
   trapeze(v: Vect) {
     return trapeze(this, v);
-  }
-
-  /**
-   * Normalize the given vector.
-   *
-   * Optional parameter length can be used as abbreviation.
-   * v.normalize().mul(33) -> v.normalize(33);
-   * @param length
-   *  [optional] length of the target vector. If not set, length is 1.0.
-   *
-   * @return {Vect}
-   */
-  normalize(length?: number) {
-    return this._chain(normalize(this, length));
   }
 
   /**

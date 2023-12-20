@@ -26,3 +26,7 @@ Things I experimented with on the way:
  * Build a minimal in browser playground with `_init,_update,_draw` and svg rendering and vue-petite
  * Going from `var` to `let` and `const` :)
  * Drawing jittering arrows
+
+
+# Readings
+ * https://github.com/TypeStrong/typedoc/issues/2458 this type and chaining in typedocs
