@@ -63,7 +63,10 @@ export function _s(
     const s = segment_pool.get();
     const p1 = arg0?.constructor?.name === 'Vect' ? (arg0 as Vect) : ZERO;
     const p2 = arg1?.constructor?.name === 'Vect' ? (arg1 as Vect) : ABSCISSA;
-    s.set(p1, p2);
+    s.x1 = p1.x;
+    s.y1 = p1.y;
+    s.x2 = p2.x;
+    s.y2 = p2.y;
     return s;
   }
 }

@@ -7,12 +7,13 @@ import {
   lengthSq,
   direction,
   support,
-	translate,
-	rotate,
-	toCenter,
-	angle,
-	getMiddle,
-	getPoint
+  translate,
+  rotate,
+  toCenter,
+  angle,
+  getMiddle,
+  getPoint,
+  toString,
 } from './segment-functions';
 
 export class Segment {
@@ -104,38 +105,27 @@ export class Segment {
     return toString(this);
   }
 
-	getPoint(position: number): Vect {
-		// Todo
-	}
+  getPoint(position: number): Vect {
+    return getPoint(this, position);
+  }
 
-	getMiddle(): Vect {
-		return // Todo
-	}
+  getMiddle(): Vect {
+    return getMiddle(this);
+  }
 
-	angle(ref?: Vect): number {
-		return angle(this, ref);
-	}
-
+  angle(ref?: Vect): number {
+    return angle(this, ref);
+  }
 
   translate(v: Vect): this {
     return this._chain(translate(this, v));
   }
 
-	rotate(angle: number, pivot?:Vect): this {
-		return this._chain(rotate(this, angle, pivot));
-	}
+  rotate(angle: number, pivot?: Vect): this {
+    return this._chain(rotate(this, angle, pivot));
+  }
 
-	toCenter(): this {
-		return this._chain(toCenter(this));
-	}
-
-
-
-
-
-
-
-
-
-
+  toCenter(): this {
+    return this._chain(toCenter(this));
+  }
 }
