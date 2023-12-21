@@ -230,9 +230,42 @@ export type IntersectLinesResult = Intersect | Parallel | Equivalent;
  *
  * How to interpret the result:
  * If the result type is {@link Intersect}
+ *  type "ITERSECT":
+ *    The two lines described by the two segments intersect.
+ *    The Intersection point can be calculated with:
+ *    		p = s1.getPoint(t1) oder p = s2.getPoint(t2)
+ *    If t1 is in [0,1] the intersection lies on the first segment.
+ *    If t2 is in [0,1] the intersection lies on the second segment.
+ *  type "PARALLEL":
+ *     the two line are parallel
+ *  type "EQUIVALENT"
+ *  	 the two lines are the same
+ *  	 (no more informations about the segments here)
+ *
  *
  **/
 export function intersectLines(s1: Segment, s2: Segment): IntersectLinesResult {
+  /**
+   *
+   * How this works?
+   * The both lines are described by two segments.
+   * S1: a + t1*b
+   * S2: b + t2*d
+   * With vectors a,b,c,d and scalar values t1,t2.
+   * And 'x' as cross operator
+   *
+   * To find the intersection we do:
+   *              a + t1*b =  c + t2*d
+   *        (a + t1*b) x d = (c + t2*d) x d
+   *  (a x d) + t1*(b x d) = (c x d) + t2 (d x d)    | d x d = 0-vect
+   *  (a x d) + t1*(b x d) = (c x d)
+   *            t1*(b x d) = (c x d) - (a x d)
+   *            t1*(b x d) = (c - a) x d
+   *                    t1 = ((c - a) x d)/ (b x d)
+   *                    t1 = numerator / denominator
+   *
+   * Cases: TODO: visual explanation for numerator==0/denominator == 0
+   **/
   return wrap<IntersectLinesResult>(() => {
     const a = support(s1);
     const c = support(s2);
@@ -242,18 +275,15 @@ export function intersectLines(s1: Segment, s2: Segment): IntersectLinesResult {
 
     // distance between support vectors
     const z1 = c.clone().sub(a);
-    const z2 = z1.clone().invert();
-
-    // check, if directions b and d are parallel
-    const cross1 = b.cross(d);
-    const cross2 = d.cross(b);
 
     // check, if connection between both supports
     // is parallel to the direction of the
     const numerator1 = z1.cross(d);
-    const numerator2 = z2.cross(b);
 
-    if (Math.abs(cross1) < EPSILON) {
+    // check, if directions b and d are parallel
+    const denominator1 = b.cross(d);
+
+    if (Math.abs(denominator1) < EPSILON) {
       //directions are parallel
       if (Math.abs(numerator1) < EPSILON) {
         //connection of support is parallel to direction
@@ -263,10 +293,14 @@ export function intersectLines(s1: Segment, s2: Segment): IntersectLinesResult {
       }
     }
 
+    const z2 = z1.clone().invert();
+    const numerator2 = z2.cross(b);
+    const denominator2 = -denominator1; //d.cross(b);
+
     return {
       type: 'INTERSECT',
-      t1: numerator1 / cross1,
-      t2: numerator2 / cross2,
+      t1: numerator1 / denominator1,
+      t2: numerator2 / denominator2,
     };
   });
 }

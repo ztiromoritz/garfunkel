@@ -32,11 +32,10 @@ describe('Segment', () => {
       const s2 = _s(2, 1, 2, 3);
       const result = intersectLines(s1, s2);
 
-			console.log({result, p: s1.getPoint(result.t1)});
 
       assert(result.type == 'INTERSECT');
-      assert(result.t1 == 0.5);
-      assert(result.t2 == 0.5);
+      assert(result.t1 == 5/6);
+      assert(result.t2 == -0.25);
     });
 
 
@@ -46,7 +45,7 @@ describe('Segment', () => {
       const result = intersectLines(s1, s2);
 
       assert(result.type == 'INTERSECT');
-      assert(result.t1 == 0.5);
+      assert(result.t1 == 0.25);
       assert(result.t2 == 0.5);
     });
 
@@ -62,6 +61,22 @@ describe('Segment', () => {
 			almostEqualVect(p1,p2);
 			almostEqualVect(p1, _v(-0.8, -0.4))
     });
+
+  		
+    it('intersectLines_circle_example', () => {
+      const s1 = _s(1, -4, -2, 2);
+      const s2 = _s(-2, -1, 0, 0);
+      const result = intersectLines(s1, s2);
+
+      assert(result.type == 'INTERSECT');
+			const p1 = s1.getPoint(result.t1);
+			const p2 = s2.getPoint(result.t2);
+			
+			almostEqualVect(p1,p2);
+			almostEqualVect(p1, _v(-0.8, -0.4))
+    });
+
+  		
 
     it('intersectLines_PARALLEL', () => {
       const s1 = _s(0, 0, 6, 0);

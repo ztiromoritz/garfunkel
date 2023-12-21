@@ -1,18 +1,15 @@
 import { Circle } from './circle';
 import { wrap } from './pool';
-import { _s, connection, intersectLines, support } from './segment-functions';
+import { _s, intersectLines } from './segment-functions';
 import { Vect } from './vect';
 import {
   _v,
-  add,
-  mul,
   distance,
   length as vect_length,
 } from './vect-functions';
 
 /**
  * Collide a moving circle with a given point u.
- *
  **/
 export function circle_point_intersect(
   circle: Circle,
@@ -21,31 +18,38 @@ export function circle_point_intersect(
 ) {
   return wrap(() => {
     const m = _v(circle.x, circle.y);
-    const s1 = _s(m, movement);
 
+		// Take s1 as the movement segment of the center
+    const s1 = _s.fromSupport(m, movement);
+
+		// Find a line through u ortogonal to s1
     const dir = movement.clone().toRightNormal();
-    console.log({ dir, movement: movement.normalize() });
-    const sup = u;
-    const s = _s(sup, dir);
-    const s2 = _s.fromSupport(sup, dir);
-    console.log({ s, s2 });
+    const s2 = _s.fromSupport(u, dir);
+
+		// intersect them
     const intersect = intersectLines(s1, s2);
-    let p: Vect;
-    let b: number;
     if (intersect.type === 'INTERSECT') {
-      const q = s1.getPoint(intersect.t1);
-      const r = s2.getPoint(intersect.t2);
-      p = add(support(s1), mul(connection(s1), intersect.t1));
-      console.log({ p, q, r });
+			const p = s1.getPoint(intersect.t1)
+
+			// At the time of collision the three points:
+			// u - The target point
+			// p - the point where s1 and s2 intersect
+			// m - the center of the circle
+			// create a right-angled triangle with r as hypothenuse (u,m).
 
       // Pythagoras
       const a = distance(u, p);
       const c = circle.radius;
-      b = Math.sqrt(c * c - a * a);
-
-      return distance(m, p) - b / vect_length(movement);
+      const b = Math.sqrt(c * c - a * a);
+			
+			// Distance the circle already moved 
+			// as percentage of the whole movement
+      return (distance(m, p) - b) / vect_length(movement);
     } else {
-      b = circle.radius;
+			// TODO:
+			// Can we get this case first without intersect
+			// Line-vs-Point intersection
+      const b = circle.radius;
       return distance(m, u) - b / vect_length(movement);
     }
   });
