@@ -230,7 +230,7 @@ export type IntersectLinesResult = Intersect | Parallel | Equivalent;
  *
  * How to interpret the result:
  * If the result type is {@link Intersect}
- *  type "ITERSECT":
+ *  type "INTERSECT":
  *    The two lines described by the two segments intersect.
  *    The Intersection point can be calculated with:
  *    		p = s1.getPoint(t1) oder p = s2.getPoint(t2)
