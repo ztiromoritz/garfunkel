@@ -1,48 +1,53 @@
 {
-  "name": "garfunkel",
-  "private": false,
-  "version": "0.3.1",
-  "type": "module",
-  "files": [
-    "dist"
-  ],
-  "types": "dist/main.d.ts",
-  "scripts": {
-    "start": "npm run dev",
-    "dev": "npx concurrently --kill-others \"npm run dev:vite\" \"npm run dev:doc\" \"npm run dev:test\"",
-    "build": "npm run doc && tsc && vite build",
-    "preview": "vite preview",
-    "test": "vitest",
-    "doc": "npx typedoc src/main.ts",
-    "upgrade": "npx npm-check-updates -u --format group",
-    "dev:vite": "vite",
-    "dev:doc": "npx typedoc --watch src/**",
-    "dev:test": "vitest --ui --open false"
-  },
-  "_main": "./dist/garfunkel.umd.js",
-  "module": "./dist/garfunkel.es.js",
-  "exports": {
-    ".": {
-      "import": "./dist/garfunkel.es.js",
-      "_require": "./dist/garfunkel.umd.js"
-    }
-  },
-  "devDependencies": {
-    "@types/node": "^20.11.8",
-    "@vitest/ui": "^1.2.2",
-    "prettier": "^3.2.4",
-    "typescript": "^5.3.3",
-    "vite": "^5.0.12",
-    "vite-multiple-assets": "^1.2.10",
-    "vite-plugin-dts": "^3.7.2",
-    "vitest": "^1.2.2"
-  },
-  "dependencies": {
-    "@codemirror/lang-javascript": "^6.2.1",
-    "@fontsource/do-hyeon": "^5.0.17",
-    "@fontsource/rubik-mono-one": "^5.0.18",
-    "codemirror": "^6.0.1",
-    "open-props": "^1.6.17",
-    "petite-vue": "^0.4.1"
-  }
+	"name": "garfunkel",
+	"private": false,
+	"version": "0.3.1",
+	"type": "module",
+	"files": [
+		"dist",
+		"src"
+	],
+	"types": "dist/types/main.d.ts",
+	"scripts": {
+		"start": "npm run dev",
+		"test": "vitest",
+		"preview": "vite preview",
+		"upgrade": "npx npm-check-updates -u --format group",
+		"dev": "npx concurrently --kill-others \"npm run dev:lib\" \"npm run dev:doc\" \"npm run dev:test\"",
+		"dev:lib": "vite",
+		"dev:doc": "npx typedoc --watch src/**",
+		"dev:pg": "vite --config vite.config.pg.ts",
+		"dev:test": "vitest --ui --open false",
+		"build": "npm run build:lib && npm run build:doc && npm run build:pg",
+		"build:lib": "tsc && vite build",
+		"build:doc": "npx typedoc src/main.ts",
+		"build:pg": "tsc && vite build --config vite.config.pg.ts",
+		"build:test": "echo 'TODO'"
+	},
+	"main": "./dist/garfunkel.umd.js",
+	"module": "./dist/garfunkel.es.js",
+	"exports": {
+		".": {
+			"import": "./dist/garfunkel.es.js",
+			"require": "./dist/garfunkel.umd.js"
+		}
+	},
+	"devDependencies": {
+		"@types/node": "^20.11.8",
+		"@vitest/ui": "^1.2.2",
+		"prettier": "^3.2.4",
+		"typescript": "^5.3.3",
+		"vite": "^5.0.12",
+		"vite-multiple-assets": "^1.2.10",
+		"vite-plugin-dts": "^3.7.2",
+		"vitest": "^1.2.2"
+	},
+	"dependencies": {
+		"@codemirror/lang-javascript": "^6.2.1",
+		"@fontsource/do-hyeon": "^5.0.17",
+		"@fontsource/rubik-mono-one": "^5.0.18",
+		"codemirror": "^6.0.1",
+		"open-props": "^1.6.17",
+		"petite-vue": "^0.4.1"
+	}
 }

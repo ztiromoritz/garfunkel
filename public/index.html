@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Garfunkel</title>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/open-props@1.6.17/open-props.min.css"
+    />
+    <style>
+      *,
+      *::before,
+      *::after {
+        margin: 0;
+        padding: 0;
+      }
+
+      html,
+      body {
+        height: 100%;
+      }
+
+      h1 {
+        /*font-family: Avenir, Montserrat, Corbel, 'URW Gothic', source-sans-pro, sans-serif;*/
+        font-family: system-ui, sans-serif;
+        font-weight: 900;
+        font-size: 68px;
+				margin-bottom: .5rem;
+      }
+
+      body {
+        font-family: 'Rubik Mono One', sans-serif;
+        color: black;
+        display: grid;
+        font-weight: normal;
+        font-family: 'Segoe Print', 'Bradley Hand', Chilanka, TSCu_Comic, casual,
+          cursive;
+
+        font-size: 18px;
+        font-weight: 900;
+
+        background-size: 100% 100%;
+        background-image: var(--gradient-3);
+      }
+
+      ul {
+        list-style: none;
+        display: flex;
+        gap: 1rem;
+        flex-direction: column;
+      }
+
+      main {
+        margin: auto;
+        border-radius: var(--radius-blob-3);
+        background: #ffffff88;
+        padding: 6rem;
+      }
+    </style>
+  </head>
+
+  <body>
+    <main>
+      <h1>Garfunkel.js</h1>
+      <nav>
+        <ul role="list">
+          <li><a href="./playground.html">Playground</a></li>
+          <li><a href="./docs/index.html">Documentation</a></li>
+          <li>
+            <a href="http://localhost:51204/__vitest__/">Vitest Report</a>
+          </li>
+        </ul>
+      </nav>
+    </main>
+  </body>
+</html>

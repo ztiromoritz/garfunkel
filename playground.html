@@ -6,7 +6,6 @@
     <title>Garfunkel</title>
     <style>
       @import 'open-props/style';
-      @import '@fontsource/rubik-mono-one';
 
       *,
       *::before,
@@ -21,7 +20,8 @@
       }
 
       body {
-        font-family: 'Rubik Mono One', sans-serif;
+        font-family: 'Nimbus Mono PS', 'Courier New', monospace;
+        font-weight: normal;
         color: black;
         display: grid;
 
@@ -166,7 +166,12 @@
             :stroke="colors[idx%colors.length]"
             fill="none"
           />
-					<circle :cx="c.x" :cy="c.y" :r="1" :fill="colors[idx%colors.length]" />
+          <circle
+            :cx="c.x"
+            :cy="c.y"
+            :r="1"
+            :fill="colors[idx%colors.length]"
+          />
         </g>
       </svg>
 

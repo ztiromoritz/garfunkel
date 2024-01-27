@@ -12,6 +12,8 @@ dist
 dist-ssr
 *.local
 
+
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
@@ -24,4 +26,6 @@ dist-ssr
 *.sw?
 
 docs/
+dist-pg/
+_site/
 vite.config.*.mjs
