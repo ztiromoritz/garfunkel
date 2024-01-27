@@ -149,8 +149,8 @@ function gameLoop(timestamp: DOMHighResTimeStamp) {
 		game._draw?.();
 		//poolsize!.innerText = `usedJsHeapSize: ${window.performance?.memory?.usedJSHeapSize}free: ${_v.pool.free_count()} in_use: ${_v.pool.in_use_count()}`;
 	  	
-		poolsize!.innerText = 
-			Math.round( 1000* window.performance?.memory?.usedJSHeapSize/ (1024 * 1024),2)/1000;
+		poolsize!.innerText = ""+
+			Math.round( 1000* (window.performance as any)?.memory?.usedJSHeapSize/ (1024 * 1024))/1000;
 	}
 
 	if (running) {
