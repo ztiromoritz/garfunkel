@@ -1,17 +1,22 @@
-# What is this?
+# Garfunkel.js
+## What is this?
 *Garfunkel.js* - is a 2d geometry toolbox.
 
 But first an foremost it is my ever changing pet project. It started as a clone of [http://victorjs.org/](http://victorjs.org/) in 2015.
 I used it to do some vector arithmetic in a Ludum Dare Game: [https://ztiromoritz.itch.io/oktapong](https://ztiromoritz.itch.io/oktapong)
 I still use it to learn and explore new JS stuff and other tools. 
 
-# Usage
-```
+## Usage
+```bash
+npm i garfunkel
 ```
 
-# Playground
+```js
 
-# Documentation
+```
+## Playground
+
+## Documentation
 
 ## Tools and libs come and go
 Things I experimented with on the way:
@@ -27,10 +32,9 @@ Things I experimented with on the way:
  * Thing about going back to jsdoc and JS :P
  * Collect intersection functions
  * Thinking about how to represent Rays, Segments, Lines
- * Build a minimal in browser playground with `_init,_update,_draw` and svg rendering and vue-petite
+ * Build a minimal in browser playground with game framework like `_init,_update,_draw`, svg rendering and vue-petite
  * Going from `var` to `let` and `const` :)
  * Drawing jittering arrows
-
 
 # Readings
  * https://github.com/TypeStrong/typedoc/issues/2458 this type and chaining in typedocs
