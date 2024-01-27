@@ -4,7 +4,7 @@ import dts from 'vite-plugin-dts';
 import DynamicPublicDirectory from 'vite-multiple-assets';
 
 export default defineConfig({
-	plugins: [dts(), DynamicPublicDirectory(['/public', '/docs'])],
+	plugins: [dts(), DynamicPublicDirectory(['./public', './docs/'])],
 	build: {
 		lib: {
 			entry: path.resolve(__dirname, 'src/main.ts'),
@@ -12,13 +12,17 @@ export default defineConfig({
 			fileName: (format) => `garfunkel.${format}.js`,
 		},
 		rollupOptions: {
-			input: { 
+			input: {
 				main: path.resolve(__dirname, 'index.html'),
 				playground: path.resolve(__dirname, 'playground.html'),
+			},
+			output: {
+				format: 'esm',
+				inlineDynamicImports: false,
 			},
 		},
 	},
 	test: {
 		exclude: ['ideas/**/*', '**/node_modules/**', '**/dist/**'],
 	},
-});
+})false
