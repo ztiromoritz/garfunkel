@@ -4,6 +4,7 @@ import dts from 'vite-plugin-dts';
 //import DynamicPublicDirectory from 'vite-multiple-assets';
 
 export default defineConfig({
+	base: '/garfunkel',
 	plugins: [
 //		DynamicPublicDirectory(['./public', './docs/'])
 	],
