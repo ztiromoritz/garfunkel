@@ -51,7 +51,7 @@ export function _c(
 		c.y = arg1;
 		c.radius = arg2;
 		return c;
-	} else if (arguments.length === 1 && arg0?.constructor.name === 'Segment') {
+	} else if (arguments.length === 1 && arg0?.constructor.name === Segment.name) {
 		const s = (arg0 as Segment);
 		const c = circle_pool.get();
 		c.x = s.x1
@@ -60,7 +60,7 @@ export function _c(
 		return c;
 	} else {
 		const c = circle_pool.get();
-		const m = arg0?.constructor?.name === 'Vect' ? (arg0 as Vect) : ZERO;
+		const m = arg0?.constructor?.name === Vect.name ? (arg0 as Vect) : ZERO;
 		const r = arg1 ?? 1;
 		c.set(m, r);
 		return c;

@@ -24,7 +24,7 @@
 		"build:pg": "tsc && vite build --config vite.config.pg.ts",
 		"_build:test": "vitest run --coverage --reporter=tap > test-report.txt",
 		"build:test": "vitest run --coverage --reporter=html --outputFile=./dist-test/index.html",
-		"lump": "scripts/lump-site.js",
+		"lump": "scripts/lump-site.cjs",
 		"lump:serve": "npx live-server _site"
 	},
 	"main": "./dist/garfunkel.umd.js",

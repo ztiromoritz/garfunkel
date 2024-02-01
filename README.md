@@ -12,6 +12,10 @@ npm i garfunkel
 ```
 
 ```js
+// 1. Simple Vector arithmetics
+
+// 2. Using the object pool
+
 
 ```
 ## Playground

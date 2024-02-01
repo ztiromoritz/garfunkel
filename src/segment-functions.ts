@@ -61,8 +61,8 @@ export function _s(
     return s;
   } else {
     const s = segment_pool.get();
-    const p1 = arg0?.constructor?.name === 'Vect' ? (arg0 as Vect) : ZERO;
-    const p2 = arg1?.constructor?.name === 'Vect' ? (arg1 as Vect) : ABSCISSA;
+    const p1 = arg0?.constructor?.name === Vect.name ? (arg0 as Vect) : ZERO;
+    const p2 = arg1?.constructor?.name === Vect.name ? (arg1 as Vect) : ABSCISSA;
     s.x1 = p1.x;
     s.y1 = p1.y;
     s.x2 = p2.x;

@@ -1,6 +1,6 @@
 // The entry point for usage examples and experiments
 
-import { _v, _s, _c,  } from '../main';
+import { _v, _s, _c } from '../main';
 
 import { EditorView, basicSetup } from 'codemirror';
 import { javascript } from '@codemirror/lang-javascript';
@@ -73,17 +73,17 @@ function createKeyboardHandler() {
 const keyboardHandler = createKeyboardHandler();
 
 const helper = {
-	print(o: Vect | Segment| Circle) {
+	print(o: Vect | Segment | Circle) {
 		const type = o?.constructor?.name as String;
 		if (!type) return;
 		switch (type) {
-			case 'Vect':
+			case Vect.name:
 				plot.addVect(o);
 				break;
-			case 'Segment':
+			case Segment.name:
 				plot.addSegment(o);
 				break;
-			case 'Circle':
+			case Circle.name:
 				plot.addCircle(o);
 				break;
 		}
@@ -121,6 +121,7 @@ function parse() {
   `;
 	const fn = new Function(fnStr);
 	game = fn();
+	(window as any)._game = game;
 }
 
 function start() {
@@ -134,7 +135,8 @@ function stop() {
 	running = false;
 }
 
-const poolsize = document.getElementById('poolsize');
+const in_use_count = document.getElementById('in_use_count');
+const free_count = document.getElementById('free_count');
 let start_timestamp: DOMHighResTimeStamp;
 const fps = 30;
 const interval = 1000 / fps;
@@ -147,17 +149,23 @@ function gameLoop(timestamp: DOMHighResTimeStamp) {
 
 		_v(() => game._update?.());
 		game._draw?.();
-		//poolsize!.innerText = `usedJsHeapSize: ${window.performance?.memory?.usedJSHeapSize}free: ${_v.pool.free_count()} in_use: ${_v.pool.in_use_count()}`;
-	  	
-		poolsize!.innerText = ""+
-			Math.round( 1000* (window.performance as any)?.memory?.usedJSHeapSize/ (1024 * 1024))/1000;
+		in_use_count!.innerText = String(_v.pool.in_use_count());
+		free_count!.innerText = String(_v.pool.free_count());
+/*
+		poolsize!.innerText =
+			'' +
+			Math.round(
+				(1000 * (window.performance as any)?.memory?.usedJSHeapSize) /
+				(1024 * 1024),
+			) /
+			1000;
+			*/
 	}
 
 	if (running) {
 		window.requestAnimationFrame(gameLoop);
 	}
 }
-
 document.getElementById('start')?.addEventListener('click', () => start());
 document.getElementById('stop')?.addEventListener('click', () => stop());
 document.getElementById('parse')?.addEventListener('click', () => parse());
