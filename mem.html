@@ -1,0 +1,8 @@
+<button id="create">Create Object</button>
+<script>
+  document.write(window.performance?.memory?.usedJSHeapSize / (1024 * 1024));
+  document.getElementById('create').addEventListener('click', () => {
+    window.ARRAY = [1, 2, 3, 4, 5];
+  });
+</script>
+<!-- https://www.debugbear.com/blog/debugging-javascript-memory-leaks -->

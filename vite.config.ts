@@ -1,15 +1,16 @@
-import { defineConfig } from 'vite';
+import { defineConfig, mergeConfig } from 'vite';
 import path from 'path';
 import dts from 'vite-plugin-dts';
+import { defineConfig as defineVitest, configDefaults } from 'vitest/config';
 //import DynamicPublicDirectory from 'vite-multiple-assets';
 //
 
-export default defineConfig({
+const viteConfig = defineConfig({
 	plugins: [
 		dts({
 			outDir: 'dist/types',
 			include: ['src'],
-			exclude: ['src/repl', 'src/test']
+			exclude: ['src/repl', 'src/test'],
 			//rollupTypes: true,
 		}),
 		//		DynamicPublicDirectory(['./public', './docs/'])
@@ -37,7 +38,23 @@ export default defineConfig({
 			],
 		},
 	},
+});
+
+const vitestConfig = defineVitest({
 	test: {
-		exclude: ['ideas/**/*', '**/node_modules/**', '**/dist/**'],
+		exclude: [
+			'**/ideas/**/*',
+			'**/node_modules/**',
+			'**/dist/**',
+			'**/dist-*/**',
+			'**/docs/**',
+		],
+		coverage: {
+			provider: 'v8',
+			
+			exclude: [ ...configDefaults.coverage.exclude, '**/scripts/**', '**/dist-*/**', '**/ideas/**', '**/docs/**', '**/src/test/**'],
+		},
 	},
 });
+
+export default mergeConfig(viteConfig, vitestConfig);

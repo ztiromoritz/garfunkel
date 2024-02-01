@@ -18,11 +18,14 @@
 		"dev:doc": "npx typedoc --watch src/**",
 		"dev:pg": "vite --config vite.config.pg.ts",
 		"dev:test": "vitest --ui --open false",
-		"build": "npm run build:lib && npm run build:doc && npm run build:pg",
+		"build": "npm run build:lib && npm run build:doc && npm run build:pg && npm run build:test",
 		"build:lib": "tsc && vite build",
 		"build:doc": "npx typedoc src/main.ts",
 		"build:pg": "tsc && vite build --config vite.config.pg.ts",
-		"build:test": "echo 'TODO'"
+		"_build:test": "vitest run --coverage --reporter=tap > test-report.txt",
+		"build:test": "vitest run --coverage --reporter=html --outputFile=./dist-test/index.html",
+		"lump": "scripts/lump-site.js",
+		"lump:serve": "npx live-server _site"
 	},
 	"main": "./dist/garfunkel.umd.js",
 	"module": "./dist/garfunkel.es.js",
@@ -34,8 +37,10 @@
 	},
 	"devDependencies": {
 		"@types/node": "^20.11.8",
+		"@vitest/coverage-v8": "^1.2.2",
 		"@vitest/ui": "^1.2.2",
 		"prettier": "^3.2.4",
+		"rimraf": "^5.0.5",
 		"typescript": "^5.3.3",
 		"vite": "^5.0.12",
 		"vite-multiple-assets": "^1.2.10",

@@ -27,5 +27,7 @@ dist-ssr
 
 docs/
 dist-pg/
+dist-test/
+coverage/
 _site/
 vite.config.*.mjs
