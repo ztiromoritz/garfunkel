@@ -6,175 +6,164 @@
     <title>Garfunkel</title>
     <style>
       @import 'open-props/style';
-
-      *,
-      *::before,
-      *::after {
-        margin: 0;
-        padding: 0;
-      }
-
-      html,
-      body {
-        height: 100%;
-      }
-
-      body {
-        font-family: 'Nimbus Mono PS', 'Courier New', monospace;
-        font-weight: normal;
-        color: black;
-        display: grid;
-
-        background-size: 100% 100%;
-        background-image: var(--gradient-25);
-      }
-
-      main {
-        margin: auto;
-      }
-
-      #editor {
-        background: #bbffbb;
-      }
-
-      canvas,
-      svg {
-        background: white;
-      }
-
-      canvas {
-        display: none;
-      }
     </style>
+    <link rel="stylesheet" href="./src/repl/playground.css" />
   </head>
 
   <body>
-    <main>
-      <div id="app"></div>
-      <script type="module" src="/src/repl/example.ts"></script>
+    <script type="module" src="/src/repl/example.ts"></script>
+    <header>
       <h1>Playground</h1>
-
-      <div style="overflow: auto">
-        <div id="editor"></div>
-      </div>
-      <button id="parse">Parse</button>
-      <button id="start">Start</button>
-      <button id="stop">Stop</button>
-      <div id="output"></div>
-      <div id="stats">
-        <pre>
-				Current Pool Size [InUse: <span id="in_use_count" style="color: red">0</span>  / Free: <span id="free_count" style="color:red;">0</span> ]
-			</pre>
-      </div>
-
-      <svg
-        id="plot"
-        xmlns="http://www.w3.org/2000/svg"
-        width="500"
-        height="500"
-        viewBox="-50 -50 100 100"
+    </header>
+    <main>
+      <section
+        id="editorwrapper"
+        style="overflow: auto"
+        aria-labeledby="editor-heading"
       >
-        <defs>
-          <pattern
-            id="smallGrid"
-            width="5"
-            height="5"
-            patternUnits="userSpaceOnUse"
-          >
-            <path
-              d="M 45 0 L 0 0 0 5 5 5 5 0"
-              fill="none"
-              stroke="lightgray"
-              stroke-width="0.25"
-            />
-          </pattern>
-          <pattern
-            id="grid"
-            width="80"
-            height="80"
-            patternUnits="userSpaceOnUse"
-          >
-            <rect width="80" height="80" fill="url(#smallGrid)" />
-            <path
-              d="M 80 0 L 0 0 0 80"
-              fill="none"
-              stroke="grey"
-              stroke-width="1"
-            />
-          </pattern>
-          <marker
-            v-for="color,idx in colors"
-            :id="`triangle-${idx}`"
-            viewBox="0 0 50 50"
-            refX="9"
-            refY="6"
-            markerUnits="strokeWidth"
-            markerWidth="32"
-            markerHeight="32"
-            orient="auto"
-            :key="color"
-          >
-            <path
-              :id="`marker-path-a-${idx}`"
-              fill="none"
-              :stroke="color"
-              style="
-                stroke-width: 0.999996;
-                stroke-linejoin: round;
-                stroke-miterlimit: 4;
-                stroke-dasharray: none;
-                stop-color: #000000;
-              "
-              d="m 1.634475,12.145064 -0.101741,0.0681 c 0.909276,-0.34178 1.492747,-1.231821 2.387861,-1.597641 0.781941,-0.39855 1.367794,-1.1262096 2.18629,-1.4627796 0.492358,-0.20243 0.524823,-0.41614 0.987703,-0.66083 0.768659,-0.3869 1.501668,-0.83386 2.143436,-1.4341 0.274278,-0.27169 0.639532,-0.39029 0.935407,-0.62584 0.192897,-0.0932 0.384265,-0.18849 0.532592,-0.35635 0.02339,-0.0235 0.05677,-0.0302 0.08016,-0.0537 l 0.09883,-0.0661 -0.08059,0.054 c -0.154217,0.16172 -0.354259,0.24596 -0.537304,0.35949 -0.29723,0.24401 -0.700319,0.30952 -0.948849,0.63486 -0.599503,0.69068 -1.407038,1.03212 -2.168662,1.45096 -0.384812,0.21379 -0.586134,0.48332 -0.992254,0.66389 -0.806545,0.35862 -1.404084,1.0683696 -2.188604,1.4643096 -0.888292,0.3361 -1.259454,1.543961 -2.334266,1.561791 z"
-            />
-            <path
-              :id="`marker-path-a-${idx}`"
-              fill="none"
-              :stroke="color"
-              style="
-                stroke-width: 0.999996;
-                stroke-linejoin: round;
-                stroke-miterlimit: 4;
-                stroke-dasharray: none;
-                stop-color: #000000;
-              "
-              d="m 1.1460737,1.5089867 -0.107444,-0.0501 c 0.766559,0.61896 1.745708,0.58508 2.521666,1.17552 0.73522,0.46503 1.597766,0.5377 2.30881,1.07628 0.4277,0.32399 0.601457,0.21659 1.043039,0.48623 0.719196,0.46027 1.461707,0.84905 2.263548,1.05519 0.353712,0.0783 0.648059,0.33899 0.9878313,0.46049 0.177676,0.11799 0.355949,0.23326 0.562428,0.26218 0.03039,0.006 0.05429,0.0329 0.08468,0.0394 l 0.104345,0.0487 -0.08511,-0.0396 c -0.205395,-0.0383 -0.380612,-0.16865 -0.567422,-0.2645 -0.3466783,-0.11732 -0.6240293,-0.44698 -1.0020283,-0.46711 -0.843458,-0.10901 -1.551796,-0.63435 -2.290174,-1.0676 -0.374653,-0.21751 -0.685203,-0.22996 -1.047871,-0.48848 -0.720238,-0.51339 -1.576441,-0.60834 -2.311243,-1.07743 -0.750466,-0.60325 -1.839493,-0.16929 -2.465066,-1.14912 z"
-            />
-          </marker>
-        </defs>
-        <rect x="-50" y="-50" width="100%" height="100%" fill="url(#grid)" />
+        <h2 id="editor-heading" class="sr-only">Code Editor</h2>
+        <div id="editor"></div>
+        <div class="fake-gutter"></div>
+      </section>
+      <div id="actions">
+        <button id="parse">Parse</button>
+        <button id="start">Start</button>
+        <button id="stop">Stop</button>
+      </div>
+      <section id="display" aria-labledby="display-heading">
+        <h2 class="sr-only" id="display-heading">Display Area</h2>
+        <svg
+          id="plot"
+          xmlns="http://www.w3.org/2000/svg"
+          preserveAspectRatio="xMidYMid meet"
+          viewBox="-50 -50 100 100"
+        >
+          <defs>
+            <pattern
+              id="smallGrid"
+              width="5"
+              height="5"
+              patternUnits="userSpaceOnUse"
+            >
+              <path
+                d="M 45 0 L 0 0 0 5 5 5 5 0"
+                fill="none"
+                stroke="lightgray"
+                stroke-width="0.25"
+              />
+            </pattern>
+            <pattern
+              id="grid"
+              width="80"
+              height="80"
+              patternUnits="userSpaceOnUse"
+            >
+              <rect width="80" height="80" fill="url(#smallGrid)" />
+              <path
+                d="M 80 0 L 0 0 0 80"
+                fill="none"
+                stroke="grey"
+                stroke-width="1"
+              />
+            </pattern>
+            <marker
+              v-for="color,idx in colors"
+              :id="`triangle-${idx}`"
+              viewBox="0 0 50 50"
+              refX="9"
+              refY="6"
+              markerUnits="strokeWidth"
+              markerWidth="32"
+              markerHeight="32"
+              orient="auto"
+              :key="color"
+            >
+              <path
+                :id="`marker-path-a-${idx}`"
+                fill="none"
+                :stroke="color"
+                style="
+                  stroke-width: 0.999996;
+                  stroke-linejoin: round;
+                  stroke-miterlimit: 4;
+                  stroke-dasharray: none;
+                  stop-color: #000000;
+                "
+                d="m 1.634475,12.145064 -0.101741,0.0681 c 0.909276,-0.34178 1.492747,-1.231821 2.387861,-1.597641 0.781941,-0.39855 1.367794,-1.1262096 2.18629,-1.4627796 0.492358,-0.20243 0.524823,-0.41614 0.987703,-0.66083 0.768659,-0.3869 1.501668,-0.83386 2.143436,-1.4341 0.274278,-0.27169 0.639532,-0.39029 0.935407,-0.62584 0.192897,-0.0932 0.384265,-0.18849 0.532592,-0.35635 0.02339,-0.0235 0.05677,-0.0302 0.08016,-0.0537 l 0.09883,-0.0661 -0.08059,0.054 c -0.154217,0.16172 -0.354259,0.24596 -0.537304,0.35949 -0.29723,0.24401 -0.700319,0.30952 -0.948849,0.63486 -0.599503,0.69068 -1.407038,1.03212 -2.168662,1.45096 -0.384812,0.21379 -0.586134,0.48332 -0.992254,0.66389 -0.806545,0.35862 -1.404084,1.0683696 -2.188604,1.4643096 -0.888292,0.3361 -1.259454,1.543961 -2.334266,1.561791 z"
+              />
+              <path
+                :id="`marker-path-a-${idx}`"
+                fill="none"
+                :stroke="color"
+                style="
+                  stroke-width: 0.999996;
+                  stroke-linejoin: round;
+                  stroke-miterlimit: 4;
+                  stroke-dasharray: none;
+                  stop-color: #000000;
+                "
+                d="m 1.1460737,1.5089867 -0.107444,-0.0501 c 0.766559,0.61896 1.745708,0.58508 2.521666,1.17552 0.73522,0.46503 1.597766,0.5377 2.30881,1.07628 0.4277,0.32399 0.601457,0.21659 1.043039,0.48623 0.719196,0.46027 1.461707,0.84905 2.263548,1.05519 0.353712,0.0783 0.648059,0.33899 0.9878313,0.46049 0.177676,0.11799 0.355949,0.23326 0.562428,0.26218 0.03039,0.006 0.05429,0.0329 0.08468,0.0394 l 0.104345,0.0487 -0.08511,-0.0396 c -0.205395,-0.0383 -0.380612,-0.16865 -0.567422,-0.2645 -0.3466783,-0.11732 -0.6240293,-0.44698 -1.0020283,-0.46711 -0.843458,-0.10901 -1.551796,-0.63435 -2.290174,-1.0676 -0.374653,-0.21751 -0.685203,-0.22996 -1.047871,-0.48848 -0.720238,-0.51339 -1.576441,-0.60834 -2.311243,-1.07743 -0.750466,-0.60325 -1.839493,-0.16929 -2.465066,-1.14912 z"
+              />
+            </marker>
+          </defs>
+          <rect
+            x="-300"
+            y="-300"
+            width="600%"
+            height="600%"
+            fill="url(#grid)"
+          />
 
-        <line
-          v-for="s, idx in segments"
-          :x1="s.x1"
-          :y1="s.y1"
-          :x2="s.x2"
-          :y2="s.y2"
-          :key="`segment-${idx}`"
-          style="stroke-width: 0.5; stroke-linecap: round"
-          :stroke="colors[idx%colors.length]"
-          :marker-end="`url(#triangle-${idx%colors.length})`"
-        />
-
-        <g v-for="c, idx in circles">
-          <circle
-            :cx="c.x"
-            :cy="c.y"
-            :r="c.radius"
-            :key="`circle-${idx}`"
-            style="stroke-width: 0.5"
+          <line
+            v-for="s, idx in segments"
+            :x1="s.x1"
+            :y1="s.y1"
+            :x2="s.x2"
+            :y2="s.y2"
+            :key="`segment-${idx}`"
+            style="stroke-width: 0.5; stroke-linecap: round"
             :stroke="colors[idx%colors.length]"
-            fill="none"
+            :marker-end="`url(#triangle-${idx%colors.length})`"
           />
-          <circle
-            :cx="c.x"
-            :cy="c.y"
-            :r="1"
-            :fill="colors[idx%colors.length]"
-          />
-        </g>
-      </svg>
 
+          <g v-for="c, idx in circles">
+            <circle
+              :cx="c.x"
+              :cy="c.y"
+              :r="c.radius"
+              :key="`circle-${idx}`"
+              style="stroke-width: 0.5"
+              :stroke="colors[idx%colors.length]"
+              fill="none"
+            />
+            <circle
+              :cx="c.x"
+              :cy="c.y"
+              :r="1"
+              :fill="colors[idx%colors.length]"
+            />
+          </g>
+        </svg>
+      </section>
+    </main>
+      <footer>
+        <section id="stats" aria-labledby="stats-heading">
+          <h2 id="stats-heading" class="sr-only">Stats</h2>
+          <pre>
+					Current Pool Size [InUse: <span id="in_use_count" style="color: red">0</span> / Free: <span id="free_count"
+						style="color:red;">0</span> ]
+				</pre>
+        </section>
+        <nav>
+          <ul>
+            <li><a href="/docs/index.html">Documentation</a></li>
+            <li>
+              <a href="http://localhost:51204/__vitest__/">Vitest Report</a>
+            </li>
+          </ul>
+        </nav>
+      </footer>
+      <!--
       <style>
         canvas {
           transform: scale(4);
@@ -183,15 +172,7 @@
         }
       </style>
       <canvas width="400" height="400" id="canvas"></canvas>
-      <!-- http://members.chello.at/easyfilter/canvas.html -->
-      <nav>
-        <ul>
-          <li><a href="/docs/index.html">Documentation</a></li>
-          <li>
-            <a href="http://localhost:51204/__vitest__/">Vitest Report</a>
-          </li>
-        </ul>
-      </nav>
-    </main>
+      http://members.chello.at/easyfilter/canvas.html 
+-->
   </body>
 </html>
