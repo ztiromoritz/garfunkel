@@ -6,6 +6,8 @@
     <title>Garfunkel</title>
     <style>
       @import 'open-props/style';
+			@import "open-props/normalize.min.css";
+			@import "open-props/buttons.min.css";
     </style>
     <link rel="stylesheet" href="./src/repl/playground.css" />
   </head>
@@ -26,6 +28,7 @@
         <div class="fake-gutter"></div>
       </section>
       <div id="actions">
+        <button id="restart">Restart</button>
         <button id="parse">Parse</button>
         <button id="start">Start</button>
         <button id="stop">Stop</button>
@@ -54,13 +57,13 @@
             </pattern>
             <pattern
               id="grid"
-              width="80"
-              height="80"
+              width="800"
+              height="800"
               patternUnits="userSpaceOnUse"
             >
-              <rect width="80" height="80" fill="url(#smallGrid)" />
+              <rect width="800" height="800" fill="url(#smallGrid)" />
               <path
-                d="M 80 0 L 0 0 0 80"
+                d="M 800 0 L 0 0 0 800"
                 fill="none"
                 stroke="grey"
                 stroke-width="1"
@@ -149,19 +152,9 @@
       <footer>
         <section id="stats" aria-labledby="stats-heading">
           <h2 id="stats-heading" class="sr-only">Stats</h2>
-          <pre>
 					Current Pool Size [InUse: <span id="in_use_count" style="color: red">0</span> / Free: <span id="free_count"
 						style="color:red;">0</span> ]
-				</pre>
         </section>
-        <nav>
-          <ul>
-            <li><a href="/docs/index.html">Documentation</a></li>
-            <li>
-              <a href="http://localhost:51204/__vitest__/">Vitest Report</a>
-            </li>
-          </ul>
-        </nav>
       </footer>
       <!--
       <style>

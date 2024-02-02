@@ -135,6 +135,12 @@ function stop() {
 	running = false;
 }
 
+function restart(){
+	stop();
+	parse();
+	start();
+}
+
 const in_use_count = document.getElementById('in_use_count');
 const free_count = document.getElementById('free_count');
 let start_timestamp: DOMHighResTimeStamp;
@@ -166,6 +172,7 @@ function gameLoop(timestamp: DOMHighResTimeStamp) {
 		window.requestAnimationFrame(gameLoop);
 	}
 }
+document.getElementById('restart')?.addEventListener('click', () => restart());
 document.getElementById('start')?.addEventListener('click', () => start());
 document.getElementById('stop')?.addEventListener('click', () => stop());
 document.getElementById('parse')?.addEventListener('click', () => parse());
