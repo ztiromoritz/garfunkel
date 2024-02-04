@@ -1,5 +1,5 @@
 # Garfunkel.js
-See [https://zitro.uber.space/garfunkel/docs/index.html](https://zitro.uber.space/garfunkel/docs/index.html) for more information.
+See [the Garfunkel Hompage](https://zitro.uber.space/garfunkel/) for more information.
 ## What is this?
 *Garfunkel.js* - is a 2d geometry toolbox.
 
