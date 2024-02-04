@@ -113,7 +113,7 @@ export class Vect {
    * @param {Number} a scalar to divide the vector with
    * @return {Vect}
    */
-  div(s: number) {
+  div(s: number): this {
     return this._chain(div(this, s));
   }
 
@@ -156,7 +156,7 @@ export class Vect {
    * @param v
    * @return {number}
    */
-  dot(v: Vect) {
+  dot(v: Vect): number {
     return dot(this, v);
   }
 
@@ -173,7 +173,7 @@ export class Vect {
    * @param v
    * @return {number}
    */
-  cross(v: Vect) {
+  cross(v: Vect): number {
     return cross(this, v);
   }
 
@@ -207,7 +207,7 @@ export class Vect {
    * y lengthSq
    * @return {number}
    */
-  lengthSq() {
+  lengthSq(): number {
     return lengthSq(this);
   }
 
@@ -215,7 +215,7 @@ export class Vect {
    * Euclidean norm/length/magnitude of the vector.
    * @return {number}
    */
-  length() {
+  length(): number {
     return length(this);
   }
 
@@ -224,7 +224,7 @@ export class Vect {
    * @param v
    * @return {number}
    */
-  distanceSq(v: Vect) {
+  distanceSq(v: Vect): number {
     return distanceSq(this, v);
   }
 
@@ -233,7 +233,7 @@ export class Vect {
    * @param v
    * @return {number}
    */
-  distance(v: Vect) {
+  distance(v: Vect): number {
     return distance(this, v);
   }
 
@@ -242,7 +242,7 @@ export class Vect {
    * @param v
    * @return {number}
    */
-  manhatten(v: Vect) {
+  manhatten(v: Vect): number {
     return manhatten(this, v);
   }
 
@@ -251,7 +251,7 @@ export class Vect {
    * @param v
    * @return {boolean}
    */
-  isLeftOf(v: Vect) {
+  isLeftOf(v: Vect): boolean {
     return isLeftOf(this, v);
   }
 
@@ -259,7 +259,7 @@ export class Vect {
    * @param v
    * @return {boolean}
    */
-  isRightOf(v: Vect) {
+  isRightOf(v: Vect): boolean {
     return isRightOf(this, v);
   }
 
@@ -267,7 +267,7 @@ export class Vect {
    * @chainable
    * @return {Vect}
    */
-  turnLeft() {
+  turnLeft(): this {
     return this._chain(turnLeft(this));
   }
 
@@ -275,7 +275,7 @@ export class Vect {
    * @chainable
    * @return {Vect}
    */
-  turnRight() {
+  turnRight(): this {
     return this._chain(turnRight(this));
   }
 
@@ -283,7 +283,7 @@ export class Vect {
    * @chainable
    * @return {Vect}
    */
-  toLeftNormal() {
+  toLeftNormal(): this {
     return this._chain(leftNormal(this));
   }
 
@@ -291,7 +291,7 @@ export class Vect {
    * @chainable
    * @return {Vect}
    */
-  toRightNormal() {
+  toRightNormal(): this {
     return this._chain(rightNormal(this));
   }
 
@@ -306,7 +306,7 @@ export class Vect {
    *  [optional] reference vector. default: (1,0).
    * @return {number}
    */
-  angle(ref?: Vect) {
+  angle(ref?: Vect): number {
     return angle(this, ref);
   }
 
@@ -321,7 +321,7 @@ export class Vect {
    *      [optional] default is {x:0,y:0}
    * @return {Vect} the rotated vector
    */
-  rotate(angle: number, pivot?: Vect) {
+  rotate(angle: number, pivot?: Vect): this {
     return this._chain(rotate(this, angle, pivot));
   }
 
@@ -331,7 +331,7 @@ export class Vect {
    * @param {number} angle in radians
    * @return {Vect} the rotated vector
    */
-  rotateTo(angle: number) {
+  rotateTo(angle: number): this {
     return this._chain(rotateTo(this, angle));
   }
 

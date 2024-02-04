@@ -63,7 +63,11 @@ export function create_pool<T>(options: PoolOptions<T>) {
 
   function in_use_count() {
     return in_use.size;
-  }
+	}
+
+	function is_in_use(o:T):boolean{
+		return in_use.has(o);
+	}
 
   function debug() {
     return JSON.stringify(
@@ -78,6 +82,7 @@ export function create_pool<T>(options: PoolOptions<T>) {
     free,
     free_count,
     in_use_count,
+		is_in_use,
     pop_context,
     push_context,
     lift,
