@@ -1,143 +1,170 @@
 *,
 *::before,
 *::after {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
 }
 
 html,
 body {
-  height: 100%;
-  overflow: auto;
+	height: 100%;
+	overflow: auto;
 }
 
 body {
-  font-family: 'Nimbus Mono PS', 'Courier New', monospace;
-  font-weight: normal;
-  color: black;
-  display: grid;
-  background-size: 100% 100%;
-  background-image: var(--gradient-25);
+	font-family: 'Nimbus Mono PS', 'Courier New', monospace;
+	font-weight: normal;
+	color: black;
+	display: grid;
+	background-size: 100% 100%;
+	background-image: var(--gradient-25);
 }
 
 :root {
-  --header-height: 50px;
-  --footer-height: 50px;
+	--header-height: 50px;
+	--footer-height: 50px;
 }
 
 h1 {
-  font-size: 2.4rem;
+	font-size: 2.4rem;
 }
 
 .sr-only:not(:focus):not(:active) {
-  clip: rect(0 0 0 0);
-  clip-path: inset(50%);
-  height: 1px;
-  overflow: hidden;
-  position: absolute;
-  white-space: nowrap;
-  width: 1px;
+	clip: rect(0 0 0 0);
+	clip-path: inset(50%);
+	height: 1px;
+	overflow: hidden;
+	position: absolute;
+	white-space: nowrap;
+	width: 1px;
 }
 
 header {
-  padding-inline: var(--size-fluid-2);
-  height: var(--header-height);
+	padding-inline: var(--size-fluid-2);
+	height: var(--header-height);
 }
 
 main {
-  width: 100%;
-  height: calc(100vh - var(--header-height) - var(--footer-height));
-  margin: auto;
-  display: block;
-  overflow: auto;
-  grid-template-columns: 1fr;
-  grid-template-rows: 1fr 100px 1fr;
+	width: 100%;
+	height: calc(100vh - var(--header-height) - var(--footer-height));
+	margin: auto;
+	display: block;
+	overflow: auto;
+	grid-template-columns: 1fr;
+	grid-template-rows: 1fr 100px 1fr;
 }
 
 footer {
-  padding-inline: var(--size-fluid-2);
-  height: var(--footer-height);
-  background: lightblue;
+	padding-inline: var(--size-fluid-2);
+	height: var(--footer-height);
+	background: lightblue;
 }
 
 #editorwrapper {
-  min-height: 100vw;
-  position: relative;
-  margin: var(--size-fluid-2);
-  background: #bbffbb;
+	min-height: 100vw;
+	position: relative;
+	margin: var(--size-fluid-2);
+	background: #bbffbb;
 }
 
 #editor {
-  z-index: 2;
+	z-index: 2;
 }
 
 nav ul {
-  display: flex;
-  flex-direction: row;
-  gap: var(--size-fluid-1);
+	display: flex;
+	flex-direction: row;
+	gap: var(--size-fluid-1);
 }
 
 /* Hacky codemirror changes*/
 .cm-focused {
-  outline: none !important;
+	outline: none !important;
 }
 
 /* Hacky codemirror changes*/
 
 #actions {
-  margin-top: var(--size-fluid-2);
-  display: flex;
-  flex-direction: column;
-  gap: var(--size-fluid-1);
-  margin-inline: var(--size-fluid-2);
+	margin-top: var(--size-fluid-2);
+	display: flex;
+	flex-direction: column;
+	gap: var(--size-fluid-1);
+	margin-inline: var(--size-fluid-2);
+}
+
+#actions fieldset {
+ background: #eee;
+ padding: .1rem;
 }
 
 #display {
-  grid-column: 3/4;
-  margin: var(--size-fluid-2);
+	grid-column: 3/4;
+	margin: var(--size-fluid-2);
+	display: grid;
+}
+
+#display > * {
+	grid-column: 1/1;
+	grid-row: 1/1;
 }
 
 #display svg {
-  width: 100%;
-  height: 100%;
+	width: 100%;
+	height: 100%;
 }
+
+
+
 
 canvas,
 svg {
-  background: white;
+	background: white;
 }
 
-canvas {
-  display: none;
+
+#display .canvas-wrapper {
+ background: #ddddddaa;
+ border: 1px solid grey;
+ height: 100%;
+ display: grid;
+ aspect-ratio: 1 / 1;
 }
+
+#display canvas {
+	transform: scale(1);
+	transform-origin: top left;
+	image-rendering: pixelated;
+	margin: auto;
+}
+
 
 @media (min-width: 800px) {
-  main {
-    display: grid;
-    grid-template-columns: 1fr 100px 1fr;
-  }
+	main {
+		display: grid;
+		grid-template-columns: 1fr 100px 1fr;
+	}
 
-  #editorwrapper {
-    min-height: 0px;
-    height: 100%;
-  }
+	#editorwrapper {
+		min-height: 0px;
+		height: 100%;
+	}
 
-  #editor {
-    position: absolute;
-  }
+	#editor {
+		position: absolute;
+	}
 
-  #editor ~ .fake-gutter {
-    background: #f5f5f5;
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    width: 32px;
-    z-index: 0;
-  }
+	#editor~.fake-gutter {
+		background: #f5f5f5;
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		left: 0;
+		width: 32px;
+		z-index: 0;
+	}
 
-  #actions {
-    margin-inline: 0px;
-  }
+	#actions {
+		margin-inline: 0px;
+	}
 }

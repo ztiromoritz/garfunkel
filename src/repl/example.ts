@@ -5,98 +5,37 @@ import { _v, _s, _c } from '../main';
 import { EditorView, basicSetup } from 'codemirror';
 import { javascript } from '@codemirror/lang-javascript';
 
-import './plot';
-import { plot } from './plot';
+import { plot } from './utils/plot';
 import { Coord } from '../coord';
-import { Vect } from '../vect';
-import { Segment } from '../segment';
-import { Circle } from '../circle';
+import { CanvasRenderer, createCanvasRenderer } from './utils/canvas-renderer';
+
+import { helper } from './utils/repl-api';
+
+import example_1 from './examples/example1.js?raw';
+
 
 const editor = new EditorView({
-	doc: `
-let a,s,c;
-function _init(){
-  a = _v(0,30);
-	c = _c(10,10,30);
-}
-
-function _update(){
- // a.rotate(Math.PI/32);
-  if(btn("w")){ a.add(_v(0,1)) }	
-  if(btn("a")){ a.add(_v(-1,0)) }	
-  if(btn("s")){ a.add(_v(0,-1)) }	
-  if(btn("d")){ a.add(_v(1,0)) }	
-
-  //_v(3,4).rotate(90).normalize()
-  _v(3,4).normalize()
-}
-
-function _draw(){
-  clear();
-  print(a);
-  print(c);
-}
-  `,
+	doc: example_1,
 	extensions: [basicSetup, javascript()],
 	parent: document.getElementById('editor')!,
 });
+
+editor.focus();
+
+// canvas crisp render experiment
+const canvas = document.getElementById('canvas') as HTMLCanvasElement;
+let canvasRenderer: CanvasRenderer;
+if (canvas) {
+	canvasRenderer = createCanvasRenderer(canvas, plot)
+}
+
+const svg = document.getElementById('plot') as SVGElement;
 
 /*
 editor.on("change", (editor) => {
 	localStorage.setItem("garfunkel_editor", editor.getValue());
 });
 */
-editor.focus();
-
-function createKeyboardHandler() {
-	window.addEventListener('blur', () => {
-		keys.clear();
-	});
-
-	window.addEventListener('keydown', (e) => {
-		keys.add(e.key);
-	});
-
-	window.addEventListener('keyup', (e) => {
-		keys.delete(e.key);
-	});
-
-	const keys = new Set<string>();
-
-	return {
-		is_key_down(key: string) {
-			return keys.has(key);
-		},
-	};
-}
-
-const keyboardHandler = createKeyboardHandler();
-
-const helper = {
-	print(o: Vect | Segment | Circle) {
-		const type = o?.constructor?.name as String;
-		if (!type) return;
-		switch (type) {
-			case Vect.name:
-				plot.addVect(o);
-				break;
-			case Segment.name:
-				plot.addSegment(o);
-				break;
-			case Circle.name:
-				plot.addCircle(o);
-				break;
-		}
-	},
-
-	btn(key: string) {
-		return keyboardHandler.is_key_down(key);
-	},
-
-	clear() {
-		plot.clear();
-	},
-};
 
 Coord.setSchoolCoords();
 Object.assign(window, { _v, _s, _c, ...helper });
@@ -135,7 +74,7 @@ function stop() {
 	running = false;
 }
 
-function restart(){
+function restart() {
 	stop();
 	parse();
 	start();
@@ -155,36 +94,34 @@ function gameLoop(timestamp: DOMHighResTimeStamp) {
 
 		_v(() => game._update?.());
 		game._draw?.();
+		canvasRenderer?.render();
 		in_use_count!.innerText = String(_v.pool.in_use_count());
 		free_count!.innerText = String(_v.pool.free_count());
-/*
-		poolsize!.innerText =
-			'' +
-			Math.round(
-				(1000 * (window.performance as any)?.memory?.usedJSHeapSize) /
-				(1024 * 1024),
-			) /
-			1000;
-			*/
 	}
 
 	if (running) {
 		window.requestAnimationFrame(gameLoop);
 	}
 }
+
+
 document.getElementById('restart')?.addEventListener('click', () => restart());
 document.getElementById('start')?.addEventListener('click', () => start());
 document.getElementById('stop')?.addEventListener('click', () => stop());
 document.getElementById('parse')?.addEventListener('click', () => parse());
 
-// canvas crisp render experiment
-const canvas = document.getElementById('canvas') as HTMLCanvasElement;
-const ctx = canvas.getContext('2d');
-if (ctx) {
-	ctx.imageSmoothingEnabled = false;
-	ctx.scale(1, 1);
-	ctx.beginPath(); // Start a new path
-	ctx.moveTo(30, 50); // Move the pen to (30, 50)
-	ctx.lineTo(150, 100); // Draw a line to (150, 100)
-	ctx.stroke(); // Render the path
-}
+const canvasWrapper = document.querySelector('.canvas-wrapper')! as HTMLElement;
+Array.from(document.querySelectorAll('input[type=radio][name=render]')).forEach((radio: HTMLInputElement) => {
+	radio.addEventListener('click', (event) => {
+		const value = (event.target as HTMLInputElement)?.value;
+		if(value==='svg'){
+			canvasWrapper.style.display='none';
+			svg.style.display="";
+		}else if(value==='canvas'){
+			canvasWrapper.style.display='';
+			svg.style.display='none';
+		}
+
+	})
+})
+
