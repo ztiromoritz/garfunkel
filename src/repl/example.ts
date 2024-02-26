@@ -29,7 +29,7 @@ if (canvas) {
 	canvasRenderer = createCanvasRenderer(canvas, plot)
 }
 
-const svg = document.getElementById('plot') as SVGElement;
+const svg = document.getElementById('plot') as HTMLElement;
 
 /*
 editor.on("change", (editor) => {
@@ -111,7 +111,7 @@ document.getElementById('stop')?.addEventListener('click', () => stop());
 document.getElementById('parse')?.addEventListener('click', () => parse());
 
 const canvasWrapper = document.querySelector('.canvas-wrapper')! as HTMLElement;
-Array.from(document.querySelectorAll('input[type=radio][name=render]')).forEach((radio: HTMLInputElement) => {
+Array.from(document.querySelectorAll('input[type=radio][name=render]')).forEach((radio: Element) => {
 	radio.addEventListener('click', (event) => {
 		const value = (event.target as HTMLInputElement)?.value;
 		if(value==='svg'){
